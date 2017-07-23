@@ -1,0 +1,31 @@
+{
+  "presets": [
+    ["env", {
+      "targets": {
+        "chrome": 40,
+      },
+      "modules": false,
+      "include": [],
+      "useBuiltIns": true,
+      "uglify": true,
+      "loose": false,
+      "debug": false
+    }],
+    "react",
+  ],
+  "plugins": [
+      "transform-decorators-legacy",
+      "transform-class-properties",
+      "react-hot-loader/babel",
+      "transform-object-rest-spread",
+      ["transform-runtime", {
+        "regenerator": true,
+        "polyfill": true
+      }], [
+        "react-css-modules", {
+          "webpackHotModuleReloading": true,
+          "generateScopedName": "[path]___[name]__[local]___[hash:base64:5]"
+        }
+      ]
+  ]
+}
