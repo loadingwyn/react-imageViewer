@@ -1,4 +1,3 @@
-
 import React, { PureComponent } from 'react';
 // import { autobind } from 'core-decorators';
 import './style.css';
@@ -6,7 +5,7 @@ import './style.css';
 let originalBodyOverflow = null;
 let lockingCounter = 0;
 
-export default class Clock extends PureComponent {
+export default class Overlay extends PureComponent {
   componentDidMount() {
     if (this.props.lock === true) {
       this.preventScrolling();
@@ -51,6 +50,7 @@ export default class Clock extends PureComponent {
       originalBodyOverflow = null;
     }
   }
+
   render() {
     return (
       <div styleName="overlay">

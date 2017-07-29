@@ -6,7 +6,7 @@ export default function touchEmulator(el) {
   }
   function trigger(mouseEvent, touchEvent, downState) {
     el.addEventListener(mouseEvent, event => {
-      if (touchEvent !== 'touchmove' || down) {
+      if (touchEvent === 'touchstart' || down) {
         const touch = {
           pageX: event.pageX,
           pageY: event.pageY,
@@ -24,7 +24,7 @@ export default function touchEmulator(el) {
     });
   }
   trigger('mousedown', 'touchstart', true);
-  trigger('mousemove', 'touchmove');
+  trigger('mousemove', 'touchmove', true);
   trigger('mouseup', 'touchend', false);
   trigger('mouseout', 'touchend', false);
   trigger('mouseleave', 'touchend', false);

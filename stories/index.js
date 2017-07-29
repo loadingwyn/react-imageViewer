@@ -2,6 +2,7 @@ import React from 'react';
 
 import { storiesOf } from '@storybook/react';
 import ImageViewer from '../src/ImageViewer';
+import Carousel from '../src/Carousel';
 
 const images = ['http://img.zcool.cn/community/0101f856cfff206ac7252ce6214470.jpg',
   'https://s-media-cache-ak0.pinimg.com/originals/f6/92/3d/f6923d7df3af60cbca63d2e6bdded08f.jpg',
@@ -10,4 +11,5 @@ const images = ['http://img.zcool.cn/community/0101f856cfff206ac7252ce6214470.jp
 ];
 storiesOf('ImageViewer', module)
   .add('on PC', () => <ImageViewer images={images} index={0} />)
-  .add('on mobile device', () => <ImageViewer images={images} index={0} isMobile />);
+  .add('on mobile device', () => <ImageViewer images={images} index={0} isMobile />)
+  .add('Carousel', () => <Carousel width="1000px" height="750px" />);
