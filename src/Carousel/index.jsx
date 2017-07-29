@@ -6,7 +6,7 @@
 
   export default class Carousel extends PureComponent {
     static defaultProps = {
-      count: 2,
+      images: [],
     }
     state = {
       index: 0,
@@ -49,7 +49,7 @@
 
   @autobind
     next() {
-      if (this.state.index < this.props.count - 1) {
+      if (this.state.index < this.props.images.length - 1) {
         this.setState({
           index: this.state.index + 1,
         });
@@ -69,6 +69,7 @@
       const {
       width,
       height,
+      images,
     } = this.props;
       if (this.containerDom && this.viewPortDom) {
         this.containerDom.style.transform = `translateX(${-this.state.index * this.viewPortDom.clientWidth}px)`;
@@ -86,8 +87,18 @@
             styleName="container"
             ref={this.getContainer}
           >
-            <div styleName="content0" />
-            <div styleName="content1" />
+            {images.map(url => (
+              <div
+                key={url}
+                styleName="blackboard"
+              >
+                <img
+                  styleName="content"
+                  src={url}
+                  alt="图片"
+                />
+              </div>
+              ))}
           </div>
         </div>
       );

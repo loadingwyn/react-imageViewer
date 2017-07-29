@@ -12,4 +12,4 @@ const images = ['http://img.zcool.cn/community/0101f856cfff206ac7252ce6214470.jp
 storiesOf('ImageViewer', module)
   .add('on PC', () => <ImageViewer images={images} index={0} />)
   .add('on mobile device', () => <ImageViewer images={images} index={0} isMobile />)
-  .add('Carousel', () => <Carousel width="1000px" height="750px" />);
+  .add('Carousel', () => <Carousel width="1000px" height="750px" images={images} />);

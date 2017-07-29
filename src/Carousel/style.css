@@ -5,26 +5,24 @@
 }
 
 .container {
-  display: flex;
-  width: 201%;
+  white-space: nowrap;
   height: 100%;
   position: relative;
   overflow: visible;
   /*transition: all 0.3s;*/
 }
 
-.content0 {
-  flex: 1 1 0;
+.blackboard {
+  position: relative;
+  display: inline-block;
   height: 100%;
   width: 100%;
-  float: left;
-  background-color: red;
+  overflow: hidden;
 }
 
-.content1 {
-  flex: 1 1 0;
-  height: 100%;
-  width: 100%;
-  float: left;
-  background-color: blue;
+.content {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
 }

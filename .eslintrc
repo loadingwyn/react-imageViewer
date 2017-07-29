@@ -14,6 +14,7 @@
   "rules": {
       "react/prop-types": 0,
       "import/no-extraneous-dependencies": [error, { devDependencies: true }],
+      "jsx-closing-bracket-location": 0,
       "func-names": 0,
       "prefer-arrow-callback": 0,
       "arrow-parens": ["error", "as-needed"],
