@@ -8,11 +8,17 @@ export default class ImageControllerCreator {
     lastOffsetX: 0,
     lastOffsetY: 0,
   }
-  constructor(element) {
+  constructor(element, option = {}) {
     this.target = element;
     this.originalWidth = element.clientWidth;
     this.maxOffsetX = (window.innerWidth / 2) - 10;
     this.maxOffsetY = (window.innerHeight / 2) - 10;
+    this.viewPortWidth = option.viewPortWidth;
+    this.viewPortHeight = option.viewPortHeight;
+    this.onGetControl = option.onGetControl;
+    this.onLoseControl = option.onLoseControl;
+    this.isControlled = true;
+    this.stop = true;
   }
 
   changeTarget(newEle) {
@@ -21,6 +27,7 @@ export default class ImageControllerCreator {
   }
 
   set(newState) {
+    // const oldState = this.state;
     this.state = {
       ...this.state,
       ...newState,
@@ -31,11 +38,20 @@ export default class ImageControllerCreator {
       clientHeight,
     } = this.target;
     const scaleMultiples = 1 + (this.state.scale / 100);
+    if (scaleMultiples <= 1 && (
+      this.state.lastOffsetX ||
+      this.state.lastOffsetY
+    )) {
+      this.onGetControl();
+      this.onLoseControl();
+      this.reset();
+    }
     this.state = {
       ...this.state,
       ...this.restrictMovement(
-        (4 * clientWidth * scaleMultiples) / 7,
-        (clientHeight * scaleMultiples) / 2,
+        this.state,
+        ((clientWidth * scaleMultiples) - this.viewPortWidth) / 2,
+        ((clientHeight * scaleMultiples) - this.viewPortHeight) / 2,
       ),
     };
     const {
@@ -46,33 +62,46 @@ export default class ImageControllerCreator {
     } = this.state;
     // style.width = `${(scale * 2) + this.originalWidth}px`;
     // style.height = 'auto';
-    style.transform = `translate3d(${offsetX + lastOffsetX}px, ${offsetY + lastOffsetY}px, 0) scale(${scaleMultiples})`;
+    style.transform = `translate3d(calc(${offsetX + lastOffsetX}px - 50%), calc(${offsetY + lastOffsetY}px - 50%), 0) scale(${scaleMultiples})`;
+    if (this.onChange) {
+      this.onChange(this.state);
+    }
+    this.state.lastOffsetX = offsetX + lastOffsetX;
+    this.state.lastOffsetY = offsetY + lastOffsetY;
   }
 
-  restrictMovement(xRange, yRange) {
+  restrictMovement(state, xRange, yRange) {
+    let flag = true;
     const result = {};
     const {
       offsetX,
       offsetY,
       lastOffsetX,
       lastOffsetY,
-    } = this.state;
-    if ((lastOffsetX + offsetX) > xRange) {
-      result.lastOffsetX = xRange;
+    } = state;
+    if (Math.abs(lastOffsetX + offsetX) > xRange) {
       result.offsetX = 0;
+      result.lastOffsetX = lastOffsetX;
+      flag = false;
     }
-    if ((lastOffsetX + offsetX) < -xRange) {
-      result.lastOffsetX = -xRange;
-      result.offsetX = 0;
-    }
-    if ((lastOffsetY + offsetY) > yRange) {
-      result.lastOffsetY = yRange;
+    if (Math.abs(lastOffsetY + offsetY) > yRange) {
       result.offsetY = 0;
+      result.lastOffsetY = lastOffsetY;
+      // flag = false;
     }
-    if ((lastOffsetY + offsetY) < -yRange) {
-      result.lastOffsetY = -yRange;
-      result.offsetY = 0;
+    // if (this.stop) {
+    //   result.offsetX = 0;
+    //   result.offsetY = 0;
+    // }
+    if (!this.stop && flag === true && this.onGetControl) {
+      this.onGetControl();
     }
+    if (flag === false && this.isControlled === true && this.onLoseControl) {
+      this.onGetControl();
+      this.onLoseControl();
+    }
+    this.stop = false;
+    this.isControlled = flag;
     return result;
   }
 
@@ -118,5 +147,11 @@ export default class ImageControllerCreator {
       offsetX: 0,
       offsetY: 0,
     });
+  }
+  pause() {
+    this.stop = true;
+  }
+  resume() {
+    this.stop = false;
   }
 }
