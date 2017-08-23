@@ -4,6 +4,7 @@
   "description": "",
   "main": "index.js",
   "scripts": {
+    "build": "webpack",
     "dev": "webpack-dev-server",
     "test": "./node_modules/.bin/karma start",
     "storybook": "start-storybook -p 6006",
@@ -42,6 +43,7 @@
     "karma-sourcemap-loader": "^0.3.7",
     "karma-spec-reporter": "^0.0.31",
     "karma-webpack": "^2.0.3",
+    "loglevel": "^1.4.1",
     "mocha": "^3.4.1",
     "postcss-loader": "^2.0.6",
     "precss": "^2.0.0",

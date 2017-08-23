@@ -76,7 +76,15 @@ export default class Carousel extends PureComponent {
       });
       // gesturesManager.on('pressMove', this.containerOnMove);
       gesturesManager.on('touchEnd', () => {
+        const lastPosition = /translateX\((-?\d+)px\)/.exec(style.transform);
+        const offsetX = parseInt(lastPosition ? lastPosition[1] : 0, 10);
+        const base = this.viewPortEl.clientWidth * this.state.index;
         style.transition = 'all 0.3s';
+        if (offsetX + base > this.viewPortEl.clientWidth / 3) {
+          this.last();
+        } else if (offsetX + base < -this.viewPortEl.clientWidth / 3) {
+          this.next();
+        }
         style.transform = `translateX(${-this.viewPortEl.clientWidth * this.state.index}px)`;
         this.imageController.resume();
         this.isMoving = false;
@@ -99,8 +107,9 @@ export default class Carousel extends PureComponent {
     this.imageController.pause();
     const style = this.containerEl ? this.containerEl.style : {};
     const lastPosition = /translateX\((-?\d+)px\)/.exec(style.transform);
+    const offsetX = offset.deltaX + parseInt(lastPosition ? lastPosition[1] : 0, 10);
     style.transition = '';
-    style.transform = `translateX(${offset.deltaX + parseInt(lastPosition ? lastPosition[1] : 0, 10)}px)`;
+    style.transform = `translateX(${offsetX}px)`;
   };
 
   initialStyle = {};

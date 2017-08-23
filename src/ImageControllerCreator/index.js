@@ -8,17 +8,15 @@ export default class ImageControllerCreator {
     lastOffsetX: 0,
     lastOffsetY: 0,
   }
+
   constructor(element, option = {}) {
     this.target = element;
     this.originalWidth = element.clientWidth;
-    this.maxOffsetX = (window.innerWidth / 2) - 10;
-    this.maxOffsetY = (window.innerHeight / 2) - 10;
     this.viewPortWidth = option.viewPortWidth;
     this.viewPortHeight = option.viewPortHeight;
     this.onGetControl = option.onGetControl;
     this.onLoseControl = option.onLoseControl;
     this.isControlled = true;
-    this.stop = true;
   }
 
   changeTarget(newEle) {
@@ -27,38 +25,16 @@ export default class ImageControllerCreator {
   }
 
   set(newState) {
-    // const oldState = this.state;
-    this.state = {
-      ...this.state,
-      ...newState,
-    };
+    this.preProcess(newState);
     const {
       style,
-      clientWidth,
-      clientHeight,
     } = this.target;
-    const scaleMultiples = 1 + (this.state.scale / 100);
-    if (scaleMultiples <= 1 && (
-      this.state.lastOffsetX ||
-      this.state.lastOffsetY
-    )) {
-      this.onGetControl();
-      this.onLoseControl();
-      this.reset();
-    }
-    this.state = {
-      ...this.state,
-      ...this.restrictMovement(
-        this.state,
-        ((clientWidth * scaleMultiples) - this.viewPortWidth) / 2,
-        ((clientHeight * scaleMultiples) - this.viewPortHeight) / 2,
-      ),
-    };
     const {
       offsetX,
       offsetY,
       lastOffsetX,
       lastOffsetY,
+      scaleMultiples,
     } = this.state;
     // style.width = `${(scale * 2) + this.originalWidth}px`;
     // style.height = 'auto';
@@ -70,7 +46,36 @@ export default class ImageControllerCreator {
     this.state.lastOffsetY = offsetY + lastOffsetY;
   }
 
-  restrictMovement(state, xRange, yRange) {
+  preProcess(newState) {
+    this.state = {
+      ...this.state,
+      ...newState,
+    };
+    this.state.scaleMultiples = 1 + (this.state.scale / 100);
+    const {
+      clientWidth,
+      clientHeight,
+    } = this.target;
+    const {
+      lastOffsetX,
+      lastOffsetY,
+      scaleMultiples,
+    } = this.state;
+    if (scaleMultiples <= 1 && (
+      lastOffsetX ||
+      lastOffsetY
+    )) {
+      // this.onGetControl();
+      // this.onLoseControl();
+      this.reset();
+    }
+    this.restrictMovement(
+      ((clientWidth * scaleMultiples) - this.viewPortWidth) / 2,
+      ((clientHeight * scaleMultiples) - this.viewPortHeight) / 2,
+    );
+  }
+
+  restrictMovement(xRange, yRange) {
     let flag = true;
     const result = {};
     const {
@@ -78,31 +83,29 @@ export default class ImageControllerCreator {
       offsetY,
       lastOffsetX,
       lastOffsetY,
-    } = state;
-    if (Math.abs(lastOffsetX + offsetX) > xRange) {
+    } = this.state;
+    if (Math.abs(lastOffsetX + offsetX) > xRange
+      && Math.abs(lastOffsetX + offsetX) > Math.abs(lastOffsetX)) {
       result.offsetX = 0;
       result.lastOffsetX = lastOffsetX;
       flag = false;
     }
-    if (Math.abs(lastOffsetY + offsetY) > yRange) {
+    if (Math.abs(lastOffsetY + offsetY) > yRange
+      && Math.abs(lastOffsetY + offsetY) > Math.abs(lastOffsetY)) {
       result.offsetY = 0;
       result.lastOffsetY = lastOffsetY;
       // flag = false;
     }
-    // if (this.stop) {
-    //   result.offsetX = 0;
-    //   result.offsetY = 0;
-    // }
-    if (!this.stop && flag === true && this.onGetControl) {
-      this.onGetControl();
-    }
-    if (flag === false && this.isControlled === true && this.onLoseControl) {
+    if (this.isControlled && !flag && this.onLoseControl) {
       this.onGetControl();
       this.onLoseControl();
+    } else if (this.isControlled) {
+      this.onGetControl();
     }
-    this.stop = false;
-    this.isControlled = flag;
-    return result;
+    this.state = {
+      ...this.state,
+      ...result,
+    };
   }
 
   reset() {
@@ -120,12 +123,14 @@ export default class ImageControllerCreator {
       const {
         scale,
       } = this.state;
+      this.scaling = true;
       const newScale = scale + delta;
       if (newScale < 350 && newScale > 0) {
         this.set({ scale: newScale });
       } else if (newScale <= 0) {
         this.set({ scale: 0 });
       }
+      this.resume();
     };
   }
 
@@ -148,10 +153,11 @@ export default class ImageControllerCreator {
       offsetY: 0,
     });
   }
+
   pause() {
-    this.stop = true;
+    this.isControlled = false;
   }
   resume() {
-    this.stop = false;
+    this.isControlled = true;
   }
 }

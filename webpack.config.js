@@ -6,15 +6,14 @@ const HtmlWebpackPlugin = require('html-webpack-plugin');
 module.exports = {
   entry: [
     'babel-polyfill',
-    'react-hot-loader/patch',
-    'webpack-dev-server/client?http://localhost:8080',
-    'webpack/hot/only-dev-server',
-    './app/index.jsx',
+    // 'react-hot-loader/patch',
+    // 'webpack-dev-server/client?http://localhost:8080',
+    // 'webpack/hot/only-dev-server',
+    './src/index.jsx',
   ],
   output: {
     filename: 'js/bundle.js',
-    path: resolve(__dirname, 'public/static'),
-    publicPath: '/static/',
+    path: resolve(__dirname, 'public'),
   },
   devtool: 'source-map',
   devServer: {
@@ -47,7 +46,7 @@ module.exports = {
     }],
   },
   plugins: [
-    new webpack.HotModuleReplacementPlugin(),
+    // new webpack.HotModuleReplacementPlugin(),
     new webpack.NamedModulesPlugin(),
     new HtmlWebpackPlugin({
       filename: '../index.html',
