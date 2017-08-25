@@ -85,7 +85,7 @@ export default class Carousel extends PureComponent {
         } else if (offsetX + base < -this.viewPortEl.clientWidth / 3) {
           this.next();
         }
-        style.transform = `translateX(${-this.viewPortEl.clientWidth * this.state.index}px)`;
+        style.transform = `translateX(${-(10 + this.viewPortEl.clientWidth) * this.state.index}px)`;
         this.imageController.resume();
         this.isMoving = false;
       });
@@ -236,7 +236,7 @@ export default class Carousel extends PureComponent {
         images,
       } = this.props;
     if (this.containerEl && this.viewPortEl) {
-      this.containerEl.style.transform = `translateX(${-this.state.index * this.viewPortEl.clientWidth}px)`;
+      this.containerEl.style.transform = `translateX(${-this.state.index * (this.viewPortEl.clientWidth + 10)}px)`;
     }
     return (
       <Overlay lock>
@@ -245,7 +245,7 @@ export default class Carousel extends PureComponent {
             width,
             height,
           }}
-          styleName="viewPort"
+          styleName="view-port"
           ref={this.getViewPort}
         >
           <div

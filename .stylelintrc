@@ -123,7 +123,7 @@ rules:
 
   # Disallow animation and transition times under 100ms.
   # http://stylelint.io/user-guide/rules/time-no-imperceptible/
-  time-no-imperceptible: null
+  # time-no-imperceptible: null
 
   # Unit
 
@@ -323,23 +323,12 @@ rules:
 
   # Disallow attribute selectors.
   # http://stylelint.io/user-guide/rules/selector-no-attribute/
-  selector-no-attribute: null
+  # selector-no-attribute: null
 
   # Disallow combinators in selectors.
   # http://stylelint.io/user-guide/rules/selector-no-combinator/
-  selector-no-combinator: null
-
-  # Disallow id selectors.
-  # http://stylelint.io/user-guide/rules/selector-no-id/
-  selector-no-id: true
-
-  # Disallow type selectors.
-  # http://stylelint.io/user-guide/rules/selector-no-type/
-  selector-no-type: null
-
   # Disallow universal selectors.
   # http://stylelint.io/user-guide/rules/selector-no-universal/
-  selector-no-universal: true
 
   # Disallow vendor prefixes for selectors.
   # http://stylelint.io/user-guide/rules/selector-no-vendor-prefix/

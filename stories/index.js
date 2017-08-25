@@ -1,7 +1,7 @@
 import React from 'react';
 
 import { storiesOf } from '@storybook/react';
-import ImageViewer from '../src/ImageViewer';
+// import ImageViewer from '../src/ImageViewer';
 import Carousel from '../src/Carousel';
 
 const images = ['http://img.zcool.cn/community/0101f856cfff206ac7252ce6214470.jpg',
@@ -10,6 +10,4 @@ const images = ['http://img.zcool.cn/community/0101f856cfff206ac7252ce6214470.jp
   'http://niutuku.com/tools/bizhi_down.php?id=635332&n=0&time=1503224132&sign=89cb03b0d536e443ecdd7d8847a8b6c8',
 ];
 storiesOf('ImageViewer', module)
-  .add('on PC', () => <ImageViewer images={images} index={0} />)
-  .add('on mobile device', () => <ImageViewer images={images} index={0} isMobile />)
   .add('Carousel', () => <Carousel width="1000px" height="750px" images={images} />);
