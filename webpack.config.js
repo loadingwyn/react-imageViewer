@@ -1,7 +1,7 @@
 const { resolve } = require('path');
 const webpack = require('webpack');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
-// const ExtractTextPlugin = require('extract-text-webpack-plugin');
+const ExtractTextPlugin = require('extract-text-webpack-plugin');
 
 module.exports = {
   entry: [
@@ -52,9 +52,9 @@ module.exports = {
       filename: './index.html',
       template: './index.html',
     }),
-    // new ExtractTextPlugin({
-    //   filename: 'css/[name].css',
-    //   allChunks: true,
-    // }),
+    new ExtractTextPlugin({
+      filename: 'css/[name].css',
+      allChunks: true,
+    }),
   ],
 };

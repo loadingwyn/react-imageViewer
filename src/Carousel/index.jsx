@@ -89,8 +89,9 @@ export default class Carousel extends PureComponent {
   containerOnMove = offset => {
     this.isMoving = true;
     this.imageController.pause();
+    const deltaX = parseInt(offset.deltaX, 10);
     const style = this.containerEl ? this.containerEl.style : {};
-    this.lastContainerOffsetX = offset.deltaX + this.lastContainerOffsetX;
+    this.lastContainerOffsetX = deltaX + this.lastContainerOffsetX;
     const offsetX = this.lastContainerOffsetX
       - ((10 + this.viewPortEl.clientWidth) * this.state.index);
     style.transform = `translate3d(${offsetX}px, 0, 0)`;
@@ -167,7 +168,6 @@ export default class Carousel extends PureComponent {
       const {
           images,
         } = this.props;
-        // this.imageController.changeTarget(this.imageEls[images[this.state.index - 1]]);
       this.setState({
         index: this.state.index - 1,
       });
@@ -176,20 +176,22 @@ export default class Carousel extends PureComponent {
   }
 
   preload(url) {
-    const loader = new Image();
-    new Promise((resolve, reject) => {
-      loader.onload = resolve;
-      loader.onerror = reject;
-      loader.src = url;
-    }).then(() => {
-      this.initialStyle[url] = resizeImage(loader.width, loader.height);
-      this.setState({
-        loaded: {
-          ...this.state.loaded,
-          [url]: true,
-        },
+    if (url && !this.state.loaded[url]) {
+      const loader = new Image();
+      new Promise((resolve, reject) => {
+        loader.onload = resolve;
+        loader.onerror = reject;
+        loader.src = url;
+      }).then(() => {
+        this.initialStyle[url] = resizeImage(loader.width, loader.height);
+        this.setState({
+          loaded: {
+            ...this.state.loaded,
+            [url]: true,
+          },
+        });
       });
-    });
+    }
   }
 
   render() {
@@ -197,25 +199,20 @@ export default class Carousel extends PureComponent {
         loaded,
       } = this.state;
     const {
-        width,
-        height,
         images,
-      } = this.props;
-    if (this.containerEl && this.viewPortEl) {
-      this.containerEl.style.transform = `translate3d(${-this.state.index * (this.viewPortEl.clientWidth + 10)}px, 0, 0)`;
-    }
+    } = this.props;
+
     return (
       <Overlay lock>
         <div
-          style={{
-            width,
-            height,
-          }}
           styleName="view-port"
           ref={this.getViewPort}
         >
           <div
             styleName="container"
+            style={{
+              transform: `translate3d(${-this.state.index * ((this.viewPortEl ? this.viewPortEl.clientWidth : 0) + 10)}px, 0, 0)`,
+            }}
             ref={this.getContainer}
           >
             {images.map(url => (

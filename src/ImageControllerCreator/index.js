@@ -138,8 +138,8 @@ export default class ImageControllerCreator {
     //   lastOffsetY: offset.deltaY + this.state.lastOffsetY,
     // });
     this.set({
-      offsetX: offset.deltaX,
-      offsetY: offset.deltaY,
+      offsetX: parseInt(offset.deltaX, 10),
+      offsetY: parseInt(offset.deltaY, 10),
     });
   }
 
