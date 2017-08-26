@@ -62,21 +62,19 @@ export default class Carousel extends PureComponent {
         touchEmulator(el);
       }
       gesturesManager.on('touchStart', () => {
-        style.transition = 'all 0.3s';
+        style.transition = '';
       });
       gesturesManager.on('touchEnd', () => {
-        const lastPosition = /translateX\((-?\d+)px\)/.exec(style.transform);
-        const offsetX = parseInt(lastPosition ? lastPosition[1] : 0, 10);
-        const base = this.viewPortEl.clientWidth * this.state.index;
         style.transition = 'all 0.3s';
-        if (offsetX + base > this.viewPortEl.clientWidth / 3) {
+        if (this.lastContainerOffsetX > this.viewPortEl.clientWidth / 3) {
           this.last();
-        } else if (offsetX + base < -this.viewPortEl.clientWidth / 3) {
+        } else if (this.lastContainerOffsetX < -this.viewPortEl.clientWidth / 3) {
           this.next();
         }
-        style.transform = `translateX(${-(10 + this.viewPortEl.clientWidth) * this.state.index}px)`;
+        style.transform = `translate3d(${-(10 + this.viewPortEl.clientWidth) * this.state.index}px, 0, 0)`;
         this.imageController.resume();
         this.isMoving = false;
+        this.lastContainerOffsetX = 0;
       });
     }
   }
@@ -92,19 +90,19 @@ export default class Carousel extends PureComponent {
     this.isMoving = true;
     this.imageController.pause();
     const style = this.containerEl ? this.containerEl.style : {};
-    const lastPosition = /translateX\((-?\d+)px\)/.exec(style.transform);
-    const offsetX = offset.deltaX + parseInt(lastPosition ? lastPosition[1] : 0, 10);
-    style.transition = '';
-    style.transform = `translateX(${offsetX}px)`;
+    this.lastContainerOffsetX = offset.deltaX + this.lastContainerOffsetX;
+    const offsetX = this.lastContainerOffsetX
+      - ((10 + this.viewPortEl.clientWidth) * this.state.index);
+    style.transform = `translate3d(${offsetX}px, 0, 0)`;
   };
 
+  lastContainerOffsetX = 0;
   initialStyle = {};
   imageController = {};
   gesturesHandler(el) {
     if (this.touchDisabled) {
       touchEmulator(el.parentElement);
     }
-
     const imageController = new ImageControllerCreator(
       el, {
         viewPortWidth: this.viewPortEl.clientWidth,
@@ -127,7 +125,20 @@ export default class Carousel extends PureComponent {
       'pressMove',
       offset => {
         imageController.move.bind(imageController)(offset);
-      });
+      },
+    );
+    gesturesManager.on(
+      'doubleTap',
+      () => {
+        if (!imageController.isLarge) {
+          imageController.enlarge(200)();
+          imageController.isLarge = true;
+        } else {
+          imageController.enlarge(-200)();
+          imageController.isLarge = false;
+        }
+      },
+    );
     el.parentElement.addEventListener('wheel', event => {
       if (event.deltaY < 0) {
         imageController.enlarge(12)();
@@ -191,7 +202,7 @@ export default class Carousel extends PureComponent {
         images,
       } = this.props;
     if (this.containerEl && this.viewPortEl) {
-      this.containerEl.style.transform = `translateX(${-this.state.index * (this.viewPortEl.clientWidth + 10)}px)`;
+      this.containerEl.style.transform = `translate3d(${-this.state.index * (this.viewPortEl.clientWidth + 10)}px, 0, 0)`;
     }
     return (
       <Overlay lock>

@@ -9,6 +9,6 @@ const images = ['http://img.zcool.cn/community/0101f856cfff206ac7252ce6214470.jp
 ];
 
 ReactDOM.render(
-  <Carousel width="100%" height="75%" images={images} />,
+  <Carousel width="100%" height="75%" images={images} isMobile />,
   document.querySelector('#root'),
 );

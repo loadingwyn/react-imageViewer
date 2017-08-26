@@ -49,7 +49,7 @@ module.exports = {
     // new webpack.HotModuleReplacementPlugin(),
     new webpack.NamedModulesPlugin(),
     new HtmlWebpackPlugin({
-      filename: '../index.html',
+      filename: './index.html',
       template: './index.html',
     }),
     // new ExtractTextPlugin({
