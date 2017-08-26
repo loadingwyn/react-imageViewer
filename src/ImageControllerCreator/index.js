@@ -65,8 +65,6 @@ export default class ImageControllerCreator {
       lastOffsetX ||
       lastOffsetY
     )) {
-      // this.onGetControl();
-      // this.onLoseControl();
       this.reset();
     }
     this.restrictMovement(

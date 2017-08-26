@@ -57,24 +57,13 @@ export default class Carousel extends PureComponent {
       this.containerEl = el;
       const gesturesManager = new AlloyFinger(el, {});
       this.containerController = gesturesManager;
-    //   let tmpDeltaX = 0;
-    //   let lastIsOutOfRange = false;
       const style = this.containerEl.style;
-    //   const gesturesManager = new Hammer.Manager(el);
-    //   const backgroundPan = new Hammer.Pan({ threshold: 0, pointers: 0 });
-    //   const backgroundSwipe = new Hammer.Swipe({
-    //     velocity: 0.2,
-    //     threshold: 40,
-    //   });
       if (this.touchDisabled) {
         touchEmulator(el);
       }
-    //   gesturesManager.add(backgroundPan);
-    //   gesturesManager.add(backgroundSwipe).recognizeWith(gesturesManager.get('pan'));
       gesturesManager.on('touchStart', () => {
         style.transition = 'all 0.3s';
       });
-      // gesturesManager.on('pressMove', this.containerOnMove);
       gesturesManager.on('touchEnd', () => {
         const lastPosition = /translateX\((-?\d+)px\)/.exec(style.transform);
         const offsetX = parseInt(lastPosition ? lastPosition[1] : 0, 10);
@@ -89,15 +78,12 @@ export default class Carousel extends PureComponent {
         this.imageController.resume();
         this.isMoving = false;
       });
-    //   gesturesManager.on('swipeleft', this.next);
-    //   gesturesManager.on('swiperight', this.last);
     }
   }
 
   @autobind
   getImageEl(el) {
-    if (el && !this.imageEls[el.src]) {
-      this.imageEls[el.src] = el;
+    if (el) {
       this.gesturesHandler(el);
     }
   }
@@ -113,41 +99,10 @@ export default class Carousel extends PureComponent {
   };
 
   initialStyle = {};
-  imageEls = {};
   imageController = {};
   gesturesHandler(el) {
-    // const imageController = new ImageControllerCreator(
-    //   this.imageEls[el.src],
-    //   () => {
-    //     this.isOutOfRange = false;
-    //   },
-    //   () => {
-    //     this.isOutOfRange = true;
-    //   },
-    // );
-    // const gesturesManager = new Hammer.Manager(this.imageEls[el.src], {});
-    // if (!this.touchDisabled) {
-    //   gesturesManager.on('swipeleft', this.next);
-    //   gesturesManager.on('swiperight', this.last);
-    // }
-    // this.imageController[el.src] = imageController;
-    // gesturesManager.add(new Hammer.Pan({ threshold: 0, pointers: 0 }));
-    // gesturesManager.add(new Hammer.Swipe({
-    //   velocity: 0.88,
-    //   threshold: 40,
-    // })).recognizeWith(gesturesManager.get('pan'));
-    // gesturesManager.add(new Hammer.Pinch({ threshold: 0 })).recognizeWith([
-    //   gesturesManager.get('pan'),
-    // ]);
-    // gesturesManager.on('pinchout', imageController.enlarge(2));
-    // gesturesManager.on('pinchin', imageController.enlarge(-2));
-    // gesturesManager.on('panmove', imageController.move.bind(imageController));
-    // gesturesManager.on('panend', offset => {
-    //   imageController.record(offset);
-    //   this.isOutOfRange = false;
-    // });
     if (this.touchDisabled) {
-      touchEmulator(el);
+      touchEmulator(el.parentElement);
     }
 
     const imageController = new ImageControllerCreator(
@@ -167,13 +122,13 @@ export default class Carousel extends PureComponent {
       },
     );
     this.imageController = imageController;
-    const gesturesManager = new AlloyFinger(el, {});
+    const gesturesManager = new AlloyFinger(el.parentElement, {});
     gesturesManager.on(
       'pressMove',
       offset => {
         imageController.move.bind(imageController)(offset);
       });
-    el.addEventListener('wheel', event => {
+    el.parentElement.addEventListener('wheel', event => {
       if (event.deltaY < 0) {
         imageController.enlarge(12)();
       } else if (event.deltaY > 0) {
