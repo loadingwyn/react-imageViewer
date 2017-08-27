@@ -110,6 +110,7 @@ export default class ImageControllerCreator {
   }
 
   reset() {
+    this.target.style.transition = 'transform 0.1s';
     this.set({
       scale: 0,
       offsetX: 0,
@@ -117,6 +118,7 @@ export default class ImageControllerCreator {
       lastOffsetX: 0,
       lastOffsetY: 0,
     });
+    this.target.style.transition = 'transform 0.1s';
   }
 
   enlarge(delta) {
@@ -124,7 +126,6 @@ export default class ImageControllerCreator {
       const {
         scale,
       } = this.state;
-      this.scaling = true;
       const newScale = scale + delta;
       if (newScale < 350 && newScale > 0) {
         this.set({ scale: newScale });
@@ -133,6 +134,18 @@ export default class ImageControllerCreator {
       }
       this.resume();
     };
+  }
+
+  enlargeBytimes(times) {
+    const {
+      scale,
+    } = this.state;
+    const newScale = scale + ((times - 1) * 100) / (scale / 100 + 1);
+    if (newScale < 350 && newScale > 0) {
+      this.set({ scale: newScale });
+    } else if (newScale <= 0) {
+      this.set({ scale: 0 });
+    }
   }
 
   move(offset) {

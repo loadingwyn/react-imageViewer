@@ -68,6 +68,7 @@ export default class Carousel extends PureComponent {
       gesturesManager.on('pressMove', this.containerOnMove);
       gesturesManager.on('touchEnd', () => {
         const swipeTrigger = this.viewPortEl.clientWidth * 0.2;
+        // this.imageController.resume();
         if (this.lastContainerOffsetX > swipeTrigger) {
           if (this.getCenter() > 0 && this.state.index !== 1) {
             style.transform = `translate3d(${this.lastContainerOffsetX - ((GUTTER_WIDTH + this.viewPortEl.clientWidth) * 2)}px, 0, 0)`;
@@ -84,7 +85,6 @@ export default class Carousel extends PureComponent {
         }
         style.transition = 'all 0.3s';
         style.transform = `translate3d(${-(GUTTER_WIDTH + this.viewPortEl.clientWidth) * this.getCenter()}px, 0, 0)`;
-        this.imageController.resume();
         this.lastContainerOffsetX = 0;
       });
     }
@@ -116,7 +116,7 @@ export default class Carousel extends PureComponent {
   }
 
   containerOnMove = offset => {
-    this.imageController.pause();
+    // this.imageController.pause();
     const deltaX = parseInt(offset.deltaX, 10);
     const style = this.containerEl ? this.containerEl.style : {};
     this.lastContainerOffsetX = deltaX + this.lastContainerOffsetX;
@@ -157,15 +157,9 @@ export default class Carousel extends PureComponent {
       },
     );
     gesturesManager.on(
-      'doubleTap',
-      () => {
-        if (!imageController.isLarge) {
-          imageController.enlarge(200)();
-          imageController.isLarge = true;
-        } else {
-          imageController.enlarge(-200)();
-          imageController.isLarge = false;
-        }
+      'pinch',
+      event => {
+        imageController.enlargeBytimes(event.zoom);
       },
     );
     el.parentElement.addEventListener('wheel', event => {
@@ -188,7 +182,7 @@ export default class Carousel extends PureComponent {
     if (index < images.length - 1) {
       this.setState({
         index: index + 1,
-      });
+      }, this.ignore);
       this.preload(images[index + 1]);
     }
   }
@@ -204,7 +198,7 @@ export default class Carousel extends PureComponent {
     if (index > 0) {
       this.setState({
         index: index - 1,
-      });
+      }, this.ignore);
       this.preload(images[index - 1]);
     }
   }
@@ -225,6 +219,13 @@ export default class Carousel extends PureComponent {
           },
         });
       });
+    }
+  }
+
+  ignore = () => {
+    if (this.containerController) {
+      this.containerController.off('pressMove', this.containerOnMove);
+      this.containerController.on('pressMove', this.containerOnMove);
     }
   }
 
