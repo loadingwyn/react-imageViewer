@@ -25,6 +25,9 @@ export default class ImageControllerCreator {
   }
 
   set(newState) {
+    if (!this.isControlled) {
+      return;
+    }
     this.preProcess(newState);
     const {
       style,
@@ -74,7 +77,7 @@ export default class ImageControllerCreator {
   }
 
   restrictMovement(xRange, yRange) {
-    let flag = true;
+    let isInLimit = true;
     const result = {};
     const {
       offsetX,
@@ -86,7 +89,7 @@ export default class ImageControllerCreator {
       && Math.abs(lastOffsetX + offsetX) > Math.abs(lastOffsetX)) {
       result.offsetX = 0;
       result.lastOffsetX = lastOffsetX;
-      flag = false;
+      isInLimit = false;
     }
     if (Math.abs(lastOffsetY + offsetY) > yRange
       && Math.abs(lastOffsetY + offsetY) > Math.abs(lastOffsetY)) {
@@ -94,7 +97,7 @@ export default class ImageControllerCreator {
       result.lastOffsetY = lastOffsetY;
       // flag = false;
     }
-    if (this.isControlled && !flag && this.onLoseControl) {
+    if (this.isControlled && !isInLimit && this.onLoseControl && Math.abs(offsetY) < 5) {
       this.onGetControl();
       this.onLoseControl();
     } else if (this.isControlled) {

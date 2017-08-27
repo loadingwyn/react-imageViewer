@@ -8,12 +8,13 @@ import resizeImage from '../utils/resizeImage';
 import Overlay from '../Overlay';
 import './style.css';
 
+const GUTTER_WIDTH = 10;
 export default class Carousel extends PureComponent {
   static defaultProps = {
     images: [],
   }
   state = {
-    index: 2,
+    index: 0,
     loaded: {},
   };
   componentWillMount() {
@@ -64,16 +65,26 @@ export default class Carousel extends PureComponent {
       gesturesManager.on('touchStart', () => {
         style.transition = '';
       });
+      gesturesManager.on('pressMove', this.containerOnMove);
       gesturesManager.on('touchEnd', () => {
-        style.transition = 'all 0.3s';
-        if (this.lastContainerOffsetX > this.viewPortEl.clientWidth / 3) {
+        const swipeTrigger = this.viewPortEl.clientWidth * 0.2;
+        if (this.lastContainerOffsetX > swipeTrigger) {
+          if (this.getCenter() > 0 && this.state.index !== 1) {
+            style.transform = `translate3d(${this.lastContainerOffsetX - ((GUTTER_WIDTH + this.viewPortEl.clientWidth) * 2)}px, 0, 0)`;
+          } else if (this.state.index === 1) {
+            style.transform = `translate3d(${this.lastContainerOffsetX - (GUTTER_WIDTH + this.viewPortEl.clientWidth)}px, 0, 0)`;
+          }
           this.last();
-        } else if (this.lastContainerOffsetX < -this.viewPortEl.clientWidth / 3) {
+        } else if (this.lastContainerOffsetX < -swipeTrigger) {
+          style.transform = `translate3d(${this.lastContainerOffsetX}px, 0, 0)`;
+          if (this.state.index === 0) {
+            style.transition = 'all 0.3s';
+          }
           this.next();
         }
-        style.transform = `translate3d(${-(10 + this.viewPortEl.clientWidth) * this.state.index}px, 0, 0)`;
+        style.transition = 'all 0.3s';
+        style.transform = `translate3d(${-(GUTTER_WIDTH + this.viewPortEl.clientWidth) * this.getCenter()}px, 0, 0)`;
         this.imageController.resume();
-        this.isMoving = false;
         this.lastContainerOffsetX = 0;
       });
     }
@@ -86,14 +97,31 @@ export default class Carousel extends PureComponent {
     }
   }
 
+  getCenter() {
+    const {
+      index,
+    } = this.state;
+    const {
+        images,
+    } = this.props;
+    const displayMax = ((index + 2) > images.length ? images.length : (index + 2));
+    const displayMin = (index - 1) < 0 ? 0 : (index - 1);
+    let center = parseInt((displayMax - displayMin) / 2, 10);
+    if (index < 1) {
+      center = index;
+    } else if (index > images.length - 2) {
+      center = images.length - index;
+    }
+    return center;
+  }
+
   containerOnMove = offset => {
-    this.isMoving = true;
     this.imageController.pause();
     const deltaX = parseInt(offset.deltaX, 10);
     const style = this.containerEl ? this.containerEl.style : {};
     this.lastContainerOffsetX = deltaX + this.lastContainerOffsetX;
     const offsetX = this.lastContainerOffsetX
-      - ((10 + this.viewPortEl.clientWidth) * this.state.index);
+      - ((10 + this.viewPortEl.clientWidth) * this.getCenter());
     style.transform = `translate3d(${offsetX}px, 0, 0)`;
   };
 
@@ -151,27 +179,33 @@ export default class Carousel extends PureComponent {
 
   @autobind
   next() {
-    if (this.state.index < this.props.images.length - 1) {
-      const {
-          images,
-        } = this.props;
+    const {
+      index,
+    } = this.state;
+    const {
+        images,
+    } = this.props;
+    if (index < images.length - 1) {
       this.setState({
-        index: this.state.index + 1,
+        index: index + 1,
       });
-      this.preload(images[this.state.index + 1]);
+      this.preload(images[index + 1]);
     }
   }
 
   @autobind
   last() {
-    if (this.state.index > 0) {
-      const {
-          images,
-        } = this.props;
+    const {
+      index,
+    } = this.state;
+    const {
+        images,
+    } = this.props;
+    if (index > 0) {
       this.setState({
-        index: this.state.index - 1,
+        index: index - 1,
       });
-      this.preload(images[this.state.index - 1]);
+      this.preload(images[index - 1]);
     }
   }
 
@@ -196,12 +230,14 @@ export default class Carousel extends PureComponent {
 
   render() {
     const {
-        loaded,
-      } = this.state;
+      loaded,
+      index,
+    } = this.state;
     const {
         images,
     } = this.props;
-
+    const displayMax = ((index + 2) > images.length ? images.length : (index + 2));
+    const displayMin = (index - 1) < 0 ? 0 : (index - 1);
     return (
       <Overlay lock>
         <div
@@ -211,35 +247,39 @@ export default class Carousel extends PureComponent {
           <div
             styleName="container"
             style={{
-              transform: `translate3d(${-this.state.index * ((this.viewPortEl ? this.viewPortEl.clientWidth : 0) + 10)}px, 0, 0)`,
+              transform: `translate3d(${-this.getCenter() * ((this.viewPortEl ? this.viewPortEl.clientWidth : 0) + GUTTER_WIDTH)}px, 0, 0)`,
             }}
             ref={this.getContainer}
           >
-            {images.map(url => (
-              <div
-                key={url}
-                styleName="blackboard"
-              >
-                {loaded[url] ? (
-                  <img
-                    styleName="content"
-                    style={{
-                      ...this.initialStyle[url],
-                    }}
-                    src={url}
-                    alt="图片"
-                    ref={this.getImageEl}
-                  />
-                ) : (
-                  <div styleName="loading">
-                    <div />
-                    <div />
-                    <div />
-                    <div />
-                    <div />
-                  </div>
-                )}
-              </div>
+            {images
+              .slice(
+                displayMin,
+                displayMax,
+              ).map((url, ind) => (
+                <div
+                  key={url + (ind + (index - (displayMax - displayMin)))}
+                  styleName="blackboard"
+                >
+                  {loaded[url] ? (
+                    <img
+                      styleName="content"
+                      style={{
+                        ...this.initialStyle[url],
+                      }}
+                      src={url}
+                      alt="图片"
+                      ref={this.getImageEl}
+                    />
+                  ) : (
+                    <div styleName="loading">
+                      <div />
+                      <div />
+                      <div />
+                      <div />
+                      <div />
+                    </div>
+                  )}
+                </div>
               ))}
           </div>
         </div>
