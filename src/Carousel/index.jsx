@@ -168,6 +168,7 @@ export default class Carousel extends PureComponent {
           imageController.reset();
         } else {
           imageController.enlargeBytimes(1.5);
+          imageController.recordScale();
         }
       },
     );
