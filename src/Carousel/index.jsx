@@ -148,7 +148,6 @@ export default class Carousel extends PureComponent {
         },
       },
     );
-    this.imageController = imageController;
     const gesturesManager = new AlloyFinger(el.parentElement, {});
     gesturesManager.on(
       'pressMove',
@@ -162,13 +161,30 @@ export default class Carousel extends PureComponent {
         imageController.enlargeBytimes(event.zoom);
       },
     );
-    el.parentElement.addEventListener('wheel', event => {
-      if (event.deltaY < 0) {
-        imageController.enlarge(12)();
-      } else if (event.deltaY > 0) {
-        imageController.enlarge(-12)();
-      }
-    });
+    gesturesManager.on(
+      'doubleTap',
+      () => {
+        if (imageController.state.scale > 1) {
+          imageController.reset();
+        } else {
+          imageController.enlargeBytimes(1.5);
+        }
+      },
+    );
+    gesturesManager.on(
+      'touchEnd',
+      () => {
+        imageController.recordScale();
+      },
+    );
+
+    // el.parentElement.addEventListener('wheel', event => {
+    //   if (event.deltaY < 0) {
+    //     imageController.enlarge(12)();
+    //   } else if (event.deltaY > 0) {
+    //     imageController.enlarge(-12)();
+    //   }
+    // });
   }
 
   @autobind
@@ -258,7 +274,7 @@ export default class Carousel extends PureComponent {
                 displayMax,
               ).map((url, ind) => (
                 <div
-                  key={url + (ind + (index - (displayMax - displayMin)))}
+                  key={url + (ind + index - (index - displayMin))}
                   styleName="blackboard"
                 >
                   {loaded[url] ? (

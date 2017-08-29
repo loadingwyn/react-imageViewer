@@ -2,7 +2,8 @@
 
 export default class ImageControllerCreator {
   state = {
-    scale: 0,
+    scale: 1,
+    lastScale: 1,
     offsetX: 0,
     offsetY: 0,
     lastOffsetX: 0,
@@ -54,7 +55,7 @@ export default class ImageControllerCreator {
       ...this.state,
       ...newState,
     };
-    this.state.scaleMultiples = 1 + (this.state.scale / 100);
+    this.state.scaleMultiples = this.state.scale;
     const {
       clientWidth,
       clientHeight,
@@ -112,40 +113,47 @@ export default class ImageControllerCreator {
   reset() {
     this.target.style.transition = 'transform 0.1s';
     this.set({
-      scale: 0,
+      scale: 1,
       offsetX: 0,
       offsetY: 0,
       lastOffsetX: 0,
       lastOffsetY: 0,
+      lastScale: 1,
     });
     this.target.style.transition = 'transform 0.1s';
   }
 
-  enlarge(delta) {
-    return () => {
-      const {
-        scale,
-      } = this.state;
-      const newScale = scale + delta;
-      if (newScale < 350 && newScale > 0) {
-        this.set({ scale: newScale });
-      } else if (newScale <= 0) {
-        this.set({ scale: 0 });
-      }
-      this.resume();
-    };
-  }
+  // enlarge(delta) {
+  //   return () => {
+  //     const {
+  //       scale,
+  //     } = this.state;
+  //     const newScale = scale + delta;
+  //     if (newScale < 350 && newScale > 1) {
+  //       this.set({ scale: newScale });
+  //     } else if (newScale <= 1) {
+  //       this.set({ scale: 1 });
+  //     }
+  //     this.resume();
+  //   };
+  // }
 
   enlargeBytimes(times) {
     const {
-      scale,
+      lastScale = 1,
     } = this.state;
-    const newScale = scale + ((times - 1) * 100) / (scale / 100 + 1);
-    if (newScale < 350 && newScale > 0) {
+    const newScale = times * lastScale;
+    if (newScale < 3.5 && newScale > 1) {
       this.set({ scale: newScale });
-    } else if (newScale <= 0) {
-      this.set({ scale: 0 });
+    } else if (newScale <= 1) {
+      this.set({ scale: 1 });
     }
+  }
+
+  recordScale() {
+    this.set({
+      lastScale: this.state.scale,
+    });
   }
 
   move(offset) {
