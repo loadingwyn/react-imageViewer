@@ -86,6 +86,7 @@ export default class Carousel extends PureComponent {
         style.transition = 'all 0.3s';
         style.transform = `translate3d(${-(GUTTER_WIDTH + this.viewPortEl.clientWidth) * this.getCenter()}px, 0, 0)`;
         this.lastContainerOffsetX = 0;
+        this.isMoving = false;
       });
     }
   }
@@ -116,6 +117,7 @@ export default class Carousel extends PureComponent {
   }
 
   containerOnMove = offset => {
+    this.isMoving = true;
     // this.imageController.pause();
     const deltaX = parseInt(offset.deltaX, 10);
     const style = this.containerEl ? this.containerEl.style : {};
@@ -137,12 +139,12 @@ export default class Carousel extends PureComponent {
         viewPortWidth: this.viewPortEl.clientWidth,
         viewPortHeight: this.viewPortEl.clientHeight,
         onGetControl: () => {
-          if (this.containerController) {
+          if (this.containerController && !this.isMoving) {
             this.containerController.off('pressMove', this.containerOnMove);
           }
         },
         onLoseControl: () => {
-          if (this.containerController) {
+          if (this.containerController && !this.isMoving) {
             this.containerController.on('pressMove', this.containerOnMove);
           }
         },

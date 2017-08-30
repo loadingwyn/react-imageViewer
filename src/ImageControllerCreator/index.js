@@ -17,7 +17,6 @@ export default class ImageControllerCreator {
     this.viewPortHeight = option.viewPortHeight;
     this.onGetControl = option.onGetControl;
     this.onLoseControl = option.onLoseControl;
-    this.isControlled = true;
   }
 
   changeTarget(newEle) {
@@ -26,9 +25,6 @@ export default class ImageControllerCreator {
   }
 
   set(newState) {
-    if (!this.isControlled) {
-      return;
-    }
     this.preProcess(newState);
     const {
       style,
@@ -98,10 +94,10 @@ export default class ImageControllerCreator {
       result.lastOffsetY = lastOffsetY;
       // flag = false;
     }
-    if (this.isControlled && !isInLimit && this.onLoseControl && Math.abs(offsetY) < 5) {
+    if (!isInLimit && this.onLoseControl && Math.abs(offsetY) < 5) {
       this.onGetControl();
       this.onLoseControl();
-    } else if (this.isControlled) {
+    } else {
       this.onGetControl();
     }
     this.state = {
@@ -122,22 +118,6 @@ export default class ImageControllerCreator {
     });
     this.target.style.transition = 'transform 0.1s';
   }
-
-  // enlarge(delta) {
-  //   return () => {
-  //     const {
-  //       scale,
-  //     } = this.state;
-  //     const newScale = scale + delta;
-  //     if (newScale < 350 && newScale > 1) {
-  //       this.set({ scale: newScale });
-  //     } else if (newScale <= 1) {
-  //       this.set({ scale: 1 });
-  //     }
-  //     this.resume();
-  //   };
-  // }
-
   enlargeBytimes(times) {
     const {
       lastScale = 1,
@@ -157,10 +137,6 @@ export default class ImageControllerCreator {
   }
 
   move(offset) {
-    // this.set({
-    //   lastOffsetX: offset.deltaX + this.state.lastOffsetX,
-    //   lastOffsetY: offset.deltaY + this.state.lastOffsetY,
-    // });
     this.set({
       offsetX: parseInt(offset.deltaX, 10),
       offsetY: parseInt(offset.deltaY, 10),
@@ -174,12 +150,5 @@ export default class ImageControllerCreator {
       offsetX: 0,
       offsetY: 0,
     });
-  }
-
-  pause() {
-    this.isControlled = false;
-  }
-  resume() {
-    this.isControlled = true;
   }
 }
