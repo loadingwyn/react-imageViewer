@@ -15,13 +15,13 @@ module.exports = {
     filename: 'js/bundle.js',
     path: resolve(__dirname, 'public'),
   },
-  devtool: 'source-map',
-  devServer: {
-    hot: true,
-    contentBase: resolve(__dirname, 'public'),
-    publicPath: '/static/',
-    historyApiFallback: true,
-  },
+  // devtool: 'source-map',
+  // devServer: {
+  //   hot: true,
+  //   contentBase: resolve(__dirname, 'public'),
+  //   publicPath: '/static/',
+  //   historyApiFallback: true,
+  // },
   resolve: {
     extensions: ['.js', '.jsx'],
   },
@@ -36,7 +36,7 @@ module.exports = {
          { loader: 'style-loader' }, {
            loader: 'css-loader',
            options: {
-             sourceMap: true,
+            //  sourceMap: true,
              importLoaders: 1,
              modules: true,
              localIdentName: '[path]___[name]__[local]___[hash:base64:5]',

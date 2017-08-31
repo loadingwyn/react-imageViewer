@@ -51,24 +51,20 @@
     "mocha": "^3.4.1",
     "postcss-loader": "^2.0.6",
     "precss": "^2.0.0",
-    "react-hot-loader": "next",
     "style-loader": "^0.18.2",
     "stylelint": "^8.0.0",
     "stylelint-order": "^0.6.0",
-    "webpack": "^3.x",
-    "webpack-dev-server": "^2.x"
+    "webpack": "^3.x"
   },
   "dependencies": {
     "alloyfinger": "^0.1.8",
     "babel-plugin-react-css-modules": "^3.x",
     "babel-polyfill": "^6.23.0",
     "core-decorators": "^0.19.0",
-    "history": "^4.6.3",
     "loaders.css": "^0.1.2",
     "normalize.css": "^7.0.0",
     "react": "^15.6.1",
     "react-addons-perf": "^15.4.2",
-    "react-dom": "^15.6.1",
-    "react-router-dom": "^4.1.1"
+    "react-dom": "^15.6.1"
   }
 }
