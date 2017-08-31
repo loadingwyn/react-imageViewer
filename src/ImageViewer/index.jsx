@@ -317,7 +317,7 @@ export default class Carousel extends PureComponent {
                       ref={this.getImageEl}
                     />
                   ) : (
-                    <div styleName="loading">
+                    <div styleName="loading" key="loading">
                       <div />
                       <div />
                       <div />

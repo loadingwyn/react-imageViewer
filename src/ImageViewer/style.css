@@ -3,6 +3,8 @@
   position: absolute;
   top: 50%;
   left: 50%;
+  width: 100%;
+  line-height: 500px;
   transform: translate(-50%, -50%);
 }
 

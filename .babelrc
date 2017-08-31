@@ -3,6 +3,7 @@
     ["env", {
       "targets": {
         "chrome": 40,
+        "safari": 9,
       },
       "modules": false,
       "include": [],
