@@ -4,7 +4,7 @@
 ![demo](demo/demo.gif)
 
 Features
-- Support pinch to zoom and swipe smoothly(use [Alloyfinger](https://github.com/AlloyTeam/AlloyFinger))
+- Support pinching to zoom and swiping smoothly(use [Alloyfinger](https://github.com/AlloyTeam/AlloyFinger))
 - Image preloading
 - Good performance(rendering no more than 3 images in the same time, no matter how long the image array is)
 
