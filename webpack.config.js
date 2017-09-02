@@ -32,15 +32,17 @@ module.exports = {
       exclude: /node_modules/,
     }, {
       test: /\.css$/,
+      exclude: /node_modules/,
       use: ExtractTextPlugin.extract({
         fallback: 'style-loader',
         use: [{
           loader: 'css-loader',
           options: {
            //  sourceMap: true,
+            minimize: true,
             importLoaders: 1,
             modules: true,
-            localIdentName: '[path]___[name]__[local]___[hash:base64:5]',
+            localIdentName: '[local]___[hash:base64:5]',
           },
         }, 'postcss-loader'],
       }),
@@ -56,6 +58,16 @@ module.exports = {
     new ExtractTextPlugin({
       filename: 'css/[name].css',
       allChunks: true,
+    }),
+    new webpack.optimize.UglifyJsPlugin({
+      beautify: false,
+      comments: false,
+      compress: {
+        warnings: false,
+        drop_console: true,
+        collapse_vars: true,
+        reduce_vars: true,
+      },
     }),
   ],
 };
