@@ -1,5 +1,6 @@
 .loading {
   composes: line-scale-pulse-out from '../../node_modules/loaders.css/loaders.css';
+
   position: absolute;
   top: 50%;
   left: 50%;
@@ -16,11 +17,12 @@
 }
 
 .container {
+  will-change: transform;
+
   position: relative;
   overflow: visible;
   height: 100%;
   white-space: nowrap;
-  will-change: transform;
 }
 
 .index {
@@ -58,9 +60,10 @@
 }
 
 .content {
+  will-change: transform;
+
   position: absolute;
   top: 50%;
   left: 50%;
   transform: translate3d(-50%, -50%, 0);
-  will-change: transform;
 }

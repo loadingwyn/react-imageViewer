@@ -32,17 +32,18 @@ module.exports = {
       exclude: /node_modules/,
     }, {
       test: /\.css$/,
-      use: [
-         { loader: 'style-loader' }, {
-           loader: 'css-loader',
-           options: {
-            //  sourceMap: true,
-             importLoaders: 1,
-             modules: true,
-             localIdentName: '[path]___[name]__[local]___[hash:base64:5]',
-           },
-         }, 'postcss-loader',
-      ],
+      use: ExtractTextPlugin.extract({
+        fallback: 'style-loader',
+        use: [{
+          loader: 'css-loader',
+          options: {
+           //  sourceMap: true,
+            importLoaders: 1,
+            modules: true,
+            localIdentName: '[path]___[name]__[local]___[hash:base64:5]',
+          },
+        }, 'postcss-loader'],
+      }),
     }],
   },
   plugins: [
