@@ -1,27 +1,23 @@
 const { resolve } = require('path');
 const webpack = require('webpack');
-const HtmlWebpackPlugin = require('html-webpack-plugin');
-const ExtractTextPlugin = require('extract-text-webpack-plugin');
 
 module.exports = {
   entry: [
-    'babel-polyfill',
     // 'react-hot-loader/patch',
     // 'webpack-dev-server/client?http://localhost:8080',
     // 'webpack/hot/only-dev-server',
-    './src/index.jsx',
+    './src/index.js',
   ],
   output: {
-    filename: 'js/bundle.js',
-    path: resolve(__dirname, 'public'),
+    path: resolve(__dirname, 'dist'),
+    library: 'react-imageslides',
+    libraryTarget: 'umd',
+    filename: 'bundle.js',
   },
-  // devtool: 'source-map',
-  // devServer: {
-  //   hot: true,
-  //   contentBase: resolve(__dirname, 'public'),
-  //   publicPath: '/static/',
-  //   historyApiFallback: true,
-  // },
+  externals: [
+    'react',
+    'react-dom',
+  ],
   resolve: {
     extensions: ['.js', '.jsx'],
   },
@@ -32,33 +28,17 @@ module.exports = {
       exclude: /node_modules/,
     }, {
       test: /\.css$/,
-      exclude: /node_modules/,
-      use: ExtractTextPlugin.extract({
-        fallback: 'style-loader',
-        use: [{
-          loader: 'css-loader',
-          options: {
-           //  sourceMap: true,
-            minimize: true,
-            importLoaders: 1,
-            modules: true,
-            localIdentName: '[local]___[hash:base64:5]',
-          },
-        }, 'postcss-loader'],
-      }),
+      use: ['style-loader', {
+        loader: 'css-loader',
+        options: {
+         //  sourceMap: true,
+          minimize: true,
+          importLoaders: 1,
+        },
+      }, 'postcss-loader'],
     }],
   },
   plugins: [
-    // new webpack.HotModuleReplacementPlugin(),
-    new webpack.NamedModulesPlugin(),
-    new HtmlWebpackPlugin({
-      filename: './index.html',
-      template: './index.html',
-    }),
-    new ExtractTextPlugin({
-      filename: 'css/[name].css',
-      allChunks: true,
-    }),
     new webpack.optimize.UglifyJsPlugin({
       beautify: false,
       comments: false,

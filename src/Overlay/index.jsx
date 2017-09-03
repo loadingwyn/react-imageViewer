@@ -53,7 +53,7 @@ export default class Overlay extends PureComponent {
 
   render() {
     return (
-      <div styleName="overlay">
+      <div className="overlay">
         {this.props.children}
       </div>
     );

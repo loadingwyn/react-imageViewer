@@ -273,11 +273,11 @@ export default class Carousel extends PureComponent {
     return (
       <Overlay lock>
         <div
-          styleName="view-port"
+          className="view-port"
           ref={this.getViewPort}
         >
           <button
-            styleName="close"
+            className="close"
             onClick={this.onCloseViewer}
           >
             <svg fill="#fff" height="24" viewBox="0 0 24 24" width="24" transform="scale(1.5)">
@@ -286,12 +286,12 @@ export default class Carousel extends PureComponent {
             </svg>
           </button>
           <div
-            styleName="index"
+            className="index"
           >
             {`${index + 1} / ${images.length}`}
           </div>
           <div
-            styleName="container"
+            className="container"
             style={{
               transform: `translate3d(${-this.getCenter() * ((this.viewPortEl ? this.viewPortEl.clientWidth : 0) + GUTTER_WIDTH)}px, 0, 0)`,
             }}
@@ -304,11 +304,11 @@ export default class Carousel extends PureComponent {
               ).map((url, ind) => (
                 <div
                   key={url + (ind + index - (index - displayMin))}
-                  styleName="blackboard"
+                  className="blackboard"
                 >
                   {loaded[url] ? (
                     <img
-                      styleName="content"
+                      className="content"
                       style={{
                         ...this.initialStyle[url],
                       }}
@@ -317,7 +317,7 @@ export default class Carousel extends PureComponent {
                       ref={this.getImageEl}
                     />
                   ) : (
-                    <div styleName="loading" key="loading">
+                    <div className="loading" key="loading">
                       <div />
                       <div />
                       <div />

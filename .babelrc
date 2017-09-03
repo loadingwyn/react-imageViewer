@@ -18,14 +18,6 @@
       "transform-decorators-legacy",
       "transform-class-properties",
       "transform-object-rest-spread",
-      ["transform-runtime", {
-        "regenerator": true,
-        "polyfill": true
-      }], [
-        "react-css-modules", {
-          "exclude": "/node_modules/",
-          "generateScopedName": "[local]___[hash:base64:5]"
-        }
-      ]
+      "transform-runtime",
   ]
 }

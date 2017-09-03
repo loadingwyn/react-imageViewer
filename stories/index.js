@@ -2,6 +2,7 @@ import React from 'react';
 import { storiesOf } from '@storybook/react';
 import ImageViewer from '../src/ImageViewer';
 
+
 const images = [
   '',
   'http://img.zcool.cn/community/0101f856cfff206ac7252ce6214470.jpg',
