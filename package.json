@@ -4,11 +4,16 @@
   "description": "A mobile friendly images slideshow react component",
   "main": "dist/bundle.js",
   "scripts": {
-    "build": "NODE_ENV=production ./node_modules/.bin/webpack",
+    "clean": "rimraf dist",
+    "build": "npm run clean && NODE_ENV=production webpack",
     "test": "./node_modules/.bin/karma start",
     "storybook": "start-storybook -p 6006",
     "build-storybook": "build-storybook"
   },
+  "files": [
+    "dist",
+    "src"
+  ],
   "keywords": [
     "react",
     "slide",
@@ -48,6 +53,7 @@
     "mocha": "^3.4.1",
     "postcss-loader": "^2.0.6",
     "precss": "^2.0.0",
+    "rimraf": "^2.6.1",
     "style-loader": "^0.18.2",
     "stylelint": "^8.0.0",
     "stylelint-order": "^0.6.0",

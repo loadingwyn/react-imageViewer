@@ -1,3 +1,3 @@
-import ImageViewer from './ImageViewer';
+import ImageSlides from './ImageSlides';
 
-export default ImageViewer;
+export default ImageSlides;

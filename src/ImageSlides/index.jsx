@@ -9,7 +9,7 @@ import Overlay from '../Overlay';
 import './style.css';
 
 const GUTTER_WIDTH = 10;
-export default class Carousel extends PureComponent {
+export default class ImageSlides extends PureComponent {
   static defaultProps = {
     images: [],
   }
@@ -273,11 +273,11 @@ export default class Carousel extends PureComponent {
     return (
       <Overlay lock>
         <div
-          className="view-port"
+          className="image-slides-view-port"
           ref={this.getViewPort}
         >
           <button
-            className="close"
+            className="image-slides-close"
             onClick={this.onCloseViewer}
           >
             <svg fill="#fff" height="24" viewBox="0 0 24 24" width="24" transform="scale(1.5)">
@@ -286,12 +286,12 @@ export default class Carousel extends PureComponent {
             </svg>
           </button>
           <div
-            className="index"
+            className="image-slides-index"
           >
             {`${index + 1} / ${images.length}`}
           </div>
           <div
-            className="container"
+            className="image-slides-container"
             style={{
               transform: `translate3d(${-this.getCenter() * ((this.viewPortEl ? this.viewPortEl.clientWidth : 0) + GUTTER_WIDTH)}px, 0, 0)`,
             }}
@@ -304,11 +304,11 @@ export default class Carousel extends PureComponent {
               ).map((url, ind) => (
                 <div
                   key={url + (ind + index - (index - displayMin))}
-                  className="blackboard"
+                  className="image-slides-blackboard"
                 >
                   {loaded[url] ? (
                     <img
-                      className="content"
+                      className="image-slides-content"
                       style={{
                         ...this.initialStyle[url],
                       }}
@@ -317,7 +317,7 @@ export default class Carousel extends PureComponent {
                       ref={this.getImageEl}
                     />
                   ) : (
-                    <div className="loading" key="loading">
+                    <div className="image-slides-loading" key="loading">
                       <div />
                       <div />
                       <div />
