@@ -17,5 +17,5 @@ Property            | Type   | Default        | Required | Description
 :-------------------|:------:|:--------------:|:--------:|:----------------------------------------
 index               | number |        0       |          | index of the first image to display
 images              | array  |                |    yes   | image urls to display
-isMobile            | string |    false       |          | toggle touch emulator
+useTouchEmulator    | boolean|    false       |          | toggle touch emulator
 onClose             | func   |                |          | close window event. Should change the parent state such that the component is not rendered

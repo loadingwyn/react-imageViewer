@@ -17,20 +17,20 @@ export default class ImageSlides extends PureComponent {
     index: 0,
     loaded: {},
   };
+
+  lastContainerOffsetX = 0;
+  initialStyle = {};
+  imageController = {};
+
   componentWillMount() {
     const {
       index,
       images,
-      isMobile,
     } = this.props;
     this.setState({
       index: index || this.state.index,
     });
     this.preload(images[index || this.state.index]);
-    this.touchDisabled = !isMobile;
-    // this.touchDisabled = !isMobile && !(('ontouchstart' in window)
-    //   || (window.Modernizr && window.Modernizr.touch)
-    //   || (navigator.msMaxTouchPoints || navigator.maxTouchPoints) > 2);
   }
 
   componentWillReceiveProps(nextProps) {
@@ -48,24 +48,16 @@ export default class ImageSlides extends PureComponent {
   }
 
   @autobind
-  onCloseViewer(e) {
-    const {
-      index,
-    } = this.state;
-    const {
-      onClose,
-    } = this.props;
-    onClose(e, index);
-  }
-
-  @autobind
   getContainer(el) {
     if (el) {
-      this.containerEl = el;
+      const {
+        useTouchEmulator,
+      } = this.props;
       const gesturesManager = new AlloyFinger(el, {});
+      this.containerEl = el;
       this.containerController = gesturesManager;
       const style = this.containerEl.style;
-      if (this.touchDisabled) {
+      if (useTouchEmulator) {
         touchEmulator(el);
       }
       gesturesManager.on('touchStart', () => {
@@ -76,7 +68,7 @@ export default class ImageSlides extends PureComponent {
         const swipeTrigger = this.viewPortEl.clientWidth * 0.2;
         // this.imageController.resume();
         if (this.lastContainerOffsetX > swipeTrigger) {
-          if (this.getCenter() > 0 && this.state.index !== 1) {
+          if (this.getMedianIndex() > 0 && this.state.index !== 1) {
             style.transform = `translate3d(${this.lastContainerOffsetX - ((GUTTER_WIDTH + this.viewPortEl.clientWidth) * 2)}px, 0, 0)`;
           } else if (this.state.index === 1) {
             style.transform = `translate3d(${this.lastContainerOffsetX - (GUTTER_WIDTH + this.viewPortEl.clientWidth)}px, 0, 0)`;
@@ -90,7 +82,7 @@ export default class ImageSlides extends PureComponent {
           this.next();
         }
         style.transition = 'all 0.3s';
-        style.transform = `translate3d(${-(GUTTER_WIDTH + this.viewPortEl.clientWidth) * this.getCenter()}px, 0, 0)`;
+        style.transform = `translate3d(${-(GUTTER_WIDTH + this.viewPortEl.clientWidth) * this.getMedianIndex()}px, 0, 0)`;
         this.lastContainerOffsetX = 0;
         this.isMoving = false;
       });
@@ -109,7 +101,7 @@ export default class ImageSlides extends PureComponent {
     this.viewPortEl = el;
   }
 
-  getCenter() {
+  getMedianIndex() {
     const {
       index,
     } = this.state;
@@ -129,20 +121,19 @@ export default class ImageSlides extends PureComponent {
 
   containerOnMove = offset => {
     this.isMoving = true;
-    // this.imageController.pause();
     const deltaX = parseInt(offset.deltaX, 10);
     const style = this.containerEl ? this.containerEl.style : {};
     this.lastContainerOffsetX = deltaX + this.lastContainerOffsetX;
     const offsetX = this.lastContainerOffsetX
-      - ((10 + this.viewPortEl.clientWidth) * this.getCenter());
+      - ((GUTTER_WIDTH + this.viewPortEl.clientWidth) * this.getMedianIndex());
     style.transform = `translate3d(${offsetX}px, 0, 0)`;
   };
 
-  lastContainerOffsetX = 0;
-  initialStyle = {};
-  imageController = {};
   gesturesHandler(el) {
-    if (this.touchDisabled) {
+    const {
+      useTouchEmulator,
+    } = this.props;
+    if (useTouchEmulator) {
       touchEmulator(el.parentElement);
     }
     const imageController = new ImageControllerCreator(
@@ -165,7 +156,7 @@ export default class ImageSlides extends PureComponent {
     gesturesManager.on(
       'pressMove',
       offset => {
-        imageController.move.bind(imageController)(offset);
+        imageController.move(offset);
       },
     );
     gesturesManager.on(
@@ -233,6 +224,14 @@ export default class ImageSlides extends PureComponent {
     }
   }
 
+  @autobind
+  ignore() {
+    if (this.containerController) {
+      this.containerController.off('pressMove', this.containerOnMove);
+      this.containerController.on('pressMove', this.containerOnMove);
+    }
+  }
+
   preload(url) {
     if (url && !this.state.loaded[url]) {
       const loader = new Image();
@@ -253,11 +252,14 @@ export default class ImageSlides extends PureComponent {
   }
 
   @autobind
-  ignore() {
-    if (this.containerController) {
-      this.containerController.off('pressMove', this.containerOnMove);
-      this.containerController.on('pressMove', this.containerOnMove);
-    }
+  onCloseViewer(e) {
+    const {
+      index,
+    } = this.state;
+    const {
+      onClose,
+    } = this.props;
+    onClose(e, index);
   }
 
   render() {
@@ -293,7 +295,7 @@ export default class ImageSlides extends PureComponent {
           <div
             className="image-slides-container"
             style={{
-              transform: `translate3d(${-this.getCenter() * ((this.viewPortEl ? this.viewPortEl.clientWidth : 0) + GUTTER_WIDTH)}px, 0, 0)`,
+              transform: `translate3d(${-this.getMedianIndex() * ((this.viewPortEl ? this.viewPortEl.clientWidth : 0) + GUTTER_WIDTH)}px, 0, 0)`,
             }}
             ref={this.getContainer}
           >

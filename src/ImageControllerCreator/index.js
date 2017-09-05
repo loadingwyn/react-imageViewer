@@ -118,6 +118,7 @@ export default class ImageControllerCreator {
     });
     this.target.style.transition = 'transform 0.1s';
   }
+
   enlargeBytimes(times) {
     const {
       lastScale = 1,
