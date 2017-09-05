@@ -1,23 +1,10 @@
 {
   "presets": [
-    ["env", {
-      "targets": {
-        "chrome": 40,
-        "safari": 9,
-      },
-      "modules": false,
-      "include": [],
-      "useBuiltIns": true,
-      "uglify": true,
-      "loose": false,
-      "debug": false
-    }],
+    "env",
     "react",
   ],
   "plugins": [
-      "transform-decorators-legacy",
       "transform-class-properties",
-      "transform-object-rest-spread",
-      "transform-runtime",
-  ]
+      "transform-object-rest-spread"
+    ]
 }

@@ -1,6 +1,4 @@
 import React, { PureComponent } from 'react';
-import { autobind } from 'core-decorators';
-// import Hammer from 'hammerjs';
 import AlloyFinger from 'alloyfinger';
 import ImageControllerCreator from '../ImageControllerCreator';
 import touchEmulator from '../utils/touchEmulator';
@@ -47,8 +45,7 @@ export default class ImageSlides extends PureComponent {
     }
   }
 
-  @autobind
-  getContainer(el) {
+  getContainer = el => {
     if (el) {
       const {
         useTouchEmulator,
@@ -89,15 +86,13 @@ export default class ImageSlides extends PureComponent {
     }
   }
 
-  @autobind
-  getImageEl(el) {
+  getImageEl = el => {
     if (el) {
       this.gesturesHandler(el);
     }
   }
 
-  @autobind
-  getViewPort(el) {
+  getViewPort = el => {
     this.viewPortEl = el;
   }
 
@@ -192,8 +187,7 @@ export default class ImageSlides extends PureComponent {
     // });
   }
 
-  @autobind
-  next() {
+  next = () => {
     const {
       index,
     } = this.state;
@@ -208,8 +202,7 @@ export default class ImageSlides extends PureComponent {
     }
   }
 
-  @autobind
-  last() {
+  last = () => {
     const {
       index,
     } = this.state;
@@ -224,8 +217,7 @@ export default class ImageSlides extends PureComponent {
     }
   }
 
-  @autobind
-  ignore() {
+  ignore = () => {
     if (this.containerController) {
       this.containerController.off('pressMove', this.containerOnMove);
       this.containerController.on('pressMove', this.containerOnMove);
@@ -251,15 +243,14 @@ export default class ImageSlides extends PureComponent {
     }
   }
 
-  @autobind
-  onCloseViewer(e) {
+  onCloseViewer = event => {
     const {
       index,
     } = this.state;
     const {
       onClose,
     } = this.props;
-    onClose(e, index);
+    onClose(event, index);
   }
 
   render() {

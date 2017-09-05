@@ -17,6 +17,7 @@ module.exports = {
   externals: [
     'react',
     'react-dom',
+    'alloyfinger',
   ],
   resolve: {
     extensions: ['.js', '.jsx'],
