@@ -166,7 +166,7 @@ export default class ImageSlides extends PureComponent {
         if (imageController.state.scale > 1) {
           imageController.reset();
         } else {
-          imageController.enlargeBytimes(1.5);
+          imageController.enlargeBytimes(1.8);
           imageController.recordScale();
         }
       },
@@ -177,14 +177,6 @@ export default class ImageSlides extends PureComponent {
         imageController.recordScale();
       },
     );
-
-    // el.parentElement.addEventListener('wheel', event => {
-    //   if (event.deltaY < 0) {
-    //     imageController.enlarge(12)();
-    //   } else if (event.deltaY > 0) {
-    //     imageController.enlarge(-12)();
-    //   }
-    // });
   }
 
   next = () => {
