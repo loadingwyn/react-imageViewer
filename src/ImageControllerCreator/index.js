@@ -36,8 +36,6 @@ export default class ImageControllerCreator {
       lastOffsetY,
       scaleMultiples,
     } = this.state;
-    // style.width = `${(scale * 2) + this.originalWidth}px`;
-    // style.height = 'auto';
     style.transform = `translate3d(calc(${offsetX + lastOffsetX}px - 50%), calc(${offsetY + lastOffsetY}px - 50%), 0) scale(${scaleMultiples})`;
     if (this.onChange) {
       this.onChange(this.state);
@@ -92,7 +90,6 @@ export default class ImageControllerCreator {
       && Math.abs(lastOffsetY + offsetY) > Math.abs(lastOffsetY)) {
       result.offsetY = 0;
       result.lastOffsetY = lastOffsetY;
-      // flag = false;
     }
     if (!isInLimit && this.onLoseControl && Math.abs(offsetY) < 5) {
       this.onGetControl();

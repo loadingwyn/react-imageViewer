@@ -63,7 +63,6 @@ export default class ImageSlides extends PureComponent {
       gesturesManager.on('pressMove', this.containerOnMove);
       gesturesManager.on('touchEnd', () => {
         const swipeTrigger = this.viewPortEl.clientWidth * 0.2;
-        // this.imageController.resume();
         if (this.lastContainerOffsetX > swipeTrigger) {
           if (this.getMedianIndex() > 0 && this.state.index !== 1) {
             style.transform = `translate3d(${this.lastContainerOffsetX - ((GUTTER_WIDTH + this.viewPortEl.clientWidth) * 2)}px, 0, 0)`;

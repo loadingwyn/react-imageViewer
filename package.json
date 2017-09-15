@@ -63,5 +63,9 @@
     "react": "^15.6.1",
     "react-dom": "^15.6.1"
   },
-  "dependencies": {}
+  "dependencies": {
+    "alloyfinger": "^0.1.8",
+    "react": "^15.6.1",
+    "react-dom": "^15.6.1"
+  }
 }
