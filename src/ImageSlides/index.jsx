@@ -10,6 +10,7 @@ const GUTTER_WIDTH = 10;
 export default class ImageSlides extends PureComponent {
   static defaultProps = {
     images: [],
+    index: 0,
   }
   state = {
     index: 0,
