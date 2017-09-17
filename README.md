@@ -20,3 +20,8 @@ isOpen              | boolean|    false       |          | whether component is 
 index               | number |        0       |          | index of the first image to display
 useTouchEmulator    | boolean|    false       |          | toggle touch emulator
 onClose             | func   |                |          | close window event. Should change the parent state such that the component is not rendered
+
+## Todo
+
+- Add tests
+- Add pop-up animation effects

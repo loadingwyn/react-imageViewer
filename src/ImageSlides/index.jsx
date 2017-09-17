@@ -11,7 +11,7 @@ export default class ImageSlides extends PureComponent {
   static defaultProps = {
     images: [],
     index: 0,
-    isOpen: true,
+    isOpen: false,
   }
   state = {
     index: 0,
