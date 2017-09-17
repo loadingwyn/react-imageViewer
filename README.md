@@ -15,7 +15,8 @@ Features
 
 Property            | Type   | Default        | Required | Description
 :-------------------|:------:|:--------------:|:--------:|:----------------------------------------
-index               | number |        0       |          | index of the first image to display
 images              | array  |                |    yes   | image urls to display
+isOpen              | boolean|    false       |          | whether component is open
+index               | number |        0       |          | index of the first image to display
 useTouchEmulator    | boolean|    false       |          | toggle touch emulator
 onClose             | func   |                |          | close window event. Should change the parent state such that the component is not rendered

@@ -11,10 +11,12 @@ export default class ImageSlides extends PureComponent {
   static defaultProps = {
     images: [],
     index: 0,
+    isOpen: true,
   }
   state = {
     index: 0,
     loaded: {},
+    isOpen: false,
   };
 
   lastContainerOffsetX = 0;
@@ -25,20 +27,29 @@ export default class ImageSlides extends PureComponent {
     const {
       index,
       images,
+      isOpen,
     } = this.props;
     this.setState({
       index: index || this.state.index,
+      isOpen,
     });
     this.preload(images[index || this.state.index]);
   }
 
-  componentWillReceiveProps(nextProps) {
+  componentWillReceiveProps(newProps) {
     const {
-        index,
-      } = this.props;
+      index,
+      isOpen,
+    } = this.props;
     const {
-        index: newIndex,
-      } = nextProps;
+      index: newIndex,
+      isOpen: newIsOpen,
+    } = newProps;
+    if (isOpen !== newIsOpen) {
+      this.setState({
+        isOpen: newIsOpen,
+      });
+    }
     if (newIndex && index !== newIndex) {
       this.setState({
         index: newIndex,
@@ -242,6 +253,9 @@ export default class ImageSlides extends PureComponent {
     const {
       onClose,
     } = this.props;
+    this.setState({
+      isOpen: false,
+    });
     onClose(event, index);
   }
 
@@ -249,13 +263,14 @@ export default class ImageSlides extends PureComponent {
     const {
       loaded,
       index,
+      isOpen,
     } = this.state;
     const {
-        images,
+      images,
     } = this.props;
     const displayMax = ((index + 2) > images.length ? images.length : (index + 2));
     const displayMin = (index - 1) < 0 ? 0 : (index - 1);
-    return (
+    return isOpen ? (
       <Overlay lock>
         <div
           className="image-slides-view-port"
@@ -315,6 +330,6 @@ export default class ImageSlides extends PureComponent {
           </div>
         </div>
       </Overlay>
-    );
+    ) : null;
   }
  }
