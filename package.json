@@ -19,7 +19,7 @@
     "slide",
     "lightbox"
   ],
-  "author": "loading-wyn",
+  "author": "loadingwyn",
   "license": "MIT",
   "devDependencies": {
     "@storybook/react": "^3.1.9",
