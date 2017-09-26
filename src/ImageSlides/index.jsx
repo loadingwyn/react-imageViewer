@@ -285,11 +285,13 @@ export default class ImageSlides extends PureComponent {
               <path d="M0 0h24v24H0z" fill="none" />
             </svg>
           </button>
-          <div
-            className="image-slides-index"
-          >
-            {`${index + 1} / ${images.length}`}
-          </div>
+          {images.length > 0 && (
+            <div
+              className="image-slides-index"
+            >
+              {`${index + 1} / ${images.length}`}
+            </div>
+          )}
           <div
             className="image-slides-container"
             style={{

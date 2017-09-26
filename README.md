@@ -23,5 +23,5 @@ onClose             | func   |                |          | close window event
 
 ## Todo
 
-- Add tests
+- ~~Add tests~~
 - Add pop-up animation effects

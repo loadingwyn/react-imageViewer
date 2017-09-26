@@ -1,17 +1,22 @@
 // const _ = require('lodash');
-const _ = require('lodash');
+const cloneDeep = require('lodash.clonedeep');
 // const webpack = require('webpack');
 // import ExtractTextPlugin from 'extract-text-webpack-plugin';
 // const AssetsPlugin = require('assets-webpack-plugin');
 const webpackConfig = require('./webpack.config.js');
 
-const webpackConfigForKarma = _.cloneDeep(webpackConfig);
+const webpackConfigForKarma = cloneDeep(webpackConfig);
 // _.remove(webpackConfigForKarma.plugins, function (i) {
 //   return i instanceof webpack.optimize.CommonsChunkPlugin;
 //   // || i instanceof ExtractTextPlugin;
 // });
-webpackConfigForKarma.entry = function () { return []; };
-module.exports = function (config) {
+webpackConfigForKarma.entry = () => [];
+webpackConfigForKarma.externals = {
+  'react/addons': true,
+  'react/lib/ExecutionEnvironment': true,
+  'react/lib/ReactContext': 'window',
+};
+module.exports = config => {
   config.set({
     // base path, that will be used to resolve files and exclude
     basePath: './',
@@ -47,12 +52,12 @@ module.exports = function (config) {
       // 'chai-things',
     ],
     preprocessors: {
-      'app/**/*.test.js': ['webpack', 'sourcemap'],
+      'test/**/*.test.js': ['webpack', 'sourcemap'],
       // 'app/**/*.(js|jsx)': ['coverage'],
     },
     // list of files / patterns to load in the browser
     files: [
-      'app/**/*.test.js',
+      'test/**/*.test.js',
     ],
     // list of files to exclude
     exclude: [
