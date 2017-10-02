@@ -8,7 +8,9 @@ let lockingCounter = 0;
 export default class Overlay extends PureComponent {
   static defaultProps = {
     lock: false,
-    parentSelector() { return document.body; },
+    parentSelector() {
+      return document.body;
+    },
   };
 
   componentDidMount() {
@@ -49,11 +51,10 @@ export default class Overlay extends PureComponent {
   }
 
   renderContent(props) {
-    this.content = ReactDOM.render((
-      <div className="image-slides-overlay">
-        {props.children}
-      </div>
-    ), this.node);
+    this.content = ReactDOM.render(
+      <div className="image-slides-overlay">{props.children}</div>,
+      this.node,
+    );
   }
 
   locked = false;
@@ -84,4 +85,4 @@ export default class Overlay extends PureComponent {
   render() {
     return null;
   }
- }
+}

@@ -1,5 +1,3 @@
-// import { autobind } from 'core-decorators';
-
 export default class ImageControllerCreator {
   state = {
     scale: 1,
@@ -8,7 +6,7 @@ export default class ImageControllerCreator {
     offsetY: 0,
     lastOffsetX: 0,
     lastOffsetY: 0,
-  }
+  };
 
   constructor(element, option = {}) {
     this.target = element;
@@ -26,9 +24,7 @@ export default class ImageControllerCreator {
 
   set(newState) {
     this.preProcess(newState);
-    const {
-      style,
-    } = this.target;
+    const { style } = this.target;
     const {
       offsetX,
       offsetY,
@@ -36,7 +32,9 @@ export default class ImageControllerCreator {
       lastOffsetY,
       scaleMultiples,
     } = this.state;
-    style.transform = `translate3d(calc(${offsetX + lastOffsetX}px - 50%), calc(${offsetY + lastOffsetY}px - 50%), 0) scale(${scaleMultiples})`;
+    style.transform = `translate3d(calc(${offsetX +
+      lastOffsetX}px - 50%), calc(${offsetY +
+      lastOffsetY}px - 50%), 0) scale(${scaleMultiples})`;
     if (this.onChange) {
       this.onChange(this.state);
     }
@@ -50,44 +48,33 @@ export default class ImageControllerCreator {
       ...newState,
     };
     this.state.scaleMultiples = this.state.scale;
-    const {
-      clientWidth,
-      clientHeight,
-    } = this.target;
-    const {
-      lastOffsetX,
-      lastOffsetY,
-      scaleMultiples,
-    } = this.state;
-    if (scaleMultiples <= 1 && (
-      lastOffsetX ||
-      lastOffsetY
-    )) {
+    const { clientWidth, clientHeight } = this.target;
+    const { lastOffsetX, lastOffsetY, scaleMultiples } = this.state;
+    if (scaleMultiples <= 1 && (lastOffsetX || lastOffsetY)) {
       this.reset();
     }
     this.restrictMovement(
-      ((clientWidth * scaleMultiples) - this.viewPortWidth) / 2,
-      ((clientHeight * scaleMultiples) - this.viewPortHeight) / 2,
+      (clientWidth * scaleMultiples - this.viewPortWidth) / 2,
+      (clientHeight * scaleMultiples - this.viewPortHeight) / 2,
     );
   }
 
   restrictMovement(xRange, yRange) {
     let isInLimit = true;
     const result = {};
-    const {
-      offsetX,
-      offsetY,
-      lastOffsetX,
-      lastOffsetY,
-    } = this.state;
-    if (Math.abs(lastOffsetX + offsetX) > xRange
-      && Math.abs(lastOffsetX + offsetX) > Math.abs(lastOffsetX)) {
+    const { offsetX, offsetY, lastOffsetX, lastOffsetY } = this.state;
+    if (
+      Math.abs(lastOffsetX + offsetX) > xRange &&
+      Math.abs(lastOffsetX + offsetX) > Math.abs(lastOffsetX)
+    ) {
       result.offsetX = 0;
       result.lastOffsetX = lastOffsetX;
       isInLimit = false;
     }
-    if (Math.abs(lastOffsetY + offsetY) > yRange
-      && Math.abs(lastOffsetY + offsetY) > Math.abs(lastOffsetY)) {
+    if (
+      Math.abs(lastOffsetY + offsetY) > yRange &&
+      Math.abs(lastOffsetY + offsetY) > Math.abs(lastOffsetY)
+    ) {
       result.offsetY = 0;
       result.lastOffsetY = lastOffsetY;
     }
@@ -117,9 +104,7 @@ export default class ImageControllerCreator {
   }
 
   enlargeBytimes(times) {
-    const {
-      lastScale = 1,
-    } = this.state;
+    const { lastScale = 1 } = this.state;
     const newScale = times * lastScale;
     if (newScale < 3.5 && newScale > 1) {
       this.set({ scale: newScale });
