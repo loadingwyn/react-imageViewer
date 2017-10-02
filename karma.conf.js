@@ -21,7 +21,7 @@ module.exports = config => {
     // base path, that will be used to resolve files and exclude
     basePath: './',
     /* can either be a string (module name)
-    , which will be required by Karma, or an object (inlined plugin)*/
+    , which will be required by Karma, or an object (inlined plugin) */
     plugins: [
       // https://www.npmjs.com/package/karma-webpack
       'karma-webpack',
@@ -52,12 +52,12 @@ module.exports = config => {
       // 'chai-things',
     ],
     preprocessors: {
-      'test/**/*.test.js': ['webpack', 'sourcemap'],
+      'tests/**/*.test.js': ['webpack', 'sourcemap'],
       // 'app/**/*.(js|jsx)': ['coverage'],
     },
     // list of files / patterns to load in the browser
     files: [
-      'test/**/*.test.js',
+      'tests/**/*.test.js',
     ],
     // list of files to exclude
     exclude: [
