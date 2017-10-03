@@ -232,23 +232,12 @@ export default class ImageSlides extends PureComponent {
     const displayMax = index + 2 > images.length ? images.length : index + 2;
     const displayMin = index - 1 < 0 ? 0 : index - 1;
     return isOpen ? (
-      <Overlay lock>
+      <Overlay
+        lock
+        onClose={this.onCloseViewer}>
         <div
           className="image-slides-view-port"
           ref={this.getViewPort} >
-          <button
-            className="image-slides-close"
-            onClick={this.onCloseViewer} >
-            <svg
-              fill="#fff"
-              height="24"
-              viewBox="0 0 24 24"
-              width="24"
-              transform="scale(1.5)">
-              <path d="M19 6.41L17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z" />
-              <path d="M0 0h24v24H0z" fill="none" />
-            </svg>
-          </button>
           {images.length > 0 && (
             <div
               className="image-slides-index" >

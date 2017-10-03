@@ -72,8 +72,26 @@ export default class Overlay extends PureComponent {
   }
 
   render() {
+    const {
+      onClose,
+    } = this.props;
     return ReactDOM.createPortal(
-      <div className="image-slides-overlay">{this.props.children}</div>,
+      <div className="image-slides-overlay">
+        <button
+          className="image-slides-close"
+          onClick={onClose} >
+          <svg
+            fill="#fff"
+            height="24"
+            viewBox="0 0 24 24"
+            width="24"
+            transform="scale(1.5)">
+            <path d="M19 6.41L17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z" />
+            <path d="M0 0h24v24H0z" fill="none" />
+          </svg>
+        </button>
+        {this.props.children}
+      </div>,
       this.node,
     );
   }
