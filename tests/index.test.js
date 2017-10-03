@@ -18,8 +18,8 @@ describe('<ImageSlides />', function () {
     const wrapper = shallow(<ImageSlides images={images} isOpen />);
     expect(wrapper.find('.image-slides-blackboard')).to.have.length(2);
   });
-  it('renders three imgs when then index is equal to 1', function () {
-    const wrapper = shallow(<ImageSlides images={images} index={1} isOpen />);
+  it('renders three imgs when then index is equal to 2', function () {
+    const wrapper = shallow(<ImageSlides images={images} index={2} isOpen />);
     expect(wrapper.find('.image-slides-blackboard')).to.have.length(3);
   });
 });

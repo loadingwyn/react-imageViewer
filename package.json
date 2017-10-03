@@ -8,7 +8,7 @@
     "build": "npm run clean && NODE_ENV=production webpack",
     "lint": "eslint --fix ./src --ext .js,.jsx",
     "eslint-check": "eslint --print-config .eslintrc | eslint-config-prettier-check",
-    "test": "./node_modules/.bin/karma start",
+    "test": "karma start",
     "storybook": "start-storybook -p 6006",
     "build-storybook": "build-storybook"
   },
@@ -24,7 +24,7 @@
   "author": "loadingwyn",
   "license": "MIT",
   "devDependencies": {
-    "@storybook/react": "^3.2.11",
+    "@storybook/react": "^3.2.12",
     "alloyfinger": "^0.1.10",
     "autoprefixer": "^7.1.4",
     "babel-core": "^6.26.0",
@@ -37,12 +37,14 @@
     "babel-preset-react": "^6.24.1",
     "chai": "^4.1.2",
     "css-loader": "^0.28.7",
-    "enzyme": "^3.0.0",
-    "enzyme-adapter-react-16": "^1.0.0",
+    "enzyme": "^3.1.0",
+    "enzyme-adapter-react-16": "^1.0.1",
     "eslint": "^4.8.0",
     "eslint-config-airbnb": "^15.1.0",
+    "eslint-config-prettier": "^2.6.0",
     "eslint-plugin-import": "^2.7.0",
     "eslint-plugin-jsx-a11y": "^5.1.1",
+    "eslint-plugin-prettier": "^2.3.1",
     "eslint-plugin-react": "^7.4.0",
     "karma": "^1.7.1",
     "karma-chai-plugins": "^0.9.0",
@@ -55,24 +57,24 @@
     "karma-webpack": "^2.0.4",
     "lodash.clonedeep": "^4.5.0",
     "loglevel": "^1.5.0",
-    "mocha": "^3.5.3",
     "postcss-loader": "^2.0.6",
     "precss": "^2.0.0",
+    "prettier": "^1.7.4",
     "react": "^16.0.0",
     "react-dom": "^16.0.0",
     "react-test-renderer": "^16.0.0",
     "rimraf": "^2.6.2",
-    "style-loader": "^0.18.2",
     "stylelint": "^8.1.1",
     "stylelint-order": "^0.7.0",
-    "webpack": "^3.x",
-    "eslint-config-prettier": "^2.6.0",
-    "eslint-plugin-prettier": "^2.3.1",
-    "prettier": "^1.7.3"
+    "webpack": "^3.6.0"
   },
   "peerDependencies": {
     "alloyfinger": "^0.1.8",
     "react": "^16.0.0",
     "react-dom": "^16.0.0"
+  },
+  "dependencies": {
+    "mocha": "^4.0.0",
+    "style-loader": "^0.19.0"
   }
 }

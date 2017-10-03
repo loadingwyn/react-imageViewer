@@ -276,7 +276,7 @@ export default class ImageSlides extends PureComponent {
                     style={{
                       ...this.initialStyle[url],
                     }} />
-                ) : <Loading />}
+                ) : Loading}
               </div>
             ))}
           </div>
