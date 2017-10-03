@@ -223,7 +223,7 @@ export default class ImageSlides extends PureComponent {
     this.setState({
       isOpen: false,
     });
-    onClose(event, index);
+    if (onClose) onClose(event, index);
   };
 
   render() {

@@ -13,12 +13,11 @@ export default class Overlay extends PureComponent {
     },
   };
   locked = false;
-
+  node = document.createElement('div');
   componentDidMount() {
     if (this.props.lock === true) {
       this.preventScrolling();
     }
-    this.node = document.createElement('div');
     const parent = this.props.parentSelector();
     parent.appendChild(this.node);
   }
