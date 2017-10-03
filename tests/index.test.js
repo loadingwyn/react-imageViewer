@@ -5,8 +5,6 @@ import { expect } from 'chai';
 import ImageSlides from '../src/ImageSlides';
 
 Enzyme.configure({ adapter: new Adapter() });
-// import Chance from 'chance';
-
 const images = [
   '',
   'http://img.zcool.cn/community/0101f856cfff206ac7252ce6214470.jpg',

@@ -12,16 +12,15 @@ export default class Overlay extends PureComponent {
       return document.body;
     },
   };
+  locked = false;
 
   componentDidMount() {
     if (this.props.lock === true) {
       this.preventScrolling();
     }
     this.node = document.createElement('div');
-
     const parent = this.props.parentSelector();
     parent.appendChild(this.node);
-    this.renderContent(this.props);
   }
 
   componentWillReceiveProps(newProps) {
@@ -39,25 +38,15 @@ export default class Overlay extends PureComponent {
       currentParent.removeChild(this.node);
       newParent.appendChild(this.node);
     }
-    this.renderContent(newProps);
   }
 
   componentWillUnmount() {
     const parent = this.props.parentSelector();
     if (!this.node || !this.content) return;
-    ReactDOM.unmountComponentAtNode(this.node);
     parent.removeChild(this.node);
     this.allowScrolling();
   }
 
-  renderContent(props) {
-    this.content = ReactDOM.render(
-      <div className="image-slides-overlay">{props.children}</div>,
-      this.node,
-    );
-  }
-
-  locked = false;
   preventScrolling() {
     if (this.locked === true) {
       return;
@@ -69,6 +58,7 @@ export default class Overlay extends PureComponent {
       body.style.overflow = 'hidden';
     }
   }
+
   allowScrolling() {
     if (this.locked === true) {
       lockingCounter -= 1;
@@ -83,6 +73,9 @@ export default class Overlay extends PureComponent {
   }
 
   render() {
-    return null;
+    return ReactDOM.createPortal(
+      <div className="image-slides-overlay">{this.props.children}</div>,
+      this.node,
+    );
   }
 }
