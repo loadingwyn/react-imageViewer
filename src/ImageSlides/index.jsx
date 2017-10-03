@@ -231,6 +231,15 @@ export default class ImageSlides extends PureComponent {
     const { images } = this.props;
     const displayMax = index + 2 > images.length ? images.length : index + 2;
     const displayMin = index - 1 < 0 ? 0 : index - 1;
+    const Loading = (
+      <div className="image-slides-loading" key="loading">
+        <div />
+        <div />
+        <div />
+        <div />
+        <div />
+      </div>
+    );
     return isOpen ? (
       <Overlay
         lock
@@ -267,15 +276,7 @@ export default class ImageSlides extends PureComponent {
                     style={{
                       ...this.initialStyle[url],
                     }} />
-                ) : (
-                  <div className="image-slides-loading" key="loading">
-                    <div />
-                    <div />
-                    <div />
-                    <div />
-                    <div />
-                  </div>
-                )}
+                ) : <Loading />}
               </div>
             ))}
           </div>
