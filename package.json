@@ -28,8 +28,6 @@
     },
     "testPathIgnorePatterns": [
       "<rootDir>/node_modules/",
-      "<rootDir>/legacy_notes_and_workbook/",
-      "<rootDir>/client/src/stylesheets/"
     ]
   },
   "author": "loadingwyn",
