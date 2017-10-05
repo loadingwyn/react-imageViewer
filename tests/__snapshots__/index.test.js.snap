@@ -1,0 +1,699 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`<ImageSlides /> should render a loading 1`] = `
+ShallowWrapper {
+  "length": 1,
+  Symbol(enzyme.__root__): [Circular],
+  Symbol(enzyme.__unrendered__): <ImageSlides
+    images={
+      Array [
+        "",
+        "http://img.zcool.cn/community/0101f856cfff206ac7252ce6214470.jpg",
+        "http://a4.att.hudong.com/05/55/01200000033533115855502090905.jpg",
+        "http://img.zcool.cn/community/0101f856cfff206ac7252ce6214470.jpg",
+        "https://timgsa.baidu.com/timg?image&quality=80&size=b9999_10000&sec=1503235534249&di=4c198d5a305627d12e5dae4c581c9e57&imgtype=0&src=http%3A%2F%2Fimg2.niutuku.com%2Fdesk%2Fanime%2F0529%2F0529-17277.jpg",
+      ]
+    }
+    index={0}
+    isOpen={true}
+  />,
+  Symbol(enzyme.__renderer__): Object {
+    "batchedUpdates": [Function],
+    "getNode": [Function],
+    "render": [Function],
+    "simulateEvent": [Function],
+    "unmount": [Function],
+  },
+  Symbol(enzyme.__node__): Object {
+    "instance": null,
+    "key": null,
+    "nodeType": "class",
+    "props": Object {
+      "children": <div
+        className="image-slides-view-port"
+      >
+        <div
+          className="image-slides-index"
+        >
+          1 / 5
+        </div>
+        <div
+          className="image-slides-container"
+          style={
+            Object {
+              "transform": "translate3d(0px, 0, 0)",
+            }
+          }
+        >
+          <div
+            className="image-slides-blackboard"
+          >
+            <div
+              className="image-slides-loading"
+            >
+              <div />
+              <div />
+              <div />
+              <div />
+              <div />
+            </div>
+          </div>
+          <div
+            className="image-slides-blackboard"
+          >
+            <div
+              className="image-slides-loading"
+            >
+              <div />
+              <div />
+              <div />
+              <div />
+              <div />
+            </div>
+          </div>
+        </div>
+      </div>,
+      "lock": true,
+      "onClose": [Function],
+      "parentSelector": [Function],
+    },
+    "ref": null,
+    "rendered": Object {
+      "instance": null,
+      "key": null,
+      "nodeType": "host",
+      "props": Object {
+        "children": Array [
+          <div
+            className="image-slides-index"
+          >
+            1 / 5
+          </div>,
+          <div
+            className="image-slides-container"
+            style={
+              Object {
+                "transform": "translate3d(0px, 0, 0)",
+              }
+            }
+          >
+            <div
+              className="image-slides-blackboard"
+            >
+              <div
+                className="image-slides-loading"
+              >
+                <div />
+                <div />
+                <div />
+                <div />
+                <div />
+              </div>
+            </div>
+            <div
+              className="image-slides-blackboard"
+            >
+              <div
+                className="image-slides-loading"
+              >
+                <div />
+                <div />
+                <div />
+                <div />
+                <div />
+              </div>
+            </div>
+          </div>,
+        ],
+        "className": "image-slides-view-port",
+      },
+      "ref": [Function],
+      "rendered": Array [
+        Object {
+          "instance": null,
+          "key": null,
+          "nodeType": "host",
+          "props": Object {
+            "children": "1 / 5",
+            "className": "image-slides-index",
+          },
+          "ref": null,
+          "rendered": "1 / 5",
+          "type": "div",
+        },
+        Object {
+          "instance": null,
+          "key": null,
+          "nodeType": "host",
+          "props": Object {
+            "children": Array [
+              <div
+                className="image-slides-blackboard"
+              >
+                <div
+                  className="image-slides-loading"
+                >
+                  <div />
+                  <div />
+                  <div />
+                  <div />
+                  <div />
+                </div>
+              </div>,
+              <div
+                className="image-slides-blackboard"
+              >
+                <div
+                  className="image-slides-loading"
+                >
+                  <div />
+                  <div />
+                  <div />
+                  <div />
+                  <div />
+                </div>
+              </div>,
+            ],
+            "className": "image-slides-container",
+            "style": Object {
+              "transform": "translate3d(0px, 0, 0)",
+            },
+          },
+          "ref": [Function],
+          "rendered": Array [
+            Object {
+              "instance": null,
+              "key": "0",
+              "nodeType": "host",
+              "props": Object {
+                "children": <div
+                  className="image-slides-loading"
+                >
+                  <div />
+                  <div />
+                  <div />
+                  <div />
+                  <div />
+                </div>,
+                "className": "image-slides-blackboard",
+              },
+              "ref": null,
+              "rendered": Object {
+                "instance": null,
+                "key": "loading",
+                "nodeType": "host",
+                "props": Object {
+                  "children": Array [
+                    <div />,
+                    <div />,
+                    <div />,
+                    <div />,
+                    <div />,
+                  ],
+                  "className": "image-slides-loading",
+                },
+                "ref": null,
+                "rendered": Array [
+                  Object {
+                    "instance": null,
+                    "key": null,
+                    "nodeType": "host",
+                    "props": Object {},
+                    "ref": null,
+                    "rendered": null,
+                    "type": "div",
+                  },
+                  Object {
+                    "instance": null,
+                    "key": null,
+                    "nodeType": "host",
+                    "props": Object {},
+                    "ref": null,
+                    "rendered": null,
+                    "type": "div",
+                  },
+                  Object {
+                    "instance": null,
+                    "key": null,
+                    "nodeType": "host",
+                    "props": Object {},
+                    "ref": null,
+                    "rendered": null,
+                    "type": "div",
+                  },
+                  Object {
+                    "instance": null,
+                    "key": null,
+                    "nodeType": "host",
+                    "props": Object {},
+                    "ref": null,
+                    "rendered": null,
+                    "type": "div",
+                  },
+                  Object {
+                    "instance": null,
+                    "key": null,
+                    "nodeType": "host",
+                    "props": Object {},
+                    "ref": null,
+                    "rendered": null,
+                    "type": "div",
+                  },
+                ],
+                "type": "div",
+              },
+              "type": "div",
+            },
+            Object {
+              "instance": null,
+              "key": "http://img.zcool.cn/community/0101f856cfff206ac7252ce6214470.jpg1",
+              "nodeType": "host",
+              "props": Object {
+                "children": <div
+                  className="image-slides-loading"
+                >
+                  <div />
+                  <div />
+                  <div />
+                  <div />
+                  <div />
+                </div>,
+                "className": "image-slides-blackboard",
+              },
+              "ref": null,
+              "rendered": Object {
+                "instance": null,
+                "key": "loading",
+                "nodeType": "host",
+                "props": Object {
+                  "children": Array [
+                    <div />,
+                    <div />,
+                    <div />,
+                    <div />,
+                    <div />,
+                  ],
+                  "className": "image-slides-loading",
+                },
+                "ref": null,
+                "rendered": Array [
+                  Object {
+                    "instance": null,
+                    "key": null,
+                    "nodeType": "host",
+                    "props": Object {},
+                    "ref": null,
+                    "rendered": null,
+                    "type": "div",
+                  },
+                  Object {
+                    "instance": null,
+                    "key": null,
+                    "nodeType": "host",
+                    "props": Object {},
+                    "ref": null,
+                    "rendered": null,
+                    "type": "div",
+                  },
+                  Object {
+                    "instance": null,
+                    "key": null,
+                    "nodeType": "host",
+                    "props": Object {},
+                    "ref": null,
+                    "rendered": null,
+                    "type": "div",
+                  },
+                  Object {
+                    "instance": null,
+                    "key": null,
+                    "nodeType": "host",
+                    "props": Object {},
+                    "ref": null,
+                    "rendered": null,
+                    "type": "div",
+                  },
+                  Object {
+                    "instance": null,
+                    "key": null,
+                    "nodeType": "host",
+                    "props": Object {},
+                    "ref": null,
+                    "rendered": null,
+                    "type": "div",
+                  },
+                ],
+                "type": "div",
+              },
+              "type": "div",
+            },
+          ],
+          "type": "div",
+        },
+      ],
+      "type": "div",
+    },
+    "type": [Function],
+  },
+  Symbol(enzyme.__nodes__): Array [
+    Object {
+      "instance": null,
+      "key": null,
+      "nodeType": "class",
+      "props": Object {
+        "children": <div
+          className="image-slides-view-port"
+        >
+          <div
+            className="image-slides-index"
+          >
+            1 / 5
+          </div>
+          <div
+            className="image-slides-container"
+            style={
+              Object {
+                "transform": "translate3d(0px, 0, 0)",
+              }
+            }
+          >
+            <div
+              className="image-slides-blackboard"
+            >
+              <div
+                className="image-slides-loading"
+              >
+                <div />
+                <div />
+                <div />
+                <div />
+                <div />
+              </div>
+            </div>
+            <div
+              className="image-slides-blackboard"
+            >
+              <div
+                className="image-slides-loading"
+              >
+                <div />
+                <div />
+                <div />
+                <div />
+                <div />
+              </div>
+            </div>
+          </div>
+        </div>,
+        "lock": true,
+        "onClose": [Function],
+        "parentSelector": [Function],
+      },
+      "ref": null,
+      "rendered": Object {
+        "instance": null,
+        "key": null,
+        "nodeType": "host",
+        "props": Object {
+          "children": Array [
+            <div
+              className="image-slides-index"
+            >
+              1 / 5
+            </div>,
+            <div
+              className="image-slides-container"
+              style={
+                Object {
+                  "transform": "translate3d(0px, 0, 0)",
+                }
+              }
+            >
+              <div
+                className="image-slides-blackboard"
+              >
+                <div
+                  className="image-slides-loading"
+                >
+                  <div />
+                  <div />
+                  <div />
+                  <div />
+                  <div />
+                </div>
+              </div>
+              <div
+                className="image-slides-blackboard"
+              >
+                <div
+                  className="image-slides-loading"
+                >
+                  <div />
+                  <div />
+                  <div />
+                  <div />
+                  <div />
+                </div>
+              </div>
+            </div>,
+          ],
+          "className": "image-slides-view-port",
+        },
+        "ref": [Function],
+        "rendered": Array [
+          Object {
+            "instance": null,
+            "key": null,
+            "nodeType": "host",
+            "props": Object {
+              "children": "1 / 5",
+              "className": "image-slides-index",
+            },
+            "ref": null,
+            "rendered": "1 / 5",
+            "type": "div",
+          },
+          Object {
+            "instance": null,
+            "key": null,
+            "nodeType": "host",
+            "props": Object {
+              "children": Array [
+                <div
+                  className="image-slides-blackboard"
+                >
+                  <div
+                    className="image-slides-loading"
+                  >
+                    <div />
+                    <div />
+                    <div />
+                    <div />
+                    <div />
+                  </div>
+                </div>,
+                <div
+                  className="image-slides-blackboard"
+                >
+                  <div
+                    className="image-slides-loading"
+                  >
+                    <div />
+                    <div />
+                    <div />
+                    <div />
+                    <div />
+                  </div>
+                </div>,
+              ],
+              "className": "image-slides-container",
+              "style": Object {
+                "transform": "translate3d(0px, 0, 0)",
+              },
+            },
+            "ref": [Function],
+            "rendered": Array [
+              Object {
+                "instance": null,
+                "key": "0",
+                "nodeType": "host",
+                "props": Object {
+                  "children": <div
+                    className="image-slides-loading"
+                  >
+                    <div />
+                    <div />
+                    <div />
+                    <div />
+                    <div />
+                  </div>,
+                  "className": "image-slides-blackboard",
+                },
+                "ref": null,
+                "rendered": Object {
+                  "instance": null,
+                  "key": "loading",
+                  "nodeType": "host",
+                  "props": Object {
+                    "children": Array [
+                      <div />,
+                      <div />,
+                      <div />,
+                      <div />,
+                      <div />,
+                    ],
+                    "className": "image-slides-loading",
+                  },
+                  "ref": null,
+                  "rendered": Array [
+                    Object {
+                      "instance": null,
+                      "key": null,
+                      "nodeType": "host",
+                      "props": Object {},
+                      "ref": null,
+                      "rendered": null,
+                      "type": "div",
+                    },
+                    Object {
+                      "instance": null,
+                      "key": null,
+                      "nodeType": "host",
+                      "props": Object {},
+                      "ref": null,
+                      "rendered": null,
+                      "type": "div",
+                    },
+                    Object {
+                      "instance": null,
+                      "key": null,
+                      "nodeType": "host",
+                      "props": Object {},
+                      "ref": null,
+                      "rendered": null,
+                      "type": "div",
+                    },
+                    Object {
+                      "instance": null,
+                      "key": null,
+                      "nodeType": "host",
+                      "props": Object {},
+                      "ref": null,
+                      "rendered": null,
+                      "type": "div",
+                    },
+                    Object {
+                      "instance": null,
+                      "key": null,
+                      "nodeType": "host",
+                      "props": Object {},
+                      "ref": null,
+                      "rendered": null,
+                      "type": "div",
+                    },
+                  ],
+                  "type": "div",
+                },
+                "type": "div",
+              },
+              Object {
+                "instance": null,
+                "key": "http://img.zcool.cn/community/0101f856cfff206ac7252ce6214470.jpg1",
+                "nodeType": "host",
+                "props": Object {
+                  "children": <div
+                    className="image-slides-loading"
+                  >
+                    <div />
+                    <div />
+                    <div />
+                    <div />
+                    <div />
+                  </div>,
+                  "className": "image-slides-blackboard",
+                },
+                "ref": null,
+                "rendered": Object {
+                  "instance": null,
+                  "key": "loading",
+                  "nodeType": "host",
+                  "props": Object {
+                    "children": Array [
+                      <div />,
+                      <div />,
+                      <div />,
+                      <div />,
+                      <div />,
+                    ],
+                    "className": "image-slides-loading",
+                  },
+                  "ref": null,
+                  "rendered": Array [
+                    Object {
+                      "instance": null,
+                      "key": null,
+                      "nodeType": "host",
+                      "props": Object {},
+                      "ref": null,
+                      "rendered": null,
+                      "type": "div",
+                    },
+                    Object {
+                      "instance": null,
+                      "key": null,
+                      "nodeType": "host",
+                      "props": Object {},
+                      "ref": null,
+                      "rendered": null,
+                      "type": "div",
+                    },
+                    Object {
+                      "instance": null,
+                      "key": null,
+                      "nodeType": "host",
+                      "props": Object {},
+                      "ref": null,
+                      "rendered": null,
+                      "type": "div",
+                    },
+                    Object {
+                      "instance": null,
+                      "key": null,
+                      "nodeType": "host",
+                      "props": Object {},
+                      "ref": null,
+                      "rendered": null,
+                      "type": "div",
+                    },
+                    Object {
+                      "instance": null,
+                      "key": null,
+                      "nodeType": "host",
+                      "props": Object {},
+                      "ref": null,
+                      "rendered": null,
+                      "type": "div",
+                    },
+                  ],
+                  "type": "div",
+                },
+                "type": "div",
+              },
+            ],
+            "type": "div",
+          },
+        ],
+        "type": "div",
+      },
+      "type": [Function],
+    },
+  ],
+  Symbol(enzyme.__options__): Object {
+    "adapter": ReactSixteenAdapter {
+      "options": Object {
+        "enableComponentDidUpdateOnSetState": true,
+      },
+    },
+  },
+}
+`;

@@ -13,6 +13,12 @@ const images = [
 ];
 
 describe('<ImageSlides />', () => {
+  it('should render a loading', () => {
+    const wrapper = shallow(
+      <ImageSlides images={images} isOpen />,
+    );
+    expect(wrapper).toMatchSnapshot();
+  });
   it('renders two imgs when then index is equal to 0', () => {
     const wrapper = shallow(<ImageSlides images={images} isOpen />);
     expect(wrapper.find('.image-slides-blackboard').length).toBe(2);

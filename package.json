@@ -9,6 +9,8 @@
     "lint": "eslint --fix ./src --ext .js,.jsx",
     "eslint-check": "eslint --print-config .eslintrc | eslint-config-prettier-check",
     "test": "jest",
+    "test:watch": "jest --watch",
+    "test:coverage": "jest --coverage",
     "storybook": "start-storybook -p 6006",
     "build-storybook": "build-storybook"
   },
@@ -27,7 +29,7 @@
       "\\.(css|less)$": "<rootDir>/tests/__mocks__/styleMock.js"
     },
     "testPathIgnorePatterns": [
-      "<rootDir>/node_modules/",
+      "<rootDir>/node_modules/"
     ]
   },
   "author": "loadingwyn",
@@ -48,6 +50,7 @@
     "css-loader": "^0.28.7",
     "enzyme": "^3.1.0",
     "enzyme-adapter-react-16": "^1.0.1",
+    "enzyme-to-json": "^3.1.1",
     "eslint": "^4.8.0",
     "eslint-config-airbnb": "^15.1.0",
     "eslint-config-prettier": "^2.6.0",
@@ -65,9 +68,9 @@
     "react-dom": "^16.0.0",
     "react-test-renderer": "^16.0.0",
     "rimraf": "^2.6.2",
+    "style-loader": "^0.19.0",
     "stylelint": "^8.1.1",
     "stylelint-order": "^0.7.0",
-    "style-loader": "^0.19.0",
     "webpack": "^3.6.0"
   },
   "peerDependencies": {
