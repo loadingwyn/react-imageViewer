@@ -6,7 +6,7 @@ module.exports = {
     // 'react-hot-loader/patch',
     // 'webpack-dev-server/client?http://localhost:8080',
     // 'webpack/hot/only-dev-server',
-    './src/index.js',
+    './src/dev.js',
   ],
   output: {
     path: resolve(__dirname, 'dist'),
@@ -14,11 +14,11 @@ module.exports = {
     libraryTarget: 'umd',
     filename: 'bundle.js',
   },
-  externals: [
-    'react',
-    'react-dom',
-    'alloyfinger',
-  ],
+  // externals: [
+  //   'react',
+  //   'react-dom',
+  //   'alloyfinger',
+  // ],
   resolve: {
     extensions: ['.js', '.jsx'],
   },
@@ -32,7 +32,7 @@ module.exports = {
       use: ['style-loader', {
         loader: 'css-loader',
         options: {
-         //  sourceMap: true,
+        //  sourceMap: true,
           minimize: true,
           importLoaders: 1,
         },

@@ -25,11 +25,14 @@ export default class ImageSlides extends PureComponent {
 
   componentWillMount() {
     const { index, images, isOpen } = this.props;
+    const finalIndex = index || this.state.index;
     this.setState({
-      index: index || this.state.index,
+      index: finalIndex,
       isOpen,
     });
-    this.preload(images[index || this.state.index]);
+    this.preload(images[finalIndex]);
+    this.preload(images[finalIndex + 1]);
+    this.preload(images[finalIndex - 1]);
   }
 
   componentWillReceiveProps(newProps) {
@@ -167,13 +170,13 @@ export default class ImageSlides extends PureComponent {
     const { index } = this.state;
     const { images } = this.props;
     if (index < images.length - 1) {
+      this.preload(images[index + 2]);
       this.setState(
         {
           index: index + 1,
         },
         this.ignore,
       );
-      this.preload(images[index + 1]);
     }
   };
 
@@ -181,13 +184,13 @@ export default class ImageSlides extends PureComponent {
     const { index } = this.state;
     const { images } = this.props;
     if (index > 0) {
+      this.preload(images[index - 2]);
       this.setState(
         {
           index: index - 1,
         },
         this.ignore,
       );
-      this.preload(images[index - 1]);
     }
   };
 
