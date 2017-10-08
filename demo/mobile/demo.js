@@ -1,6 +1,6 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-import ImageSlides from '../src/ImageSlides';
+import ImageSlides from '../../src/ImageSlides';
 
 const images = [
   '',

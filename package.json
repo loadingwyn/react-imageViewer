@@ -5,6 +5,7 @@
   "main": "dist/bundle.js",
   "scripts": {
     "clean": "rimraf dist",
+    "dev": "npm run clean && NODE_ENV=development node ./demo/mobile/start.js",
     "build": "npm run clean && NODE_ENV=production webpack",
     "lint": "eslint --fix ./src --ext .js,.jsx",
     "eslint-check": "eslint --print-config .eslintrc | eslint-config-prettier-check",

@@ -6,7 +6,7 @@ module.exports = {
     // 'react-hot-loader/patch',
     // 'webpack-dev-server/client?http://localhost:8080',
     // 'webpack/hot/only-dev-server',
-    './src/dev.js',
+    process.env.NODE_ENV === 'production' ? './src/index.js' : './demo/mobile/demo.js',
   ],
   output: {
     path: resolve(__dirname, 'dist'),
@@ -14,11 +14,12 @@ module.exports = {
     libraryTarget: 'umd',
     filename: 'bundle.js',
   },
-  // externals: [
-  //   'react',
-  //   'react-dom',
-  //   'alloyfinger',
-  // ],
+  devtool: process.env.NODE_ENV === 'production' ? false : 'source-map',
+  externals: process.env.NODE_ENV === 'production' ? [
+    'react',
+    'react-dom',
+    'alloyfinger',
+  ] : [],
   resolve: {
     extensions: ['.js', '.jsx'],
   },
@@ -32,14 +33,14 @@ module.exports = {
       use: ['style-loader', {
         loader: 'css-loader',
         options: {
-        //  sourceMap: true,
+          sourceMap: process.env.NODE_ENV !== 'production',
           minimize: true,
           importLoaders: 1,
         },
       }, 'postcss-loader'],
     }],
   },
-  plugins: [
+  plugins: process.env.NODE_ENV === 'production' ? [
     new webpack.optimize.UglifyJsPlugin({
       beautify: false,
       comments: false,
@@ -50,5 +51,5 @@ module.exports = {
         reduce_vars: true,
       },
     }),
-  ],
+  ] : [],
 };
