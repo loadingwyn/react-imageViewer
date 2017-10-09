@@ -18,6 +18,7 @@ module.exports = {
   externals: process.env.NODE_ENV === 'production' ? [
     'react',
     'react-dom',
+    'prop-types',
     'alloyfinger',
   ] : [],
   resolve: {

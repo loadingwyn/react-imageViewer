@@ -1,11 +1,17 @@
 import React, { PureComponent } from 'react';
 import ReactDOM from 'react-dom';
+import PropTypes from 'prop-types';
 import './style.css';
 
 let originalBodyOverflow = null;
 let lockingCounter = 0;
 
 export default class Overlay extends PureComponent {
+  static propTypes = {
+    lock: PropTypes.bool,
+    parentSelector: PropTypes.func,
+  };
+
   static defaultProps = {
     lock: false,
     parentSelector() {
@@ -52,7 +58,7 @@ export default class Overlay extends PureComponent {
     }
     lockingCounter += 1;
     if (lockingCounter === 1) {
-      const body = document.body;
+      const { body } = document;
       originalBodyOverflow = body.style.overflow;
       body.style.overflow = 'hidden';
     }
@@ -65,7 +71,7 @@ export default class Overlay extends PureComponent {
     }
 
     if (lockingCounter === 0 && originalBodyOverflow !== null) {
-      const body = document.body;
+      const { body } = document;
       body.style.overflow = originalBodyOverflow || '';
       originalBodyOverflow = null;
     }

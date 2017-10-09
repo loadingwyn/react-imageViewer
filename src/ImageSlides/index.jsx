@@ -1,5 +1,6 @@
 import React, { PureComponent } from 'react';
 import AlloyFinger from 'alloyfinger';
+import PropTypes from 'prop-types';
 import ImageControllerCreator from '../ImageControllerCreator';
 import touchEmulator from '../utils/touchEmulator';
 import resizeImage from '../utils/resizeImage';
@@ -8,6 +9,11 @@ import './style.css';
 
 const GUTTER_WIDTH = 10;
 export default class ImageSlides extends PureComponent {
+  static propTypes = {
+    images: PropTypes.arrayOf(PropTypes.string),
+    index: PropTypes.number,
+    isOpen: PropTypes.bool,
+  };
   static defaultProps = {
     images: [],
     index: 0,
@@ -56,7 +62,7 @@ export default class ImageSlides extends PureComponent {
       const gesturesManager = new AlloyFinger(el, {});
       this.containerEl = el;
       this.containerController = gesturesManager;
-      const style = this.containerEl.style;
+      const { style } = this.containerEl;
       if (useTouchEmulator) {
         touchEmulator(el);
       }
