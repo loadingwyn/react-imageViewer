@@ -61,7 +61,6 @@
     "eslint-plugin-react": "^7.4.0",
     "jest": "^21.2.1",
     "lodash.clonedeep": "^4.5.0",
-    "loglevel": "^1.5.0",
     "postcss-loader": "^2.0.6",
     "precss": "^2.0.0",
     "prettier": "^1.7.4",
@@ -78,8 +77,8 @@
   },
   "peerDependencies": {
     "alloyfinger": "^0.1.10",
+    "prop-types": "^15.6.0",
     "react": "^16.0.0",
-    "react-dom": "^16.0.0",
-    "prop-types": "^15.6.0"
+    "react-dom": "^16.0.0"
   }
 }
