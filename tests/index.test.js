@@ -14,9 +14,7 @@ const images = [
 
 describe('<ImageSlides />', () => {
   it('should render a loading', () => {
-    const wrapper = shallow(
-      <ImageSlides images={images} isOpen />,
-    );
+    const wrapper = shallow(<ImageSlides images={images} isOpen />);
     expect(wrapper).toMatchSnapshot();
   });
   it('renders two imgs when then index is equal to 0', () => {
