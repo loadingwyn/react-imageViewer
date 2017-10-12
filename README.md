@@ -11,6 +11,8 @@ Features
 ## Install
 `yarn add react-imageslides`
 
+The package has peer dependencies on `react@^16.0.0`, `react-dom@16.0.0`, and `alloyfinger`.
+
 ## Apis
 
 Property            | Type   | Default        | Required | Description
