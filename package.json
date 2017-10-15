@@ -35,7 +35,6 @@
     ]
   },
   "author": "loadingwyn",
-  "license": "MIT",
   "devDependencies": {
     "@storybook/react": "^3.2.12",
     "alloyfinger": "^0.1.10",
