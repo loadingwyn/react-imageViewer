@@ -62,7 +62,12 @@ export default class ImageControllerCreator {
   restrictMovement(xRange, yRange) {
     let isInLimit = true;
     const result = {};
-    const { offsetX, offsetY, lastOffsetX, lastOffsetY } = this.state;
+    const {
+      offsetX,
+      offsetY,
+      lastOffsetX,
+      lastOffsetY,
+    } = this.state;
     if (
       Math.abs(lastOffsetX + offsetX) > xRange &&
       Math.abs(lastOffsetX + offsetX) > Math.abs(lastOffsetX)

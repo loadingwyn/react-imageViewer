@@ -18,8 +18,10 @@ export default class Overlay extends PureComponent {
       return document.body;
     },
   };
+
   locked = false;
   node = document.createElement('div');
+
   componentDidMount() {
     if (this.props.lock === true) {
       this.preventScrolling();
@@ -69,7 +71,6 @@ export default class Overlay extends PureComponent {
       lockingCounter -= 1;
       this.locked = false;
     }
-
     if (lockingCounter === 0 && originalBodyOverflow !== null) {
       const { body } = document;
       body.style.overflow = originalBodyOverflow || '';

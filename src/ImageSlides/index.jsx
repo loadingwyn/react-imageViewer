@@ -172,7 +172,7 @@ export default class ImageSlides extends PureComponent {
     });
   }
 
-  next = () => {
+  next() {
     const { index } = this.state;
     const { images } = this.props;
     if (index < images.length - 1) {
@@ -184,9 +184,9 @@ export default class ImageSlides extends PureComponent {
         this.ignore,
       );
     }
-  };
+  }
 
-  last = () => {
+  last() {
     const { index } = this.state;
     const { images } = this.props;
     if (index > 0) {
@@ -198,14 +198,14 @@ export default class ImageSlides extends PureComponent {
         this.ignore,
       );
     }
-  };
+  }
 
-  ignore = () => {
+  ignore() {
     if (this.containerController) {
       this.containerController.off('pressMove', this.containerOnMove);
       this.containerController.on('pressMove', this.containerOnMove);
     }
-  };
+  }
 
   preload(url) {
     if (url && !this.state.loaded[url]) {
