@@ -41,7 +41,7 @@ ShallowWrapper {
           className="image-slides-container"
           style={
             Object {
-              "transform": "translate3d(0px, 0, 0)",
+              "transform": "translate3d(10px, 0, 0)",
             }
           }
         >
@@ -93,7 +93,7 @@ ShallowWrapper {
             className="image-slides-container"
             style={
               Object {
-                "transform": "translate3d(0px, 0, 0)",
+                "transform": "translate3d(10px, 0, 0)",
               }
             }
           >
@@ -176,7 +176,7 @@ ShallowWrapper {
             ],
             "className": "image-slides-container",
             "style": Object {
-              "transform": "translate3d(0px, 0, 0)",
+              "transform": "translate3d(10px, 0, 0)",
             },
           },
           "ref": [Function],
@@ -373,7 +373,7 @@ ShallowWrapper {
             className="image-slides-container"
             style={
               Object {
-                "transform": "translate3d(0px, 0, 0)",
+                "transform": "translate3d(10px, 0, 0)",
               }
             }
           >
@@ -425,7 +425,7 @@ ShallowWrapper {
               className="image-slides-container"
               style={
                 Object {
-                  "transform": "translate3d(0px, 0, 0)",
+                  "transform": "translate3d(10px, 0, 0)",
                 }
               }
             >
@@ -508,7 +508,7 @@ ShallowWrapper {
               ],
               "className": "image-slides-container",
               "style": Object {
-                "transform": "translate3d(0px, 0, 0)",
+                "transform": "translate3d(10px, 0, 0)",
               },
             },
             "ref": [Function],

@@ -96,7 +96,6 @@ export default class ImageControllerCreator {
   }
 
   reset() {
-    this.target.style.transition = 'transform 0.1s';
     this.set({
       scale: 1,
       offsetX: 0,
@@ -129,6 +128,7 @@ export default class ImageControllerCreator {
       offsetX: parseInt(offset.deltaX, 10),
       offsetY: parseInt(offset.deltaY, 10),
     });
+    offset.preventDefault();
   }
 
   record(offset) {
@@ -138,5 +138,6 @@ export default class ImageControllerCreator {
       offsetX: 0,
       offsetY: 0,
     });
+    offset.preventDefault();
   }
 }

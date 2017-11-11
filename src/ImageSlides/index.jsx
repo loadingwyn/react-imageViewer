@@ -66,11 +66,12 @@ export default class ImageSlides extends PureComponent {
       if (useTouchEmulator) {
         touchEmulator(el);
       }
-      gesturesManager.on('touchStart', () => {
+      gesturesManager.on('touchStart', e => {
         style.transition = '';
+        e.preventDefault();
       });
       gesturesManager.on('pressMove', this.containerOnMove);
-      gesturesManager.on('touchEnd', () => {
+      gesturesManager.on('touchEnd', e => {
         const swipeTrigger = window.innerWidth * 0.2;
         if (this.lastContainerOffsetX > swipeTrigger) {
           if (this.getMedianIndex() > 0 && this.state.index !== 1) {
@@ -94,6 +95,7 @@ export default class ImageSlides extends PureComponent {
         ) * this.getMedianIndex()}px, 0, 0)`;
         this.lastContainerOffsetX = 0;
         this.isMoving = false;
+        e.preventDefault();
       });
     }
   };
@@ -131,6 +133,7 @@ export default class ImageSlides extends PureComponent {
       this.lastContainerOffsetX -
       (GUTTER_WIDTH + window.innerWidth) * this.getMedianIndex();
     style.transform = `translate3d(${offsetX}px, 0, 0)`;
+    offset.preventDefault();
   };
 
   gesturesHandler(el) {
@@ -156,9 +159,9 @@ export default class ImageSlides extends PureComponent {
     gesturesManager.on('pressMove', offset => {
       imageController.move(offset);
     });
-    gesturesManager.on('pinch', event => {
-      imageController.enlargeBytimes(event.zoom);
-    });
+    // gesturesManager.on('pinch', event => {
+    //   imageController.enlargeBytimes(event.zoom);
+    // });
     gesturesManager.on('doubleTap', () => {
       if (imageController.state.scale > 1) {
         imageController.reset();
@@ -167,8 +170,9 @@ export default class ImageSlides extends PureComponent {
         imageController.recordScale();
       }
     });
-    gesturesManager.on('touchEnd', () => {
+    gesturesManager.on('touchEnd', e => {
       imageController.recordScale();
+      e.preventDefault();
     });
   }
 
@@ -265,7 +269,7 @@ export default class ImageSlides extends PureComponent {
           <div
             className="image-slides-container"
             ref={this.getContainer}
-            key={this.viewPortEl && this.viewPortEl.clientWidth} //chrome transform
+            key={this.viewPortEl && this.viewPortEl.clientWidth} // chrome transform
             style={{
               transform: `translate3d(${-this.getMedianIndex() *
                 window.innerWidth + GUTTER_WIDTH}px, 0, 0)`,
