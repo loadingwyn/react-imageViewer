@@ -1,12 +1,12 @@
 @keyframes line-scale-pulse-out {
   0% {
-    transform: scaleY(1.0);
+    transform: scaleY(1);
   }
   50% {
     transform: scaleY(0.4);
   }
   100% {
-    transform: scaleY(1.0);
+    transform: scaleY(1);
   }
 }
 
@@ -36,7 +36,6 @@
     &:nth-child(5) {
       animation-delay: -0.2s !important;
     }
-
   }
 }
 

@@ -277,7 +277,7 @@ export default class ImageSlides extends PureComponent {
             {images.slice(displayMin, displayMax).map((url, ind) => (
               <div
                 /* eslint-disable */
-                key={url + (ind + index - (index - displayMin))}
+                key={url + (ind + displayMin)}
                 /* eslint-enable */
                 className="image-slides-blackboard">
                 {loaded[url] ? (
