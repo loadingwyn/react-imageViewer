@@ -5,6 +5,7 @@ ShallowWrapper {
   "length": 1,
   Symbol(enzyme.__root__): [Circular],
   Symbol(enzyme.__unrendered__): <ImageSlides
+    addon={[Function]}
     images={
       Array [
         "",
@@ -26,7 +27,7 @@ ShallowWrapper {
   },
   Symbol(enzyme.__node__): Object {
     "instance": null,
-    "key": null,
+    "key": undefined,
     "nodeType": "class",
     "props": Object {
       "children": <div
@@ -80,7 +81,7 @@ ShallowWrapper {
     "ref": null,
     "rendered": Object {
       "instance": null,
-      "key": null,
+      "key": undefined,
       "nodeType": "host",
       "props": Object {
         "children": Array [
@@ -89,6 +90,7 @@ ShallowWrapper {
           >
             1 / 5
           </div>,
+          undefined,
           <div
             className="image-slides-container"
             style={
@@ -131,7 +133,7 @@ ShallowWrapper {
       "rendered": Array [
         Object {
           "instance": null,
-          "key": null,
+          "key": undefined,
           "nodeType": "host",
           "props": Object {
             "children": "1 / 5",
@@ -141,9 +143,10 @@ ShallowWrapper {
           "rendered": "1 / 5",
           "type": "div",
         },
+        undefined,
         Object {
           "instance": null,
-          "key": null,
+          "key": undefined,
           "nodeType": "host",
           "props": Object {
             "children": Array [
@@ -216,7 +219,7 @@ ShallowWrapper {
                 "rendered": Array [
                   Object {
                     "instance": null,
-                    "key": null,
+                    "key": undefined,
                     "nodeType": "host",
                     "props": Object {},
                     "ref": null,
@@ -225,7 +228,7 @@ ShallowWrapper {
                   },
                   Object {
                     "instance": null,
-                    "key": null,
+                    "key": undefined,
                     "nodeType": "host",
                     "props": Object {},
                     "ref": null,
@@ -234,7 +237,7 @@ ShallowWrapper {
                   },
                   Object {
                     "instance": null,
-                    "key": null,
+                    "key": undefined,
                     "nodeType": "host",
                     "props": Object {},
                     "ref": null,
@@ -243,7 +246,7 @@ ShallowWrapper {
                   },
                   Object {
                     "instance": null,
-                    "key": null,
+                    "key": undefined,
                     "nodeType": "host",
                     "props": Object {},
                     "ref": null,
@@ -252,7 +255,7 @@ ShallowWrapper {
                   },
                   Object {
                     "instance": null,
-                    "key": null,
+                    "key": undefined,
                     "nodeType": "host",
                     "props": Object {},
                     "ref": null,
@@ -299,7 +302,7 @@ ShallowWrapper {
                 "rendered": Array [
                   Object {
                     "instance": null,
-                    "key": null,
+                    "key": undefined,
                     "nodeType": "host",
                     "props": Object {},
                     "ref": null,
@@ -308,7 +311,7 @@ ShallowWrapper {
                   },
                   Object {
                     "instance": null,
-                    "key": null,
+                    "key": undefined,
                     "nodeType": "host",
                     "props": Object {},
                     "ref": null,
@@ -317,7 +320,7 @@ ShallowWrapper {
                   },
                   Object {
                     "instance": null,
-                    "key": null,
+                    "key": undefined,
                     "nodeType": "host",
                     "props": Object {},
                     "ref": null,
@@ -326,7 +329,7 @@ ShallowWrapper {
                   },
                   Object {
                     "instance": null,
-                    "key": null,
+                    "key": undefined,
                     "nodeType": "host",
                     "props": Object {},
                     "ref": null,
@@ -335,7 +338,7 @@ ShallowWrapper {
                   },
                   Object {
                     "instance": null,
-                    "key": null,
+                    "key": undefined,
                     "nodeType": "host",
                     "props": Object {},
                     "ref": null,
@@ -358,7 +361,7 @@ ShallowWrapper {
   Symbol(enzyme.__nodes__): Array [
     Object {
       "instance": null,
-      "key": null,
+      "key": undefined,
       "nodeType": "class",
       "props": Object {
         "children": <div
@@ -412,7 +415,7 @@ ShallowWrapper {
       "ref": null,
       "rendered": Object {
         "instance": null,
-        "key": null,
+        "key": undefined,
         "nodeType": "host",
         "props": Object {
           "children": Array [
@@ -421,6 +424,7 @@ ShallowWrapper {
             >
               1 / 5
             </div>,
+            undefined,
             <div
               className="image-slides-container"
               style={
@@ -463,7 +467,7 @@ ShallowWrapper {
         "rendered": Array [
           Object {
             "instance": null,
-            "key": null,
+            "key": undefined,
             "nodeType": "host",
             "props": Object {
               "children": "1 / 5",
@@ -473,9 +477,10 @@ ShallowWrapper {
             "rendered": "1 / 5",
             "type": "div",
           },
+          undefined,
           Object {
             "instance": null,
-            "key": null,
+            "key": undefined,
             "nodeType": "host",
             "props": Object {
               "children": Array [
@@ -548,7 +553,7 @@ ShallowWrapper {
                   "rendered": Array [
                     Object {
                       "instance": null,
-                      "key": null,
+                      "key": undefined,
                       "nodeType": "host",
                       "props": Object {},
                       "ref": null,
@@ -557,7 +562,7 @@ ShallowWrapper {
                     },
                     Object {
                       "instance": null,
-                      "key": null,
+                      "key": undefined,
                       "nodeType": "host",
                       "props": Object {},
                       "ref": null,
@@ -566,7 +571,7 @@ ShallowWrapper {
                     },
                     Object {
                       "instance": null,
-                      "key": null,
+                      "key": undefined,
                       "nodeType": "host",
                       "props": Object {},
                       "ref": null,
@@ -575,7 +580,7 @@ ShallowWrapper {
                     },
                     Object {
                       "instance": null,
-                      "key": null,
+                      "key": undefined,
                       "nodeType": "host",
                       "props": Object {},
                       "ref": null,
@@ -584,7 +589,7 @@ ShallowWrapper {
                     },
                     Object {
                       "instance": null,
-                      "key": null,
+                      "key": undefined,
                       "nodeType": "host",
                       "props": Object {},
                       "ref": null,
@@ -631,7 +636,7 @@ ShallowWrapper {
                   "rendered": Array [
                     Object {
                       "instance": null,
-                      "key": null,
+                      "key": undefined,
                       "nodeType": "host",
                       "props": Object {},
                       "ref": null,
@@ -640,7 +645,7 @@ ShallowWrapper {
                     },
                     Object {
                       "instance": null,
-                      "key": null,
+                      "key": undefined,
                       "nodeType": "host",
                       "props": Object {},
                       "ref": null,
@@ -649,7 +654,7 @@ ShallowWrapper {
                     },
                     Object {
                       "instance": null,
-                      "key": null,
+                      "key": undefined,
                       "nodeType": "host",
                       "props": Object {},
                       "ref": null,
@@ -658,7 +663,7 @@ ShallowWrapper {
                     },
                     Object {
                       "instance": null,
-                      "key": null,
+                      "key": undefined,
                       "nodeType": "host",
                       "props": Object {},
                       "ref": null,
@@ -667,7 +672,7 @@ ShallowWrapper {
                     },
                     Object {
                       "instance": null,
-                      "key": null,
+                      "key": undefined,
                       "nodeType": "host",
                       "props": Object {},
                       "ref": null,

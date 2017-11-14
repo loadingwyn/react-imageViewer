@@ -13,11 +13,14 @@ export default class ImageSlides extends PureComponent {
     images: PropTypes.arrayOf(PropTypes.string),
     index: PropTypes.number,
     isOpen: PropTypes.bool,
+    addon: PropTypes.func,
   };
+
   static defaultProps = {
     images: [],
     index: 0,
     isOpen: false,
+    addon: () => {},
   };
   state = {
     index: 0,
@@ -240,8 +243,10 @@ export default class ImageSlides extends PureComponent {
   };
 
   render() {
-    const { loaded, index, isOpen } = this.state;
-    const { images } = this.props;
+    const {
+      loaded, index, isOpen,
+    } = this.state;
+    const { images, addon } = this.props;
     const displayMax = index + 2 > images.length ? images.length : index + 2;
     const displayMin = index - 1 < 0 ? 0 : index - 1;
     const Loading = (
@@ -266,6 +271,7 @@ export default class ImageSlides extends PureComponent {
               {`${index + 1} / ${images.length}`}
             </div>
           )}
+          {addon && addon(images[index], index)}
           <div
             className="image-slides-container"
             ref={this.getContainer}
