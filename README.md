@@ -1,4 +1,5 @@
 # React Image Slides
+[![codecov](https://codecov.io/gh/loadingwyn/react-imageslides/branch/master/graph/badge.svg)](https://codecov.io/gh/loadingwyn/react-imageslides)
 > A mobile friendly images slideshow react component
 ## Example
 ![demo](demo/demo.gif)
