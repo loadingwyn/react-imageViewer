@@ -5,9 +5,9 @@
 ![demo](demo/demo.gif)
 
 Features
-- smooth swiping(use [Alloyfinger](https://github.com/AlloyTeam/AlloyFinger))
-- Preload Images
-- Only render no more than 3 images (previous, current, next) at a time for performance
+- supports swiping(use [Alloyfinger](https://github.com/AlloyTeam/AlloyFinger))
+- preloads Images
+- no unnecessary rendering(renders no more than 3 images at a time)
 
 ## Install
 `yarn add react-imageslides`
