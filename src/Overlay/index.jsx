@@ -4,40 +4,27 @@ import PropTypes from 'prop-types';
 import './style.css';
 
 let originalBodyOverflow = null;
-let lockingCounter = 0;
 
 export default class Overlay extends PureComponent {
   static propTypes = {
-    lock: PropTypes.bool,
     parentSelector: PropTypes.func,
   };
 
   static defaultProps = {
-    lock: false,
     parentSelector() {
       return document.body;
     },
   };
 
-  locked = false;
   node = document.createElement('div');
 
   componentDidMount() {
-    if (this.props.lock === true) {
-      this.preventScrolling();
-    }
+    Overlay.preventScrolling();
     const parent = this.props.parentSelector();
     parent.appendChild(this.node);
   }
 
   componentWillReceiveProps(newProps) {
-    if (this.props.lock !== newProps.lock) {
-      if (newProps.lock) {
-        this.preventScrolling();
-      } else {
-        this.allowScrolling();
-      }
-    }
     const currentParent = this.props.parentSelector();
     const newParent = newProps.parentSelector();
 
@@ -49,44 +36,28 @@ export default class Overlay extends PureComponent {
 
   componentWillUnmount() {
     const parent = this.props.parentSelector();
-    if (!this.node || !this.content) return;
+    if (!this.node) return;
     parent.removeChild(this.node);
-    this.allowScrolling();
+    Overlay.allowScrolling();
   }
 
-  preventScrolling() {
-    if (this.locked === true) {
-      return;
-    }
-    lockingCounter += 1;
-    if (lockingCounter === 1) {
-      const { body } = document;
-      originalBodyOverflow = body.style.overflow;
-      body.style.overflow = 'hidden';
-    }
+  static preventScrolling() {
+    const { body } = document;
+    originalBodyOverflow = body.style.overflow;
+    body.style.overflow = 'hidden';
   }
 
-  allowScrolling() {
-    if (this.locked === true) {
-      lockingCounter -= 1;
-      this.locked = false;
-    }
-    if (lockingCounter === 0 && originalBodyOverflow !== null) {
-      const { body } = document;
-      body.style.overflow = originalBodyOverflow || '';
-      originalBodyOverflow = null;
-    }
+  static allowScrolling() {
+    const { body } = document;
+    body.style.overflow = originalBodyOverflow || '';
+    originalBodyOverflow = null;
   }
 
   render() {
-    const {
-      onClose,
-    } = this.props;
+    const { onClose } = this.props;
     return ReactDOM.createPortal(
       <div className="image-slides-overlay">
-        <button
-          className="image-slides-close"
-          onClick={onClose} >
+        <button className="image-slides-close" onClick={onClose}>
           <svg
             fill="#fff"
             height="24"

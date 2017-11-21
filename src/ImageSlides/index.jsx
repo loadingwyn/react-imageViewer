@@ -260,7 +260,6 @@ export default class ImageSlides extends PureComponent {
     );
     return isOpen ? (
       <Overlay
-        lock
         onClose={this.onCloseViewer}>
         <div
           className="image-slides-view-port"
