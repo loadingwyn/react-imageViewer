@@ -10,7 +10,7 @@ Features
 - no unnecessary rendering(renders no more than 3 images at a time)
 
 ## Install
-`yarn add react-imageslides`
+`yarn add react-imageslides react react-dom alloyfinger`
 
 The package has peer dependencies on `react@^16.0.0`, `react-dom@16.0.0`, and `alloyfinger`.
 
