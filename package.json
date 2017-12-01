@@ -46,7 +46,6 @@
     "babel-plugin-transform-class-properties": "^6.24.1",
     "babel-plugin-transform-es2015-modules-commonjs": "^6.26.0",
     "babel-plugin-transform-object-rest-spread": "^6.26.0",
-    "babel-plugin-transform-runtime": "^6.23.0",
     "babel-preset-env": "^1.6.0",
     "babel-preset-react": "^6.24.1",
     "css-loader": "^0.28.7",
@@ -81,5 +80,6 @@
     "prop-types": "^15.6.0",
     "react": "^16.0.0",
     "react-dom": "^16.0.0"
-  }
+  },
+  "dependencies": {}
 }
