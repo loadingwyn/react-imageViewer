@@ -137,6 +137,7 @@ export default class ImageSlides extends PureComponent {
       (GUTTER_WIDTH + window.innerWidth) * this.getMedianIndex();
     style.transform = `translate3d(${offsetX}px, 0, 0)`;
     offset.preventDefault();
+    offset.stopPropagation();
   };
 
   gesturesHandler(el) {
