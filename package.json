@@ -1,6 +1,6 @@
 {
   "name": "react-imageslides",
-  "version": "0.7.2",
+  "version": "0.7.3",
   "description": "A mobile friendly images slideshow react component",
   "main": "dist/bundle.js",
   "scripts": {
