@@ -93,9 +93,8 @@ export default class ImageSlides extends PureComponent {
           this.next();
         }
         style.transition = 'all 0.3s';
-        style.transform = `translate3d(${-(
-          GUTTER_WIDTH + window.innerWidth
-        ) * this.getMedianIndex()}px, 0, 0)`;
+        style.transform = `translate3d(${-(GUTTER_WIDTH + window.innerWidth) *
+          this.getMedianIndex()}px, 0, 0)`;
         this.lastContainerOffsetX = 0;
         this.isMoving = false;
         e.preventDefault();
@@ -146,7 +145,7 @@ export default class ImageSlides extends PureComponent {
       touchEmulator(el.parentElement);
     }
     const imageController = new ImageControllerCreator(el, {
-      viewPortWidth: window.innerWidth,
+      viewPortWidth: this.viewPortEl.clientHeight,
       viewPortHeight: this.viewPortEl.clientHeight,
       onGetControl: () => {
         if (this.containerController && !this.isMoving) {
@@ -244,9 +243,7 @@ export default class ImageSlides extends PureComponent {
   };
 
   render() {
-    const {
-      loaded, index, isOpen,
-    } = this.state;
+    const { loaded, index, isOpen } = this.state;
     const { images, addon } = this.props;
     const displayMax = index + 2 > images.length ? images.length : index + 2;
     const displayMin = index - 1 < 0 ? 0 : index - 1;
@@ -260,14 +257,10 @@ export default class ImageSlides extends PureComponent {
       </div>
     );
     return isOpen ? (
-      <Overlay
-        onClose={this.onCloseViewer}>
-        <div
-          className="image-slides-view-port"
-          ref={this.getViewPort} >
+      <Overlay onClose={this.onCloseViewer}>
+        <div className="image-slides-view-port" ref={this.getViewPort}>
           {images.length > 0 && (
-            <div
-              className="image-slides-index" >
+            <div className="image-slides-index">
               {`${index + 1} / ${images.length}`}
             </div>
           )}
@@ -278,8 +271,9 @@ export default class ImageSlides extends PureComponent {
             key={this.viewPortEl && this.viewPortEl.clientWidth} // chrome transform
             style={{
               transform: `translate3d(${-this.getMedianIndex() *
-                window.innerWidth + GUTTER_WIDTH}px, 0, 0)`,
-            }} >
+                window.innerWidth +
+                GUTTER_WIDTH}px, 0, 0)`,
+            }}>
             {images.slice(displayMin, displayMax).map((url, ind) => (
               <div
                 /* eslint-disable */
@@ -295,7 +289,9 @@ export default class ImageSlides extends PureComponent {
                     style={{
                       ...this.initialStyle[url],
                     }} />
-                ) : Loading}
+                ) : (
+                  Loading
+                )}
               </div>
             ))}
           </div>
