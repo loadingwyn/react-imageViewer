@@ -11,6 +11,8 @@ export default class ImageControllerCreator {
   constructor(element, option = {}) {
     this.target = element;
     this.originalWidth = element.clientWidth;
+    this.state.originX = this.target.clientWidth / 2;
+    this.state.originY = this.target.clientHeight / 2;
     this.viewPortWidth = option.viewPortWidth;
     this.viewPortHeight = option.viewPortHeight;
     this.onGetControl = option.onGetControl;
@@ -30,11 +32,14 @@ export default class ImageControllerCreator {
       offsetY,
       lastOffsetX,
       lastOffsetY,
-      scaleMultiples,
+      scale,
+      originX,
+      originY,
     } = this.state;
     style.transform = `translate3d(calc(${offsetX +
       lastOffsetX}px - 50%), calc(${offsetY +
-      lastOffsetY}px - 50%), 0) scale(${scaleMultiples})`;
+      lastOffsetY}px - 50%), 0) scale(${scale})`;
+    style.transformOrigin = `${originX}px ${originY}px`;
     if (this.onChange) {
       this.onChange(this.state);
     }
@@ -47,30 +52,44 @@ export default class ImageControllerCreator {
       ...this.state,
       ...newState,
     };
-    this.state.scaleMultiples = this.state.scale;
+    this.state.scale = this.state.scale;
     const { clientWidth, clientHeight } = this.target;
-    const { lastOffsetX, lastOffsetY, scaleMultiples } = this.state;
-    if (scaleMultiples <= 1 && (lastOffsetX || lastOffsetY)) {
+    const {
+      lastOffsetX, lastOffsetY, scale, originX, originY,
+    } = this.state;
+    if (scale <= 1 && (lastOffsetX || lastOffsetY)) {
       this.reset();
     }
     this.restrictMovement(
-      (clientWidth * scaleMultiples - this.viewPortWidth) / 2,
-      (clientHeight * scaleMultiples - this.viewPortHeight) / 2,
+      ((clientWidth - originX + this.target.clientWidth / 2) * scale -
+        this.viewPortWidth) /
+        2,
+      ((clientWidth + originX - this.target.clientWidth / 2) * scale -
+        this.viewPortWidth) /
+        2,
+      (clientHeight * scale +
+        Math.abs(originY - this.target.clientHeight / 2) -
+        this.viewPortHeight) /
+        2 + 100,
     );
   }
 
-  restrictMovement(xRange, yRange) {
+  restrictMovement(leftRange, rightRange, yRange) {
     let isInLimit = true;
     const result = {};
     const {
-      offsetX,
-      offsetY,
-      lastOffsetX,
-      lastOffsetY,
+      offsetX, offsetY, lastOffsetX, lastOffsetY,
     } = this.state;
     if (
-      Math.abs(lastOffsetX + offsetX) > xRange &&
-      Math.abs(lastOffsetX + offsetX) > Math.abs(lastOffsetX)
+      Math.abs(lastOffsetX + offsetX) > rightRange &&
+      lastOffsetX + offsetX > lastOffsetX
+    ) {
+      result.offsetX = 0;
+      result.lastOffsetX = lastOffsetX;
+      isInLimit = false;
+    } else if (
+      Math.abs(lastOffsetX + offsetX) > leftRange &&
+      lastOffsetX + offsetX < lastOffsetX
     ) {
       result.offsetX = 0;
       result.lastOffsetX = lastOffsetX;
@@ -83,7 +102,7 @@ export default class ImageControllerCreator {
       result.offsetY = 0;
       result.lastOffsetY = lastOffsetY;
     }
-    if (!isInLimit && this.onLoseControl && Math.abs(offsetY) < 5) {
+    if (!isInLimit && this.onLoseControl) {
       this.onGetControl();
       this.onLoseControl();
     } else {
@@ -103,6 +122,8 @@ export default class ImageControllerCreator {
       lastOffsetX: 0,
       lastOffsetY: 0,
       lastScale: 1,
+      originX: this.target.clientWidth / 2,
+      originY: this.target.clientHeight / 2,
     });
     this.target.style.transition = 'transform 0.1s';
   }

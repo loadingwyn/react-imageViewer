@@ -5,7 +5,8 @@
 ![demo](demo/demo.gif)
 
 Features
-- supports swiping(use [Alloyfinger](https://github.com/AlloyTeam/AlloyFinger))
+- native swiping experience(use [Alloyfinger](https://github.com/AlloyTeam/AlloyFinger))
+- double tap to zoom in/out
 - preloads Images
 - no unnecessary rendering(renders no more than 3 images at a time)
 
@@ -21,8 +22,10 @@ Property            | Type   | Default        | Required | Description
 images              | array  |                |    yes   | image urls to display
 isOpen              | boolean|    false       |          | whether component is open
 index               | number |        0       |          | index of the first image to display
+addon               | func   |                |          | display extra infomation of the image (addon must return a react element)
 useTouchEmulator    | boolean|    false       |          | whether touch emulator is used
 onClose             | func   |                |          | close window event
+onChange            | func   |                |          | swipe image event
 
 ## Todo
 

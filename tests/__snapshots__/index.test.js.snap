@@ -5,7 +5,7 @@ ShallowWrapper {
   "length": 1,
   Symbol(enzyme.__root__): [Circular],
   Symbol(enzyme.__unrendered__): <ImageSlides
-    addon={[Function]}
+    addon={null}
     images={
       Array [
         "",
@@ -17,6 +17,9 @@ ShallowWrapper {
     }
     index={0}
     isOpen={true}
+    onChange={null}
+    onClose={null}
+    useTouchEmulator={false}
   />,
   Symbol(enzyme.__renderer__): Object {
     "batchedUpdates": [Function],
@@ -89,7 +92,7 @@ ShallowWrapper {
           >
             1 / 5
           </div>,
-          undefined,
+          null,
           <div
             className="image-slides-container"
             style={
@@ -142,7 +145,7 @@ ShallowWrapper {
           "rendered": "1 / 5",
           "type": "div",
         },
-        undefined,
+        null,
         Object {
           "instance": null,
           "key": undefined,
@@ -422,7 +425,7 @@ ShallowWrapper {
             >
               1 / 5
             </div>,
-            undefined,
+            null,
             <div
               className="image-slides-container"
               style={
@@ -475,7 +478,7 @@ ShallowWrapper {
             "rendered": "1 / 5",
             "type": "div",
           },
-          undefined,
+          null,
           Object {
             "instance": null,
             "key": undefined,

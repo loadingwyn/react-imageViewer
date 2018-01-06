@@ -36,6 +36,7 @@
   },
   "author": "loadingwyn",
   "devDependencies": {
+    "@storybook/addon-viewport": "^3.3.3",
     "@storybook/react": "^3.2.12",
     "alloyfinger": "^0.1.10",
     "autoprefixer": "^7.1.4",

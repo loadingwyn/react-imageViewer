@@ -13,14 +13,20 @@ export default class ImageSlides extends PureComponent {
     images: PropTypes.arrayOf(PropTypes.string),
     index: PropTypes.number,
     isOpen: PropTypes.bool,
+    useTouchEmulator: PropTypes.bool,
     addon: PropTypes.func,
+    onClose: PropTypes.func,
+    onChange: PropTypes.func,
   };
 
   static defaultProps = {
     images: [],
     index: 0,
     isOpen: false,
-    addon: () => {},
+    addon: null,
+    useTouchEmulator: false,
+    onClose: null,
+    onChange: null,
   };
   state = {
     index: 0,
@@ -96,10 +102,10 @@ export default class ImageSlides extends PureComponent {
         style.transform = `translate3d(${-(GUTTER_WIDTH + window.innerWidth) *
           this.getMedianIndex()}px, 0, 0)`;
         this.lastContainerOffsetX = 0;
-        this.isMoving = false;
         e.preventDefault();
       });
     }
+    this.gesturesHandlers = [];
   };
 
   getImageEl = el => {
@@ -127,7 +133,6 @@ export default class ImageSlides extends PureComponent {
   }
 
   containerOnMove = offset => {
-    this.isMoving = true;
     const deltaX = parseInt(offset.deltaX, 10);
     const style = this.containerEl ? this.containerEl.style : {};
     this.lastContainerOffsetX = deltaX + this.lastContainerOffsetX;
@@ -145,32 +150,49 @@ export default class ImageSlides extends PureComponent {
       touchEmulator(el.parentElement);
     }
     const imageController = new ImageControllerCreator(el, {
-      viewPortWidth: this.viewPortEl.clientHeight,
+      viewPortWidth: this.viewPortEl.clientWidth,
       viewPortHeight: this.viewPortEl.clientHeight,
       onGetControl: () => {
-        if (this.containerController && !this.isMoving) {
+        if (this.containerController) {
           this.containerController.off('pressMove', this.containerOnMove);
         }
       },
       onLoseControl: () => {
-        if (this.containerController && !this.isMoving) {
+        if (this.containerController) {
           this.containerController.on('pressMove', this.containerOnMove);
         }
       },
     });
+    this.gesturesHandlers.push(imageController);
     const gesturesManager = new AlloyFinger(el.parentElement, {});
     gesturesManager.on('pressMove', offset => {
       imageController.move(offset);
     });
-    // gesturesManager.on('pinch', event => {
-    //   imageController.enlargeBytimes(event.zoom);
-    // });
-    gesturesManager.on('doubleTap', () => {
+    gesturesManager.on('doubleTap', e => {
       if (imageController.state.scale > 1) {
         imageController.reset();
       } else {
+        const centerX = e.changedTouches[0].pageX;
+        const centerY = e.changedTouches[0].pageY;
+        const cr = el.getBoundingClientRect();
+        const imgCenterX = cr.left + cr.width / 2;
+        const imgCenterY = cr.top + cr.height / 2;
+        const offX = centerX - imgCenterX;
+        const offY = centerY - imgCenterY;
+        const preOriginX = imageController.state.originX;
+        const preOriginY = imageController.state.originY;
+        imageController.state.originX =
+          preOriginX + offX / imageController.state.scale;
+        imageController.state.originY =
+          preOriginY + offY / imageController.state.scale;
+        // reset translateX and translateY
+        imageController.state.offsetX +=
+          offX - preOriginX * imageController.state.scale;
+        imageController.state.offsetY +=
+          offY - preOriginY * imageController.state.scale;
         imageController.enlargeBytimes(1.8);
         imageController.recordScale();
+        imageController.onGetControl();
       }
     });
     gesturesManager.on('touchEnd', e => {
@@ -208,6 +230,10 @@ export default class ImageSlides extends PureComponent {
   }
 
   ignore() {
+    if (this.props.onChange) {
+      this.props.onChange(this.state.index);
+    }
+    this.gesturesHandlers.forEach(controller => controller.reset());
     if (this.containerController) {
       this.containerController.off('pressMove', this.containerOnMove);
       this.containerController.on('pressMove', this.containerOnMove);
