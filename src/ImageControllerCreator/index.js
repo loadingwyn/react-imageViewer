@@ -1,3 +1,5 @@
+import throttle from 'lodash.throttle';
+
 export default class ImageControllerCreator {
   state = {
     scale: 1,
@@ -45,6 +47,8 @@ export default class ImageControllerCreator {
     }
     this.state.lastOffsetX = offsetX + lastOffsetX;
     this.state.lastOffsetY = offsetY + lastOffsetY;
+    this.state.offsetX = 0;
+    this.state.offsetY = 0;
   }
 
   preProcess(newState) {
@@ -60,44 +64,60 @@ export default class ImageControllerCreator {
     if (scale <= 1 && (lastOffsetX || lastOffsetY)) {
       this.reset();
     }
-    this.restrictMovement(
-      ((clientWidth - originX + this.target.clientWidth / 2) * scale -
-        this.viewPortWidth) /
-        2,
-      ((clientWidth + originX - this.target.clientWidth / 2) * scale -
-        this.viewPortWidth) /
-        2,
-      (clientHeight * scale +
-        Math.abs(originY - this.target.clientHeight / 2) -
-        this.viewPortHeight) /
-        2 + 100,
-    );
+    throttle(() => {
+      this.restrictMovement(
+        ((clientWidth + originX - this.target.clientWidth / 2) * scale -
+          this.viewPortWidth) /
+          2,
+        ((clientWidth - originX + this.target.clientWidth / 2) * scale -
+          this.viewPortWidth) /
+          2,
+        ((clientHeight + originY - this.target.clientHeight / 2) * scale -
+          this.viewPortHeight) /
+          2 +
+          100,
+        ((clientHeight - originY + this.target.clientHeight / 2) * scale -
+          this.viewPortHeight) /
+          2 +
+          100,
+      );
+    }, 100)();
   }
 
-  restrictMovement(leftRange, rightRange, yRange) {
+  restrictMovement(leftRange, rightRange, topRange, bottomRange) {
     let isInLimit = true;
     const result = {};
     const {
       offsetX, offsetY, lastOffsetX, lastOffsetY,
     } = this.state;
     if (
-      Math.abs(lastOffsetX + offsetX) > rightRange &&
-      lastOffsetX + offsetX > lastOffsetX
+      lastOffsetX + offsetX < 0 &&
+      Math.abs(lastOffsetX + offsetX) > rightRange - 1 &&
+      lastOffsetX + offsetX <= lastOffsetX
     ) {
       result.offsetX = 0;
       result.lastOffsetX = lastOffsetX;
       isInLimit = false;
     } else if (
-      Math.abs(lastOffsetX + offsetX) > leftRange &&
-      lastOffsetX + offsetX < lastOffsetX
+      lastOffsetX + offsetX >= 0 &&
+      lastOffsetX + offsetX > leftRange - 1 &&
+      lastOffsetX + offsetX >= lastOffsetX
     ) {
       result.offsetX = 0;
       result.lastOffsetX = lastOffsetX;
       isInLimit = false;
     }
     if (
-      Math.abs(lastOffsetY + offsetY) > yRange &&
-      Math.abs(lastOffsetY + offsetY) > Math.abs(lastOffsetY)
+      lastOffsetY + offsetY < 0 &&
+      Math.abs(lastOffsetY + offsetY) > bottomRange - 1 &&
+      lastOffsetY + offsetY <= lastOffsetY
+    ) {
+      result.offsetY = 0;
+      result.lastOffsetY = lastOffsetY;
+    } else if (
+      lastOffsetY + offsetY >= 0 &&
+      lastOffsetY + offsetY > topRange - 1 &&
+      lastOffsetY + offsetY >= lastOffsetY
     ) {
       result.offsetY = 0;
       result.lastOffsetY = lastOffsetY;
@@ -125,7 +145,6 @@ export default class ImageControllerCreator {
       originX: this.target.clientWidth / 2,
       originY: this.target.clientHeight / 2,
     });
-    this.target.style.transition = 'transform 0.1s';
   }
 
   enlargeBytimes(times) {

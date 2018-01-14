@@ -196,7 +196,6 @@ export default class ImageSlides extends PureComponent {
       }
     });
     gesturesManager.on('touchEnd', e => {
-      imageController.recordScale();
       e.preventDefault();
     });
   }
