@@ -83,12 +83,12 @@ export default class ImageSlides extends PureComponent {
       gesturesManager.on('touchEnd', e => {
         const swipeTrigger = window.innerWidth * 0.2;
         if (this.lastContainerOffsetX > swipeTrigger) {
-          if (this.getMedianIndex() > 0 && this.state.index !== 1) {
+          if (this.getMedianIndex() > 0) {
             style.transform = `translate3d(${this.lastContainerOffsetX -
               (GUTTER_WIDTH + window.innerWidth) * 2}px, 0, 0)`;
-          } else if (this.state.index === 1) {
-            style.transform = `translate3d(${this.lastContainerOffsetX -
-              (GUTTER_WIDTH + window.innerWidth)}px, 0, 0)`;
+          }
+          if (this.state.index === 1) {
+            style.transition = 'all 0.3s';
           }
           this.last();
         } else if (this.lastContainerOffsetX < -swipeTrigger) {
@@ -186,12 +186,15 @@ export default class ImageSlides extends PureComponent {
         imageController.state.originY =
           preOriginY + offY / imageController.state.scale;
         // reset translateX and translateY
-        imageController.state.offsetX +=
-          offX - preOriginX * imageController.state.scale;
-        imageController.state.offsetY +=
-          offY - preOriginY * imageController.state.scale;
-        imageController.enlargeBytimes(1.8);
+        imageController.state.scale = this.viewPortEl
+          ? Math.max(
+            this.viewPortEl.clientWidth / cr.width * 0.8,
+            this.viewPortEl.clientHeight / cr.height * 0.8,
+            1.6,
+          )
+          : 2;
         imageController.recordScale();
+        // debugger;
         imageController.onGetControl();
       }
     });

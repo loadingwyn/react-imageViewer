@@ -58,12 +58,8 @@ export default class ImageControllerCreator {
     };
     this.state.scale = this.state.scale;
     const { clientWidth, clientHeight } = this.target;
-    const {
-      lastOffsetX, lastOffsetY, scale, originX, originY,
-    } = this.state;
-    if (scale <= 1 && (lastOffsetX || lastOffsetY)) {
-      this.reset();
-    }
+    const { scale, originX, originY } = this.state;
+
     throttle(() => {
       this.restrictMovement(
         ((clientWidth + originX - this.target.clientWidth / 2) * scale -
@@ -134,7 +130,7 @@ export default class ImageControllerCreator {
     };
   }
 
-  reset() {
+  reset = () => {
     this.set({
       scale: 1,
       offsetX: 0,
@@ -142,10 +138,10 @@ export default class ImageControllerCreator {
       lastOffsetX: 0,
       lastOffsetY: 0,
       lastScale: 1,
-      originX: this.target.clientWidth / 2,
-      originY: this.target.clientHeight / 2,
+      originX: this.target ? this.target.clientWidth / 2 : 0,
+      originY: this.target ? this.target.clientHeight / 2 : 0,
     });
-  }
+  };
 
   enlargeBytimes(times) {
     const { lastScale = 1 } = this.state;
