@@ -176,4 +176,33 @@ export default class ImageControllerCreator {
     });
     offset.preventDefault();
   }
+
+  onDoubleTap = e => {
+    if (this.state.scale > 1) {
+      this.reset();
+    } else {
+      const centerX = e.changedTouches[0].pageX;
+      const centerY = e.changedTouches[0].pageY;
+      const cr = this.target.getBoundingClientRect();
+      const imgCenterX = cr.left + cr.width / 2;
+      const imgCenterY = cr.top + cr.height / 2;
+      const offX = centerX - imgCenterX;
+      const offY = centerY - imgCenterY;
+      const preOriginX = this.state.originX;
+      const preOriginY = this.state.originY;
+      this.state.originX = preOriginX + offX / this.state.scale;
+      this.state.originY = preOriginY + offY / this.state.scale;
+      // reset translateX and translateY
+      this.state.scale = this.viewPortEl
+        ? Math.max(
+          this.viewPortWidth / cr.width * 0.75,
+          this.viewPortHeight / cr.height * 0.75,
+          1.6,
+        )
+        : 2;
+      this.recordScale();
+      // debugger;
+      this.onGetControl();
+    }
+  };
 }

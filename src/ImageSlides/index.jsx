@@ -170,36 +170,7 @@ export default class ImageSlides extends PureComponent {
     gesturesManager.on('pressMove', offset => {
       imageController.move(offset);
     });
-    gesturesManager.on('doubleTap', e => {
-      if (imageController.state.scale > 1) {
-        imageController.reset();
-      } else {
-        const centerX = e.changedTouches[0].pageX;
-        const centerY = e.changedTouches[0].pageY;
-        const cr = el.getBoundingClientRect();
-        const imgCenterX = cr.left + cr.width / 2;
-        const imgCenterY = cr.top + cr.height / 2;
-        const offX = centerX - imgCenterX;
-        const offY = centerY - imgCenterY;
-        const preOriginX = imageController.state.originX;
-        const preOriginY = imageController.state.originY;
-        imageController.state.originX =
-          preOriginX + offX / imageController.state.scale;
-        imageController.state.originY =
-          preOriginY + offY / imageController.state.scale;
-        // reset translateX and translateY
-        imageController.state.scale = this.viewPortEl
-          ? Math.max(
-            this.viewPortEl.clientWidth / cr.width * 0.8,
-            this.viewPortEl.clientHeight / cr.height * 0.8,
-            1.6,
-          )
-          : 2;
-        imageController.recordScale();
-        // debugger;
-        imageController.onGetControl();
-      }
-    });
+    gesturesManager.on('doubleTap', imageController.onDoubleTap);
     gesturesManager.on('touchEnd', e => {
       e.preventDefault();
     });
