@@ -4,9 +4,6 @@ const webpack = require('webpack');
 
 module.exports = {
   entry: [
-    // 'react-hot-loader/patch',
-    // 'webpack-dev-server/client?http://localhost:8080',
-    // 'webpack/hot/only-dev-server',
     process.env.NODE_ENV === 'production'
       ? './src/index.js'
       : './demo/mobile/demo.js',
@@ -63,7 +60,6 @@ module.exports = {
           },
         }),
         new webpack.optimize.ModuleConcatenationPlugin(),
-        // new BundleAnalyzerPlugin(),
       ]
       : [],
 };

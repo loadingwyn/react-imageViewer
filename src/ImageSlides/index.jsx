@@ -102,6 +102,7 @@ export default class ImageSlides extends PureComponent {
         style.transform = `translate3d(${-(GUTTER_WIDTH + window.innerWidth) *
           this.getMedianIndex()}px, 0, 0)`;
         this.lastContainerOffsetX = 0;
+        this.isMoving = false;
         e.preventDefault();
       });
     }
@@ -133,6 +134,7 @@ export default class ImageSlides extends PureComponent {
   }
 
   containerOnMove = offset => {
+    this.isMoving = true;
     const deltaX = parseInt(offset.deltaX, 10);
     const style = this.containerEl ? this.containerEl.style : {};
     this.lastContainerOffsetX = deltaX + this.lastContainerOffsetX;
@@ -153,12 +155,12 @@ export default class ImageSlides extends PureComponent {
       viewPortWidth: this.viewPortEl.clientWidth,
       viewPortHeight: this.viewPortEl.clientHeight,
       onGetControl: () => {
-        if (this.containerController) {
+        if (this.containerController && !this.isMoving) {
           this.containerController.off('pressMove', this.containerOnMove);
         }
       },
       onLoseControl: () => {
-        if (this.containerController) {
+        if (this.containerController && !this.isMoving) {
           this.containerController.on('pressMove', this.containerOnMove);
         }
       },
