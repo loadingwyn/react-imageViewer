@@ -184,23 +184,33 @@ export default class ImageControllerCreator {
       const cr = this.target.getBoundingClientRect();
       const imgCenterX = cr.left + cr.width / 2;
       const imgCenterY = cr.top + cr.height / 2;
-      const centerX = Math.min(Math.max(e.changedTouches[0].pageX, cr.left), cr.left + cr.width);
-      const centerY = Math.min(Math.max(e.changedTouches[0].pageY, cr.top), cr.top + cr.height);
-      // const centerY = e.changedTouches[0].pageY;
+      const centerX = Math.min(
+        Math.max(e.changedTouches[0].pageX, cr.left),
+        cr.left + cr.width,
+      );
+      const centerY = Math.min(
+        Math.max(e.changedTouches[0].pageY, cr.top),
+        cr.top + cr.height,
+      );
       const offX = centerX - imgCenterX;
       const offY = centerY - imgCenterY;
       const preOriginX = this.state.originX;
       const preOriginY = this.state.originY;
-      this.state.originX = preOriginX + offX / this.state.scale;
-      this.state.originY = preOriginY + offY / this.state.scale;
+      const newOriginX = preOriginX + offX / this.state.scale;
+      const newOriginY = preOriginY + offY / this.state.scale;
       // reset translateX and translateY
-      this.state.scale = this.viewPortEl
-        ? Math.max(
-          this.viewPortWidth / cr.width * 0.75,
-          this.viewPortHeight / cr.height * 0.75,
-          1.6,
-        )
-        : 2;
+      const newScale = Math.max(
+        this.viewPortWidth / cr.width * 0.75,
+        this.viewPortHeight / cr.height * 0.75,
+        2,
+      );
+      if (newScale * cr.width <= this.viewPortWidth) {
+        this.state.originX = preOriginX;
+      } else {
+        this.state.originX = newOriginX;
+      }
+      this.state.originY = newOriginY;
+      this.state.scale = newScale;
       this.recordScale();
       // debugger;
       this.onGetControl();
