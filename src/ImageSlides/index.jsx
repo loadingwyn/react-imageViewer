@@ -185,7 +185,7 @@ export default class ImageSlides extends PureComponent {
         {
           index: index + 1,
         },
-        this.ignore,
+        this.handleChange,
       );
     }
   }
@@ -199,20 +199,16 @@ export default class ImageSlides extends PureComponent {
         {
           index: index - 1,
         },
-        this.ignore,
+        this.handleChange,
       );
     }
   }
 
-  ignore() {
+  handleChange() {
     if (this.props.onChange) {
       this.props.onChange(this.state.index);
     }
     this.gesturesHandlers.forEach(controller => controller.reset());
-    if (this.containerController) {
-      this.containerController.off('pressMove', this.containerOnMove);
-      this.containerController.on('pressMove', this.containerOnMove);
-    }
   }
 
   preload(url) {

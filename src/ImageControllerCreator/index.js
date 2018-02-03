@@ -181,11 +181,12 @@ export default class ImageControllerCreator {
     if (this.state.scale > 1) {
       this.reset();
     } else {
-      const centerX = e.changedTouches[0].pageX;
-      const centerY = e.changedTouches[0].pageY;
       const cr = this.target.getBoundingClientRect();
       const imgCenterX = cr.left + cr.width / 2;
       const imgCenterY = cr.top + cr.height / 2;
+      const centerX = Math.min(Math.max(e.changedTouches[0].pageX, cr.left), cr.left + cr.width);
+      const centerY = Math.min(Math.max(e.changedTouches[0].pageY, cr.top), cr.top + cr.height);
+      // const centerY = e.changedTouches[0].pageY;
       const offX = centerX - imgCenterX;
       const offY = centerY - imgCenterY;
       const preOriginX = this.state.originX;
