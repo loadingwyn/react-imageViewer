@@ -6724,6 +6724,12 @@ react-icons@^2.2.7:
   dependencies:
     react-icon-base "2.1.0"
 
+react-imageslides@^0.8.5:
+  version "0.8.5"
+  resolved "https://registry.yarnpkg.com/react-imageslides/-/react-imageslides-0.8.5.tgz#393ffaafe0ab475c06b9dece2d3a410e7ba7206c"
+  dependencies:
+    lodash.throttle "^4.1.1"
+
 react-inspector@^2.2.2:
   version "2.2.2"
   resolved "https://registry.yarnpkg.com/react-inspector/-/react-inspector-2.2.2.tgz#c04f5248fa92ab6c23e37960e725fb7f48c34d05"

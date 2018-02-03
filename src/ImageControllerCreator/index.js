@@ -95,7 +95,7 @@ export default class ImageControllerCreator {
       result.lastOffsetX = lastOffsetX;
       isInLimit = false;
     } else if (
-      lastOffsetX + offsetX >= 0 &&
+      lastOffsetX + offsetX > 0 &&
       lastOffsetX + offsetX > leftRange - 1 &&
       lastOffsetX + offsetX >= lastOffsetX
     ) {
@@ -118,6 +118,7 @@ export default class ImageControllerCreator {
       result.offsetY = 0;
       result.lastOffsetY = lastOffsetY;
     }
+    console.log(!isInLimit);
     if (!isInLimit && this.onLoseControl) {
       this.onGetControl();
       this.onLoseControl();
