@@ -6724,9 +6724,9 @@ react-icons@^2.2.7:
   dependencies:
     react-icon-base "2.1.0"
 
-react-imageslides@^0.8.5:
-  version "0.8.5"
-  resolved "https://registry.yarnpkg.com/react-imageslides/-/react-imageslides-0.8.5.tgz#393ffaafe0ab475c06b9dece2d3a410e7ba7206c"
+react-imageslides@^0.8.6:
+  version "0.8.6"
+  resolved "https://registry.yarnpkg.com/react-imageslides/-/react-imageslides-0.8.6.tgz#76e7ce77abcf5692f0fd04f7b10aadc169816358"
   dependencies:
     lodash.throttle "^4.1.1"
 

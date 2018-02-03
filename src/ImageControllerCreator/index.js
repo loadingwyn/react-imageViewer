@@ -118,7 +118,6 @@ export default class ImageControllerCreator {
       result.offsetY = 0;
       result.lastOffsetY = lastOffsetY;
     }
-    console.log(!isInLimit);
     if (!isInLimit && this.onLoseControl) {
       this.onGetControl();
       this.onLoseControl();
