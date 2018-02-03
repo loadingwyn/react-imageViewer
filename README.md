@@ -8,7 +8,7 @@
 
 ![demo](demo/demo.gif)
 
-Features
+## Features
 
 * native swiping experience(use [Alloyfinger](https://github.com/AlloyTeam/AlloyFinger))
 * double tap to zoom in/out
