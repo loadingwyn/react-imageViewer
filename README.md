@@ -8,6 +8,8 @@
 
 ![demo](demo/demo.gif)
 
+[![Edit l2xpwy3xrq](https://codesandbox.io/static/img/play-codesandbox.svg)](https://codesandbox.io/s/l2xpwy3xrq?view=preview)
+
 ## Features
 
 * native swiping experience(use [Alloyfinger](https://github.com/AlloyTeam/AlloyFinger))
@@ -56,6 +58,3 @@ ReactDOM.render(
 * Add pop-up animation effects
 * support pinch
 
-```
-
-```
