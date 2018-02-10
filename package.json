@@ -8,7 +8,8 @@
     "dev": "npm run clean && NODE_ENV=development node ./demo/mobile/start.js",
     "build": "npm run clean && NODE_ENV=production webpack",
     "lint": "eslint --fix ./src --ext .js,.jsx",
-    "eslint-check": "eslint --print-config .eslintrc | eslint-config-prettier-check",
+    "eslint-check":
+      "eslint --print-config .eslintrc | eslint-config-prettier-check",
     "test": "jest",
     "test:watch": "jest --watch",
     "test:coverage": "jest --coverage",
@@ -16,29 +17,21 @@
     "build-storybook": "build-storybook"
   },
   "license": "MIT",
-  "files": [
-    "dist",
-    "src"
-  ],
-  "keywords": [
-    "react",
-    "slide",
-    "lightbox"
-  ],
+  "files": ["dist", "src"],
+  "keywords": ["react", "slide", "lightbox"],
   "jest": {
     "moduleNameMapper": {
-      "\\.(jpg|jpeg|png|gif|eot|otf|webp|svg|ttf|woff|woff2|mp4|webm|wav|mp3|m4a|aac|oga)$": "<rootDir>/tests/__mocks__/fileMock.js",
+      "\\.(jpg|jpeg|png|gif|eot|otf|webp|svg|ttf|woff|woff2|mp4|webm|wav|mp3|m4a|aac|oga)$":
+        "<rootDir>/tests/__mocks__/fileMock.js",
       "\\.(css|less)$": "<rootDir>/tests/__mocks__/styleMock.js"
     },
-    "testPathIgnorePatterns": [
-      "<rootDir>/node_modules/"
-    ]
+    "testPathIgnorePatterns": ["<rootDir>/node_modules/"]
   },
   "author": "loadingwyn",
   "devDependencies": {
     "@storybook/addon-viewport": "^3.3.3",
     "@storybook/react": "^3.2.12",
-    "alloyfinger": "^0.1.10",
+    "alloyfinger": "^0.1.13",
     "autoprefixer": "^7.1.4",
     "babel-core": "^6.26.0",
     "babel-eslint": "^8.0.1",
@@ -78,7 +71,7 @@
     "webpack": "^3.6.0"
   },
   "peerDependencies": {
-    "alloyfinger": "^0.1.10",
+    "alloyfinger": "^0.1.13",
     "prop-types": "^15.6.0",
     "react": "^16.0.0",
     "react-dom": "^16.0.0"
