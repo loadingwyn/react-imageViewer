@@ -48,7 +48,7 @@ ReactDOM.render(
 | isOpen           | boolean |  false  |          | whether component is open                                                 |
 | index            | number  |    0    |          | index of the first image to display                                       |
 | addon            |  func   |         |          | display extra infomation of the image (addon must return a react element) |
-| useTouchEmulator | boolean |  false  |          | whether touch emulator is used                                            |
+| useTouchEmulator | boolean |  false  |          | use touch emulator                                          |
 | onClose          |  func   |         |          | close window event                                                        |
 | onChange         |  func   |         |          | swipe image event                                                         |
 
@@ -57,4 +57,3 @@ ReactDOM.render(
 * ~~Add tests~~
 * Add pop-up animation effects
 * support pinch
-
