@@ -83,18 +83,17 @@ export default class ImageSlides extends PureComponent {
       gesturesManager.on('touchEnd', e => {
         const swipeTrigger = window.innerWidth * 0.2;
         if (this.lastContainerOffsetX > swipeTrigger) {
-          if (this.getMedianIndex() > 0) {
-            style.transform = `translate3d(${this.lastContainerOffsetX -
+          style.transform = `translate3d(${this.lastContainerOffsetX -
               (GUTTER_WIDTH + window.innerWidth) * 2}px, 0, 0)`;
-          }
-          if (this.state.index === 1) {
-            style.transition = 'all 0.3s';
+          if (this.state.index === 1) { // fix: no transition for first image
+            // style.transition = 'all 0.3s';
           }
           this.last();
         } else if (this.lastContainerOffsetX < -swipeTrigger) {
           style.transform = `translate3d(${this.lastContainerOffsetX}px, 0, 0)`;
-          if (this.state.index === 0) {
-            style.transition = 'all 0.3s';
+          if (this.state.index === 0) { // fix: no transition for first image
+            // style.transition = 'all 1s';
+            console.log(111);
           }
           this.next();
         }
@@ -205,10 +204,10 @@ export default class ImageSlides extends PureComponent {
   }
 
   handleChange() {
+    this.gesturesHandlers.forEach(controller => controller.reset());
     if (this.props.onChange) {
       this.props.onChange(this.state.index);
     }
-    this.gesturesHandlers.forEach(controller => controller.reset());
   }
 
   preload(url) {
