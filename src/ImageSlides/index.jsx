@@ -84,16 +84,17 @@ export default class ImageSlides extends PureComponent {
         const swipeTrigger = window.innerWidth * 0.2;
         if (this.lastContainerOffsetX > swipeTrigger) {
           style.transform = `translate3d(${this.lastContainerOffsetX -
-              (GUTTER_WIDTH + window.innerWidth) * 2}px, 0, 0)`;
-          if (this.state.index === 1) { // fix: no transition for first image
-            // style.transition = 'all 0.3s';
+            (GUTTER_WIDTH + window.innerWidth) * 2}px, 0, 0)`;
+          if (this.state.index === 1) {
+            // fix: no transition for first image(chrome merges changes)
+            style.transition = 'all 0.3s';
           }
           this.last();
         } else if (this.lastContainerOffsetX < -swipeTrigger) {
           style.transform = `translate3d(${this.lastContainerOffsetX}px, 0, 0)`;
-          if (this.state.index === 0) { // fix: no transition for first image
-            // style.transition = 'all 1s';
-            console.log(111);
+          if (this.state.index === 0) {
+            // fix: no transition for first image(chrome merges changes)
+            style.transition = 'all 0.3s';
           }
           this.next();
         }
@@ -264,7 +265,7 @@ export default class ImageSlides extends PureComponent {
           <div
             className="image-slides-container"
             ref={this.getContainer}
-            key={this.viewPortEl && this.viewPortEl.clientWidth} // chrome transform
+            key={this.viewPortEl && this.viewPortEl.clientWidth} // aviod chrome merges transform
             style={{
               transform: `translate3d(${-this.getMedianIndex() *
                 window.innerWidth +
