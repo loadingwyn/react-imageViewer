@@ -12,3 +12,4 @@ utils/*
 !src/utils/
 /public/*
 npm-debug.*
+yarn-error.log
