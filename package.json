@@ -1,6 +1,6 @@
 {
   "name": "react-imageslides",
-  "version": "0.8.6",
+  "version": "0.8.7",
   "description": "A mobile friendly images slideshow react component",
   "main": "dist/bundle.js",
   "scripts": {
@@ -8,8 +8,7 @@
     "dev": "npm run clean && NODE_ENV=development node ./demo/mobile/start.js",
     "build": "npm run clean && webpack --mode production",
     "lint": "eslint --fix ./src --ext .js,.jsx",
-    "eslint-check":
-      "eslint --print-config .eslintrc | eslint-config-prettier-check",
+    "eslint-check": "eslint --print-config .eslintrc | eslint-config-prettier-check",
     "test": "jest",
     "test:watch": "jest --watch",
     "test:coverage": "jest --coverage",
@@ -17,15 +16,23 @@
     "build-storybook": "build-storybook"
   },
   "license": "MIT",
-  "files": ["dist", "src"],
-  "keywords": ["react", "slide", "lightbox"],
+  "files": [
+    "dist",
+    "src"
+  ],
+  "keywords": [
+    "react",
+    "slide",
+    "lightbox"
+  ],
   "jest": {
     "moduleNameMapper": {
-      "\\.(jpg|jpeg|png|gif|eot|otf|webp|svg|ttf|woff|woff2|mp4|webm|wav|mp3|m4a|aac|oga)$":
-        "<rootDir>/tests/__mocks__/fileMock.js",
+      "\\.(jpg|jpeg|png|gif|eot|otf|webp|svg|ttf|woff|woff2|mp4|webm|wav|mp3|m4a|aac|oga)$": "<rootDir>/tests/__mocks__/fileMock.js",
       "\\.(css|less)$": "<rootDir>/tests/__mocks__/styleMock.js"
     },
-    "testPathIgnorePatterns": ["<rootDir>/node_modules/"]
+    "testPathIgnorePatterns": [
+      "<rootDir>/node_modules/"
+    ]
   },
   "author": "loadingwyn",
   "devDependencies": {
