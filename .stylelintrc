@@ -1,5 +1,9 @@
 # http://stylelint.io/CHANGELOG/
 
+extends:
+
+  "stylelint-config-standard"
+
 plugins:
 
   # https://github.com/hudochenkov/stylelint-order
