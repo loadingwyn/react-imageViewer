@@ -7,6 +7,5 @@
 // to "React Create App". This only has babel loader to load JavaScript.
 const defaultConfig = require('../webpack.config.js');
 module.exports = {
-  plugins: defaultConfig.plugins.slice(1),
   module: defaultConfig.module,
 };
