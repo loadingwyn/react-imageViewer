@@ -41,6 +41,13 @@ export default class Overlay extends PureComponent {
     Overlay.allowScrolling();
   }
 
+  getLayer = el => {
+    if (el) {
+      el.addEventListener('touchstart', e => e.preventDefault());
+      el.addEventListener('touchmove', e => e.preventDefault());
+      el.addEventListener('touchend', e => e.preventDefault());
+    }
+  }
   static preventScrolling() {
     const { body } = document;
     originalBodyOverflow = body.style.overflow;
@@ -56,7 +63,7 @@ export default class Overlay extends PureComponent {
   render() {
     const { onClose } = this.props;
     return ReactDOM.createPortal(
-      <div className="image-slides-overlay">
+      <div className="image-slides-overlay" ref={this.getLayer}>
         <button className="image-slides-close" onClick={onClose}>
           <svg
             fill="#fff"

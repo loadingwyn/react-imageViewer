@@ -168,12 +168,12 @@ export default class ImageSlides extends PureComponent {
     if (this.state.haveControl) {
       this.containerEl.translateX = this.containerEl.translateX + parseInt(e.deltaX, 10);
     }
-    e.preventDefault();
   };
 
   handleContainerMove = e => {
-    e.persist();
     window.requestAnimationFrame(this.move(e));
+    e.preventDefault();
+    e.stopPropagation();
   }
 
   next() {
@@ -220,9 +220,8 @@ export default class ImageSlides extends PureComponent {
   };
 
   stopUpdate = e => {
-    console.log(11);
-    e.stopPropagation();
     e.preventDefault();
+    e.stopPropagation();
   };
   render() {
     const { index, isOpen } = this.state;
@@ -231,7 +230,7 @@ export default class ImageSlides extends PureComponent {
     const displayMin = index - 1 < 0 ? 0 : index - 1;
     return isOpen ? (
       <Overlay onClose={this.onCloseViewer} >
-        <div className="image-slides-view-port" onTouchStart={this.stopUpdate} onTouchMove={this.stopUpdate} onTouchEnd={this.stopUpdate} ref={this.getViewPort}>
+        <div className="image-slides-view-port" ref={this.getViewPort} onTouchStart={e => e.preventDefault()}>
           {images.length > 0 && (
             <div className="image-slides-index">
               {`${index + 1} / ${images.length}`}
@@ -239,6 +238,7 @@ export default class ImageSlides extends PureComponent {
           )}
           {addon && addon(images[index], index)}
           <AlloyFinger
+            onTouchStart={this.stopUpdate}
             onTouchEnd={this.handleTouchEnd}
             onPressMove={this.handleContainerMove}>
             <div

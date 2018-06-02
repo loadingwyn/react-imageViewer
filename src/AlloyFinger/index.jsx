@@ -73,6 +73,7 @@ export default class AlloyFinger extends Component {
   }
 
   _handleTouchStart(evt) {
+    this._emitEvent('onTouchStart', evt);
     if (!evt.touches) return;
     this.now = Date.now();
     this.x1 = evt.touches[0].pageX;
@@ -141,6 +142,7 @@ export default class AlloyFinger extends Component {
     this._cancelLongTap();
     this.x2 = currentX;
     this.y2 = currentY;
+    this._emitEvent('onTouchMove', evt);
 
     if (len > 1) {
       evt.preventDefault();
