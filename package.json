@@ -42,7 +42,7 @@
     "autoprefixer": "^8.5.0",
     "babel-core": "^6.26.0",
     "babel-eslint": "^8.0.1",
-    "babel-jest": "^22.4.4",
+    "babel-jest": "^23.0.1",
     "babel-loader": "^7.1.2",
     "babel-plugin-transform-class-properties": "^6.24.1",
     "babel-plugin-transform-es2015-modules-commonjs": "^6.26.0",
@@ -60,14 +60,14 @@
     "eslint-plugin-jsx-a11y": "^6.0.2",
     "eslint-plugin-prettier": "^2.3.1",
     "eslint-plugin-react": "^7.4.0",
-    "jest": "^22.4.4",
+    "jest": "^23.1.0",
     "postcss-loader": "^2.0.6",
     "precss": "^3.1.2",
     "prettier": "^1.7.4",
     "prop-types": "^15.6.0",
     "react": "^16.0.0",
     "react-dom": "^16.0.0",
-    "react-imageslides": "^0.8.6",
+    "react-imageslides": "^0.8.7",
     "react-test-renderer": "^16.0.0",
     "rimraf": "^2.6.2",
     "style-loader": "^0.21.0",
@@ -85,6 +85,7 @@
     "react-dom": "^16.0.0"
   },
   "dependencies": {
+    "css3transform": "^1.1.9",
     "lodash.throttle": "^4.1.1"
   }
 }

@@ -34,11 +34,13 @@
         ]
       }
     ],
+    "react/require-default-props": 1,
     "react/jsx-closing-bracket-location": [
       1,
       "after-props"
     ],
     "react/sort-comp": 0,
+    "react/forbid-prop-types": 0,
     "import/no-extraneous-dependencies": [
       "error",
       {

@@ -1,9 +1,8 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-import ImageSlides from 'react-imageslides';
+import ImageSlides from '../../src';
 
 const images = [
-  '',
   'http://img.zcool.cn/community/0101f856cfff206ac7252ce6214470.jpg',
   'http://a4.att.hudong.com/05/55/01200000033533115855502090905.jpg',
   'http://img.zcool.cn/community/0101f856cfff206ac7252ce6214470.jpg',
