@@ -1,14 +1,24 @@
 import React, { PureComponent } from 'react';
-import AlloyFinger from 'alloyfinger';
 import PropTypes from 'prop-types';
 import transform from 'css3transform';
+import AlloyFinger from '../AlloyFinger';
 import ImageController from '../ImageController';
 import touchEmulator from '../utils/touchEmulator';
-import resizeImage from '../utils/resizeImage';
 import Overlay from '../Overlay';
 import './style.css';
 
 const GUTTER_WIDTH = 10;
+function preload(url) {
+  if (url) {
+    const loader = new Image();
+    return new Promise((resolve, reject) => {
+      loader.onload = resolve;
+      loader.onerror = reject;
+      loader.src = url;
+    });
+  }
+  return null;
+}
 export default class ImageSlides extends PureComponent {
   static propTypes = {
     images: PropTypes.arrayOf(PropTypes.string),
@@ -28,7 +38,7 @@ export default class ImageSlides extends PureComponent {
   };
   state = {
     index: 0,
-    loaded: {},
+    haveControl: true,
     isOpen: false,
   };
 
@@ -36,16 +46,26 @@ export default class ImageSlides extends PureComponent {
   initialStyle = {};
   imageController = {};
 
-  componentWillMount() {
-    const { index, images, isOpen } = this.props;
-    const finalIndex = index || this.state.index;
-    this.setState({
-      index: finalIndex,
+  constructor(props) {
+    super(props);
+    const { index, isOpen } = props;
+    this.state = {
+      index: index || this.state.index,
+      haveControl: false,
       isOpen,
-    });
-    this.preload(images[finalIndex]);
-    this.preload(images[finalIndex + 1]);
-    this.preload(images[finalIndex - 1]);
+    };
+  }
+
+  componentDidMount() {
+    const {
+      images,
+    } = this.props;
+    const {
+      index,
+    } = this.state;
+    preload(images[index]);
+    preload(images[index + 1]);
+    preload(images[index - 1]);
   }
 
   componentWillReceiveProps(newProps) {
@@ -67,33 +87,43 @@ export default class ImageSlides extends PureComponent {
     if (el) {
       const { useTouchEmulator } = this.props;
       transform(el);
-      const gesturesManager = new AlloyFinger(el, {});
       this.containerEl = el;
-      this.containerController = gesturesManager;
       if (useTouchEmulator) {
         touchEmulator(el);
       }
-      gesturesManager.on('touchEnd', e => {
-        const boardWidth = (GUTTER_WIDTH + window.innerWidth);
-        const trigger = 120;
-        const baseline = boardWidth * this.getMedianIndex();
-        if (-this.containerEl.translateX - baseline > trigger) {
-          const step = this.transition(160, 'next');
-          window.requestAnimationFrame(step);
-        } else if (baseline + this.containerEl.translateX > trigger) {
-          const step = this.transition(160, 'last');
-          window.requestAnimationFrame(step);
-        } else {
-          const step = this.transition(160, 'noMove');
-          window.requestAnimationFrame(step);
-        }
-        e.preventDefault();
-      });
     }
-    this.gesturesHandlers = [];
   };
 
-  transition = (time, direction) => {
+  getControl = () => {
+    if (!this.state.haveControl) {
+      this.setState({
+        haveControl: true,
+      });
+    }
+  }
+  handleTouchEnd = e => {
+    e.preventDefault();
+    if (this.state.haveControl) {
+      const boardWidth = (GUTTER_WIDTH + window.innerWidth);
+      const trigger = 80;
+      const baseline = boardWidth * this.getMedianIndex();
+      if (-this.containerEl.translateX - baseline > trigger) {
+        const step = this.transition(160, 'next');
+        window.requestAnimationFrame(step);
+      } else if (baseline + this.containerEl.translateX > trigger) {
+        const step = this.transition(160, 'last');
+        window.requestAnimationFrame(step);
+      } else {
+        const step = this.transition(160, 'noMove');
+        window.requestAnimationFrame(step);
+      }
+      this.setState({
+        haveControl: false,
+      });
+    }
+  };
+
+  transition(time, direction) {
     const boardWidth = (GUTTER_WIDTH + window.innerWidth);
     let startTime;
     const startPos = this.containerEl.translateX;
@@ -112,17 +142,9 @@ export default class ImageSlides extends PureComponent {
       } else if (direction === 'last') {
         this.last();
       }
-      this.isMoving = false;
-      this.containerController.off('pressMove', this.containerOnMove);
     };
     return step;
   }
-
-  getImageEl = el => {
-    if (el) {
-      this.gesturesHandler(el);
-    }
-  };
 
   getViewPort = el => {
     this.viewPortEl = el;
@@ -142,51 +164,23 @@ export default class ImageSlides extends PureComponent {
     return center;
   }
 
-  containerOnMove = e => {
-    this.isMoving = true;
-    this.containerEl.translateX = this.containerEl.translateX + parseInt(e.deltaX, 10);
+  move = e => () => {
+    if (this.state.haveControl) {
+      this.containerEl.translateX = this.containerEl.translateX + parseInt(e.deltaX, 10);
+    }
     e.preventDefault();
-    e.stopPropagation();
   };
 
-  gesturesHandler(el) {
-    const { useTouchEmulator } = this.props;
-    if (useTouchEmulator) {
-      touchEmulator(el.parentElement);
-    }
-    const imageController = new ImageController(el, {
-      viewPortWidth: window.innerWidth,
-      viewPortHeight: window.innerHeight,
-      onLoseControl: () => {
-        if (this.containerController && !this.isMoving) {
-          this.containerController.off('pressMove', this.containerOnMove);
-          this.containerController.on('pressMove', this.containerOnMove);
-        }
-      },
-    });
-    const gesturesManager = new AlloyFinger(el.parentElement, {});
-    if (el.tagName === 'IMG') {
-      gesturesManager.on('multipointStart', imageController.onMultipointStart);
-      gesturesManager.on('pinch', imageController.onPinch);
-      //   this.containerController.off('pressMove', this.containerOnMove);
-      // });
-      gesturesManager.on('doubleTap', e => {
-        imageController.onDoubleTap(e);
-        // this.containerController.off('pressMove', this.containerOnMove);
-      });
-      this.gesturesHandlers.push(imageController);
-    }
-    gesturesManager.on('pressMove', imageController.move);
-    gesturesManager.on('touchEnd', e => {
-      e.preventDefault();
-    });
+  handleContainerMove = e => {
+    e.persist();
+    window.requestAnimationFrame(this.move(e));
   }
 
   next() {
     const { index } = this.state;
     const { images } = this.props;
     if (index < images.length - 1) {
-      this.preload(images[index + 2]);
+      preload(images[index + 2]);
       this.setState(
         {
           index: index + 1,
@@ -194,7 +188,6 @@ export default class ImageSlides extends PureComponent {
         () => {
           this.containerEl.translateX = -(GUTTER_WIDTH + window.innerWidth) *
           this.getMedianIndex();
-          this.handleChange();
         },
       );
     }
@@ -204,7 +197,7 @@ export default class ImageSlides extends PureComponent {
     const { index } = this.state;
     const { images } = this.props;
     if (index > 0) {
-      this.preload(images[index - 2]);
+      preload(images[index - 2]);
       this.setState(
         {
           index: index - 1,
@@ -212,32 +205,8 @@ export default class ImageSlides extends PureComponent {
         () => {
           this.containerEl.translateX = -(GUTTER_WIDTH + window.innerWidth) *
           this.getMedianIndex();
-          this.handleChange();
         },
       );
-    }
-  }
-
-  handleChange() {
-    this.gesturesHandlers.forEach(controller => controller.reset());
-  }
-
-  preload(url) {
-    if (url && !this.state.loaded[url]) {
-      const loader = new Image();
-      new Promise((resolve, reject) => {
-        loader.onload = resolve;
-        loader.onerror = reject;
-        loader.src = url;
-      }).then(() => {
-        this.initialStyle[url] = resizeImage(loader.width, loader.height);
-        this.setState({
-          loaded: {
-            ...this.state.loaded,
-            [url]: true,
-          },
-        });
-      });
     }
   }
 
@@ -250,54 +219,37 @@ export default class ImageSlides extends PureComponent {
     if (onClose) onClose(event, index);
   };
 
+  stopUpdate = e => {
+    console.log(11);
+    e.stopPropagation();
+    e.preventDefault();
+  };
   render() {
-    const { loaded, index, isOpen } = this.state;
+    const { index, isOpen } = this.state;
     const { images, addon } = this.props;
     const displayMax = index + 2 > images.length ? images.length : index + 2;
     const displayMin = index - 1 < 0 ? 0 : index - 1;
-    const Loading = (
-      <div className="image-slides-loading" key="loading" >
-        <div />
-        <div />
-        <div />
-        <div />
-        <div />
-      </div>
-    );
     return isOpen ? (
-      <Overlay onClose={this.onCloseViewer}>
-        <div className="image-slides-view-port" ref={this.getViewPort}>
+      <Overlay onClose={this.onCloseViewer} >
+        <div className="image-slides-view-port" onTouchStart={this.stopUpdate} onTouchMove={this.stopUpdate} onTouchEnd={this.stopUpdate} ref={this.getViewPort}>
           {images.length > 0 && (
             <div className="image-slides-index">
               {`${index + 1} / ${images.length}`}
             </div>
           )}
           {addon && addon(images[index], index)}
-          <div
-            className="image-slides-container"
-            ref={this.getContainer}
-            key={this.viewPortEl && window.innerWidth}>
-            {images.slice(displayMin, displayMax).map((url, ind) => (
-              <div
+          <AlloyFinger
+            onTouchEnd={this.handleTouchEnd}
+            onPressMove={this.handleContainerMove}>
+            <div
+              className="image-slides-container"
+              ref={this.getContainer}>
+              {images.slice(displayMin, displayMax).map((url, ind) => (
                 /* eslint-disable */
-                key={url + (ind + displayMin)}
-                /* eslint-enable */
-                className="image-slides-blackboard">
-                {loaded[url] ? (
-                  <img
-                    className="image-slides-content"
-                    src={url}
-                    alt="图片"
-                    ref={this.getImageEl}
-                    style={{
-                      ...this.initialStyle[url],
-                    }} />
-                ) : (
-                  Loading
-                )}
-              </div>
+                <ImageController url={url} onGiveupControl={this.getControl} key={url + (ind + displayMin)} focused={ind === this.getMedianIndex()}/>
             ))}
-          </div>
+            </div>
+          </AlloyFinger>
         </div>
       </Overlay>
     ) : null;

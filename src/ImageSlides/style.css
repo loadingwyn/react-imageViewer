@@ -11,7 +11,10 @@
     transform: scaleY(1);
   }
 }
-
+body {
+  /* Disables pull-to-refresh but allows overscroll glow effects. */
+  overscroll-behavior-y: contain;
+}
 .image-slides-loading {
   position: absolute;
   line-height: 500px;
@@ -54,6 +57,7 @@
   height: 100%;
   white-space: nowrap;
   will-change: transform;
+  touch-action: none;
 }
 
 .image-slides-index {
