@@ -13,11 +13,10 @@ const ifaces = os.networkInterfaces();
 let lookupIpAddress = null;
 
 Object.values(ifaces).forEach(item => {
-  item.forEach(details => {
-    if (details.family === 'IPv4') {
-      lookupIpAddress = details.address;
-    }
-  });
+  const target = item.find(details => details.family === 'IPv4');
+  if (target) {
+    lookupIpAddress = target.address;
+  }
 });
 const app = superstatic({
   host: lookupIpAddress,
@@ -30,7 +29,7 @@ compiler.watch({
 }, (err, stats) => {
   if (err || stats.hasErrors()) {
     console.log('Error!');
-    if (err.details) {
+    if (err && err.details) {
       console.error(err.details);
     }
   }

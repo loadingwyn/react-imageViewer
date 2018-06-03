@@ -97,6 +97,7 @@ export default class ImageController extends PureComponent {
   };
 
   handleMove = e => {
+    e.persist();
     e.preventDefault();
     window.requestAnimationFrame(() => this.checkPosition(
       parseInt(e.deltaX, 10),
@@ -105,6 +106,7 @@ export default class ImageController extends PureComponent {
   };
 
   handleMultipointStart = e => {
+    e.persist();
     const cr = this.target.getBoundingClientRect();
     const realX = (e.touches[0].pageX + e.touches[1].pageX) / 2;
     const realY = (e.touches[0].pageY + e.touches[1].pageY) / 2;
@@ -130,6 +132,7 @@ export default class ImageController extends PureComponent {
   };
 
   handleDoubleTap = e => {
+    e.persist();
     if (this.target.scaleX > 1) {
       this.reset();
     } else {

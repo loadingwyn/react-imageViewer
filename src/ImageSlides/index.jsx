@@ -8,6 +8,8 @@ import Overlay from '../Overlay';
 import './style.css';
 
 const GUTTER_WIDTH = 10;
+const SWIPE_TRIGGER = 60;
+
 function preload(url) {
   if (url) {
     const loader = new Image();
@@ -100,17 +102,29 @@ export default class ImageSlides extends PureComponent {
         haveControl: true,
       });
     }
-  }
+  };
+
+  handleContainerMove = e => {
+    window.requestAnimationFrame(this.move(e));
+    e.preventDefault();
+    e.stopPropagation();
+  };
+
+  move = e => () => {
+    if (this.state.haveControl) {
+      this.containerEl.translateX = this.containerEl.translateX + parseInt(e.deltaX, 10);
+    }
+  };
+
   handleTouchEnd = e => {
     e.preventDefault();
     if (this.state.haveControl) {
       const boardWidth = (GUTTER_WIDTH + window.innerWidth);
-      const trigger = 80;
       const baseline = boardWidth * this.getMedianIndex();
-      if (-this.containerEl.translateX - baseline > trigger) {
+      if (-this.containerEl.translateX - baseline > SWIPE_TRIGGER) {
         const step = this.transition(160, 'next');
         window.requestAnimationFrame(step);
-      } else if (baseline + this.containerEl.translateX > trigger) {
+      } else if (baseline + this.containerEl.translateX > SWIPE_TRIGGER) {
         const step = this.transition(160, 'last');
         window.requestAnimationFrame(step);
       } else {
@@ -146,9 +160,6 @@ export default class ImageSlides extends PureComponent {
     return step;
   }
 
-  getViewPort = el => {
-    this.viewPortEl = el;
-  };
 
   getMedianIndex() {
     const { index } = this.state;
@@ -164,17 +175,10 @@ export default class ImageSlides extends PureComponent {
     return center;
   }
 
-  move = e => () => {
-    if (this.state.haveControl) {
-      this.containerEl.translateX = this.containerEl.translateX + parseInt(e.deltaX, 10);
-    }
+  updatePosition = () => {
+    this.containerEl.translateX = -(GUTTER_WIDTH + window.innerWidth) *
+    this.getMedianIndex();
   };
-
-  handleContainerMove = e => {
-    window.requestAnimationFrame(this.move(e));
-    e.preventDefault();
-    e.stopPropagation();
-  }
 
   next() {
     const { index } = this.state;
@@ -185,10 +189,7 @@ export default class ImageSlides extends PureComponent {
         {
           index: index + 1,
         },
-        () => {
-          this.containerEl.translateX = -(GUTTER_WIDTH + window.innerWidth) *
-          this.getMedianIndex();
-        },
+        this.updatePosition,
       );
     }
   }
@@ -202,35 +203,28 @@ export default class ImageSlides extends PureComponent {
         {
           index: index - 1,
         },
-        () => {
-          this.containerEl.translateX = -(GUTTER_WIDTH + window.innerWidth) *
-          this.getMedianIndex();
-        },
+        this.updatePosition,
       );
     }
   }
 
-  onCloseViewer = event => {
+  handleCloseViewer = e => {
     const { index } = this.state;
     const { onClose } = this.props;
     this.setState({
       isOpen: false,
     });
-    if (onClose) onClose(event, index);
+    if (onClose) onClose(e, index);
   };
 
-  stopUpdate = e => {
-    e.preventDefault();
-    e.stopPropagation();
-  };
   render() {
     const { index, isOpen } = this.state;
     const { images, addon } = this.props;
     const displayMax = index + 2 > images.length ? images.length : index + 2;
     const displayMin = index - 1 < 0 ? 0 : index - 1;
     return isOpen ? (
-      <Overlay onClose={this.onCloseViewer} >
-        <div className="image-slides-view-port" ref={this.getViewPort} onTouchStart={e => e.preventDefault()}>
+      <Overlay onClose={this.onCloseViewer}>
+        <div className="image-slides-view-port" >
           {images.length > 0 && (
             <div className="image-slides-index">
               {`${index + 1} / ${images.length}`}
@@ -238,7 +232,7 @@ export default class ImageSlides extends PureComponent {
           )}
           {addon && addon(images[index], index)}
           <AlloyFinger
-            onTouchStart={this.stopUpdate}
+            onSingleTap={this.handleCloseViewer}
             onTouchEnd={this.handleTouchEnd}
             onPressMove={this.handleContainerMove}>
             <div
@@ -246,7 +240,11 @@ export default class ImageSlides extends PureComponent {
               ref={this.getContainer}>
               {images.slice(displayMin, displayMax).map((url, ind) => (
                 /* eslint-disable */
-                <ImageController url={url} onGiveupControl={this.getControl} key={url + (ind + displayMin)} focused={ind === this.getMedianIndex()}/>
+                <ImageController
+                  onGiveupControl={this.getControl}
+                  url={url}
+                  key={url + (ind + displayMin)}
+                  focused={ind === this.getMedianIndex()} />
             ))}
             </div>
           </AlloyFinger>
