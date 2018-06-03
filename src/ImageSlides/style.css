@@ -57,17 +57,6 @@
   touch-action: none;
 }
 
-.image-slides-index {
-  position: absolute;
-  right: 10%;
-  bottom: 10%;
-  z-index: 100;
-  border-radius: 2px;
-  background-color: rgba(0, 0, 0, 0.15);
-  color: #fff;
-  font-size: 14px;
-}
-
 .image-slides-close {
   position: absolute;
   top: 10px;

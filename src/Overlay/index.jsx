@@ -5,6 +5,9 @@ import './style.css';
 
 let originalBodyOverflow = null;
 
+function preventDefault(e) {
+  e.preventDefault();
+}
 export default class Overlay extends PureComponent {
   static propTypes = {
     parentSelector: PropTypes.func,
@@ -35,6 +38,9 @@ export default class Overlay extends PureComponent {
   }
 
   componentWillUnmount() {
+    if (this.layer) {
+      this.layer.removeEventListener('touchstart', preventDefault);
+    }
     const parent = this.props.parentSelector();
     if (!this.node) return;
     parent.removeChild(this.node);
@@ -43,11 +49,11 @@ export default class Overlay extends PureComponent {
 
   getLayer = el => {
     if (el) {
-      el.addEventListener('touchstart', e => e.preventDefault());
-      el.addEventListener('touchmove', e => e.preventDefault());
-      el.addEventListener('touchend', e => e.preventDefault());
+      this.layer = el;
+      el.addEventListener('touchstart', preventDefault);
     }
   }
+
   static preventScrolling() {
     const { body } = document;
     originalBodyOverflow = body.style.overflow;

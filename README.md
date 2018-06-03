@@ -13,10 +13,10 @@
 
 ## Features
 
-* native swiping experience(use [Alloyfinger](https://github.com/AlloyTeam/AlloyFinger))
-* double tap to zoom in/out
+* Close to the native experience(use [Alloyfinger](https://github.com/AlloyTeam/AlloyFinger))
+* pinch to zoom in/out
 * preloads Images
-* no unnecessary rendering(renders no more than 3 images at a time)
+* no unnecessary rendering( the component only renders no more than 3 images at a time)
 
 ## Get Started
 
@@ -43,18 +43,12 @@ ReactDOM.render(
 
 ## Apis
 
-| Property         |  Type   | Default | Required | Description                                                               |
-| :--------------- | :-----: | :-----: | :------: | :------------------------------------------------------------------------ |
-| images           |  array  |         |   yes    | image urls to display                                                     |
-| isOpen           | boolean |  false  |          | whether component is open                                                 |
-| index            | number  |    0    |          | index of the first image to display                                       |
-| addon            |  func   |         |          | display extra infomation of the image (addon must return a react element) |
-| useTouchEmulator | boolean |  false  |          | use touch emulator                                                        |
-| onClose          |  func   |         |          | close window event                                                        |
-| onChange         |  func   |         |          | swipe image event                                                         |
-
-## Todo
-
-* ~~Add tests~~
-* Add pop-up animation effects
-* support pinch
+| Property   |  Type  | Default | Required | Description                                                         |
+| :--------- | :----: | :-----: | :------: | :------------------------------------------------------------------ |
+| addon      |  func  |         |          | Display extra content of the image (addon must return a react node) |
+| images     | array  |         |   yes    | Image urls to display                                               |
+| isOpen     |  bool  |  false  |          | Whether the component is open                                       |
+| index      | number |    0    |          | index of the first image to display                                 |
+| noTapClose |  bool  |  false  |          | If `true`, the close event will not be triggered by single tap.     |
+| onClose    |  func  |         |          | Callback fired when the component closes                            |
+| onChange   |  func  |         |          | Callback fired when the url                                         |

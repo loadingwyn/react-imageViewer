@@ -2,9 +2,10 @@ export default function touchEmulator(el) {
   let down = false;
   function preventMouseEvents(event) {
     event.preventDefault();
-    event.stopPropagation();
+    // event.stopPropagation();
   }
   function trigger(mouseEvent, touchEvent, downState) {
+    const newEvent = new CustomEvent(touchEvent);
     el.addEventListener(mouseEvent, event => {
       if (touchEvent === 'touchstart' || down) {
         const touch = {
@@ -12,15 +13,14 @@ export default function touchEmulator(el) {
           pageY: event.pageY,
           type: touchEvent,
         };
-        const newEvent = new CustomEvent(touchEvent);
         newEvent.touches = [touch];
         newEvent.changedTouches = [touch];
         event.preventDefault();
-        el.dispatchEvent(newEvent);
       }
       if (touchEvent !== 'touchmove') {
         down = downState;
       }
+      el.dispatchEvent(newEvent, { bubbles: true });
     });
   }
   trigger('mousedown', 'touchstart', true);

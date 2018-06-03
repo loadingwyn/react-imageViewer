@@ -1,6 +1,6 @@
 import React from 'react';
 import Adapter from 'enzyme-adapter-react-16';
-import Enzyme, { shallow } from 'enzyme';
+import Enzyme, { shallow, mount } from 'enzyme';
 import ImageSlides from '../src/ImageSlides';
 
 Enzyme.configure({ adapter: new Adapter() });
@@ -18,11 +18,12 @@ describe('<ImageSlides />', () => {
     expect(wrapper).toMatchSnapshot();
   });
   it('renders two imgs when then index is equal to 0', () => {
-    const wrapper = shallow(<ImageSlides images={images} isOpen />);
+    const wrapper = mount(<ImageSlides images={images} isOpen />);
+    console.log(wrapper, 111);
     expect(wrapper.find('.image-slides-blackboard').length).toBe(2);
   });
   it('renders three imgs when then index is equal to 2', () => {
-    const wrapper = shallow(<ImageSlides images={images} index={2} isOpen />);
+    const wrapper = mount(<ImageSlides images={images} index={2} isOpen />);
     expect(wrapper.find('.image-slides-blackboard').length).toBe(3);
   });
 });

@@ -5,7 +5,6 @@ ShallowWrapper {
   "length": 1,
   Symbol(enzyme.__root__): [Circular],
   Symbol(enzyme.__unrendered__): <ImageSlides
-    addon={null}
     images={
       Array [
         "",
@@ -17,9 +16,7 @@ ShallowWrapper {
     }
     index={0}
     isOpen={true}
-    onChange={null}
-    onClose={null}
-    useTouchEmulator={false}
+    noTapClose={false}
   />,
   Symbol(enzyme.__renderer__): Object {
     "batchedUpdates": [Function],
@@ -36,48 +33,30 @@ ShallowWrapper {
       "children": <div
         className="image-slides-view-port"
       >
-        <div
-          className="image-slides-index"
-        >
-          1 / 5
-        </div>
-        <div
-          className="image-slides-container"
-          style={
-            Object {
-              "transform": "translate3d(10px, 0, 0)",
-            }
-          }
+        <AlloyFinger
+          onPressMove={[Function]}
+          onSingleTap={[Function]}
+          onTouchEnd={[Function]}
         >
           <div
-            className="image-slides-blackboard"
+            className="image-slides-container"
           >
-            <div
-              className="image-slides-loading"
-            >
-              <div />
-              <div />
-              <div />
-              <div />
-              <div />
-            </div>
+            <ImageController
+              alt="picture"
+              focused={true}
+              onGiveupControl={[Function]}
+              url=""
+            />
+            <ImageController
+              alt="picture"
+              focused={false}
+              onGiveupControl={[Function]}
+              url="http://img.zcool.cn/community/0101f856cfff206ac7252ce6214470.jpg"
+            />
           </div>
-          <div
-            className="image-slides-blackboard"
-          >
-            <div
-              className="image-slides-loading"
-            >
-              <div />
-              <div />
-              <div />
-              <div />
-              <div />
-            </div>
-          </div>
-        </div>
+        </AlloyFinger>
       </div>,
-      "onClose": [Function],
+      "onClose": undefined,
       "parentSelector": [Function],
     },
     "ref": null,
@@ -87,273 +66,116 @@ ShallowWrapper {
       "nodeType": "host",
       "props": Object {
         "children": Array [
-          <div
-            className="image-slides-index"
-          >
-            1 / 5
-          </div>,
-          null,
-          <div
-            className="image-slides-container"
-            style={
-              Object {
-                "transform": "translate3d(10px, 0, 0)",
-              }
-            }
+          undefined,
+          <AlloyFinger
+            onPressMove={[Function]}
+            onSingleTap={[Function]}
+            onTouchEnd={[Function]}
           >
             <div
-              className="image-slides-blackboard"
+              className="image-slides-container"
             >
-              <div
-                className="image-slides-loading"
-              >
-                <div />
-                <div />
-                <div />
-                <div />
-                <div />
-              </div>
+              <ImageController
+                alt="picture"
+                focused={true}
+                onGiveupControl={[Function]}
+                url=""
+              />
+              <ImageController
+                alt="picture"
+                focused={false}
+                onGiveupControl={[Function]}
+                url="http://img.zcool.cn/community/0101f856cfff206ac7252ce6214470.jpg"
+              />
             </div>
-            <div
-              className="image-slides-blackboard"
-            >
-              <div
-                className="image-slides-loading"
-              >
-                <div />
-                <div />
-                <div />
-                <div />
-                <div />
-              </div>
-            </div>
-          </div>,
+          </AlloyFinger>,
         ],
         "className": "image-slides-view-port",
       },
-      "ref": [Function],
+      "ref": null,
       "rendered": Array [
+        undefined,
         Object {
           "instance": null,
           "key": undefined,
-          "nodeType": "host",
+          "nodeType": "class",
           "props": Object {
-            "children": "1 / 5",
-            "className": "image-slides-index",
+            "children": <div
+              className="image-slides-container"
+            >
+              <ImageController
+                alt="picture"
+                focused={true}
+                onGiveupControl={[Function]}
+                url=""
+              />
+              <ImageController
+                alt="picture"
+                focused={false}
+                onGiveupControl={[Function]}
+                url="http://img.zcool.cn/community/0101f856cfff206ac7252ce6214470.jpg"
+              />
+            </div>,
+            "onPressMove": [Function],
+            "onSingleTap": [Function],
+            "onTouchEnd": [Function],
           },
           "ref": null,
-          "rendered": "1 / 5",
-          "type": "div",
-        },
-        null,
-        Object {
-          "instance": null,
-          "key": undefined,
-          "nodeType": "host",
-          "props": Object {
-            "children": Array [
-              <div
-                className="image-slides-blackboard"
-              >
-                <div
-                  className="image-slides-loading"
-                >
-                  <div />
-                  <div />
-                  <div />
-                  <div />
-                  <div />
-                </div>
-              </div>,
-              <div
-                className="image-slides-blackboard"
-              >
-                <div
-                  className="image-slides-loading"
-                >
-                  <div />
-                  <div />
-                  <div />
-                  <div />
-                  <div />
-                </div>
-              </div>,
+          "rendered": Object {
+            "instance": null,
+            "key": undefined,
+            "nodeType": "host",
+            "props": Object {
+              "children": Array [
+                <ImageController
+                  alt="picture"
+                  focused={true}
+                  onGiveupControl={[Function]}
+                  url=""
+                />,
+                <ImageController
+                  alt="picture"
+                  focused={false}
+                  onGiveupControl={[Function]}
+                  url="http://img.zcool.cn/community/0101f856cfff206ac7252ce6214470.jpg"
+                />,
+              ],
+              "className": "image-slides-container",
+            },
+            "ref": [Function],
+            "rendered": Array [
+              Object {
+                "instance": null,
+                "key": "0",
+                "nodeType": "class",
+                "props": Object {
+                  "alt": "picture",
+                  "focused": true,
+                  "onGiveupControl": [Function],
+                  "url": "",
+                },
+                "ref": null,
+                "rendered": null,
+                "type": [Function],
+              },
+              Object {
+                "instance": null,
+                "key": "http://img.zcool.cn/community/0101f856cfff206ac7252ce6214470.jpg1",
+                "nodeType": "class",
+                "props": Object {
+                  "alt": "picture",
+                  "focused": false,
+                  "onGiveupControl": [Function],
+                  "url": "http://img.zcool.cn/community/0101f856cfff206ac7252ce6214470.jpg",
+                },
+                "ref": null,
+                "rendered": null,
+                "type": [Function],
+              },
             ],
-            "className": "image-slides-container",
-            "style": Object {
-              "transform": "translate3d(10px, 0, 0)",
-            },
+            "type": "div",
           },
-          "ref": [Function],
-          "rendered": Array [
-            Object {
-              "instance": null,
-              "key": "0",
-              "nodeType": "host",
-              "props": Object {
-                "children": <div
-                  className="image-slides-loading"
-                >
-                  <div />
-                  <div />
-                  <div />
-                  <div />
-                  <div />
-                </div>,
-                "className": "image-slides-blackboard",
-              },
-              "ref": null,
-              "rendered": Object {
-                "instance": null,
-                "key": "loading",
-                "nodeType": "host",
-                "props": Object {
-                  "children": Array [
-                    <div />,
-                    <div />,
-                    <div />,
-                    <div />,
-                    <div />,
-                  ],
-                  "className": "image-slides-loading",
-                },
-                "ref": null,
-                "rendered": Array [
-                  Object {
-                    "instance": null,
-                    "key": undefined,
-                    "nodeType": "host",
-                    "props": Object {},
-                    "ref": null,
-                    "rendered": null,
-                    "type": "div",
-                  },
-                  Object {
-                    "instance": null,
-                    "key": undefined,
-                    "nodeType": "host",
-                    "props": Object {},
-                    "ref": null,
-                    "rendered": null,
-                    "type": "div",
-                  },
-                  Object {
-                    "instance": null,
-                    "key": undefined,
-                    "nodeType": "host",
-                    "props": Object {},
-                    "ref": null,
-                    "rendered": null,
-                    "type": "div",
-                  },
-                  Object {
-                    "instance": null,
-                    "key": undefined,
-                    "nodeType": "host",
-                    "props": Object {},
-                    "ref": null,
-                    "rendered": null,
-                    "type": "div",
-                  },
-                  Object {
-                    "instance": null,
-                    "key": undefined,
-                    "nodeType": "host",
-                    "props": Object {},
-                    "ref": null,
-                    "rendered": null,
-                    "type": "div",
-                  },
-                ],
-                "type": "div",
-              },
-              "type": "div",
-            },
-            Object {
-              "instance": null,
-              "key": "http://img.zcool.cn/community/0101f856cfff206ac7252ce6214470.jpg1",
-              "nodeType": "host",
-              "props": Object {
-                "children": <div
-                  className="image-slides-loading"
-                >
-                  <div />
-                  <div />
-                  <div />
-                  <div />
-                  <div />
-                </div>,
-                "className": "image-slides-blackboard",
-              },
-              "ref": null,
-              "rendered": Object {
-                "instance": null,
-                "key": "loading",
-                "nodeType": "host",
-                "props": Object {
-                  "children": Array [
-                    <div />,
-                    <div />,
-                    <div />,
-                    <div />,
-                    <div />,
-                  ],
-                  "className": "image-slides-loading",
-                },
-                "ref": null,
-                "rendered": Array [
-                  Object {
-                    "instance": null,
-                    "key": undefined,
-                    "nodeType": "host",
-                    "props": Object {},
-                    "ref": null,
-                    "rendered": null,
-                    "type": "div",
-                  },
-                  Object {
-                    "instance": null,
-                    "key": undefined,
-                    "nodeType": "host",
-                    "props": Object {},
-                    "ref": null,
-                    "rendered": null,
-                    "type": "div",
-                  },
-                  Object {
-                    "instance": null,
-                    "key": undefined,
-                    "nodeType": "host",
-                    "props": Object {},
-                    "ref": null,
-                    "rendered": null,
-                    "type": "div",
-                  },
-                  Object {
-                    "instance": null,
-                    "key": undefined,
-                    "nodeType": "host",
-                    "props": Object {},
-                    "ref": null,
-                    "rendered": null,
-                    "type": "div",
-                  },
-                  Object {
-                    "instance": null,
-                    "key": undefined,
-                    "nodeType": "host",
-                    "props": Object {},
-                    "ref": null,
-                    "rendered": null,
-                    "type": "div",
-                  },
-                ],
-                "type": "div",
-              },
-              "type": "div",
-            },
-          ],
-          "type": "div",
+          "type": [Function],
         },
       ],
       "type": "div",
@@ -369,48 +191,30 @@ ShallowWrapper {
         "children": <div
           className="image-slides-view-port"
         >
-          <div
-            className="image-slides-index"
-          >
-            1 / 5
-          </div>
-          <div
-            className="image-slides-container"
-            style={
-              Object {
-                "transform": "translate3d(10px, 0, 0)",
-              }
-            }
+          <AlloyFinger
+            onPressMove={[Function]}
+            onSingleTap={[Function]}
+            onTouchEnd={[Function]}
           >
             <div
-              className="image-slides-blackboard"
+              className="image-slides-container"
             >
-              <div
-                className="image-slides-loading"
-              >
-                <div />
-                <div />
-                <div />
-                <div />
-                <div />
-              </div>
+              <ImageController
+                alt="picture"
+                focused={true}
+                onGiveupControl={[Function]}
+                url=""
+              />
+              <ImageController
+                alt="picture"
+                focused={false}
+                onGiveupControl={[Function]}
+                url="http://img.zcool.cn/community/0101f856cfff206ac7252ce6214470.jpg"
+              />
             </div>
-            <div
-              className="image-slides-blackboard"
-            >
-              <div
-                className="image-slides-loading"
-              >
-                <div />
-                <div />
-                <div />
-                <div />
-                <div />
-              </div>
-            </div>
-          </div>
+          </AlloyFinger>
         </div>,
-        "onClose": [Function],
+        "onClose": undefined,
         "parentSelector": [Function],
       },
       "ref": null,
@@ -420,273 +224,116 @@ ShallowWrapper {
         "nodeType": "host",
         "props": Object {
           "children": Array [
-            <div
-              className="image-slides-index"
-            >
-              1 / 5
-            </div>,
-            null,
-            <div
-              className="image-slides-container"
-              style={
-                Object {
-                  "transform": "translate3d(10px, 0, 0)",
-                }
-              }
+            undefined,
+            <AlloyFinger
+              onPressMove={[Function]}
+              onSingleTap={[Function]}
+              onTouchEnd={[Function]}
             >
               <div
-                className="image-slides-blackboard"
+                className="image-slides-container"
               >
-                <div
-                  className="image-slides-loading"
-                >
-                  <div />
-                  <div />
-                  <div />
-                  <div />
-                  <div />
-                </div>
+                <ImageController
+                  alt="picture"
+                  focused={true}
+                  onGiveupControl={[Function]}
+                  url=""
+                />
+                <ImageController
+                  alt="picture"
+                  focused={false}
+                  onGiveupControl={[Function]}
+                  url="http://img.zcool.cn/community/0101f856cfff206ac7252ce6214470.jpg"
+                />
               </div>
-              <div
-                className="image-slides-blackboard"
-              >
-                <div
-                  className="image-slides-loading"
-                >
-                  <div />
-                  <div />
-                  <div />
-                  <div />
-                  <div />
-                </div>
-              </div>
-            </div>,
+            </AlloyFinger>,
           ],
           "className": "image-slides-view-port",
         },
-        "ref": [Function],
+        "ref": null,
         "rendered": Array [
+          undefined,
           Object {
             "instance": null,
             "key": undefined,
-            "nodeType": "host",
+            "nodeType": "class",
             "props": Object {
-              "children": "1 / 5",
-              "className": "image-slides-index",
+              "children": <div
+                className="image-slides-container"
+              >
+                <ImageController
+                  alt="picture"
+                  focused={true}
+                  onGiveupControl={[Function]}
+                  url=""
+                />
+                <ImageController
+                  alt="picture"
+                  focused={false}
+                  onGiveupControl={[Function]}
+                  url="http://img.zcool.cn/community/0101f856cfff206ac7252ce6214470.jpg"
+                />
+              </div>,
+              "onPressMove": [Function],
+              "onSingleTap": [Function],
+              "onTouchEnd": [Function],
             },
             "ref": null,
-            "rendered": "1 / 5",
-            "type": "div",
-          },
-          null,
-          Object {
-            "instance": null,
-            "key": undefined,
-            "nodeType": "host",
-            "props": Object {
-              "children": Array [
-                <div
-                  className="image-slides-blackboard"
-                >
-                  <div
-                    className="image-slides-loading"
-                  >
-                    <div />
-                    <div />
-                    <div />
-                    <div />
-                    <div />
-                  </div>
-                </div>,
-                <div
-                  className="image-slides-blackboard"
-                >
-                  <div
-                    className="image-slides-loading"
-                  >
-                    <div />
-                    <div />
-                    <div />
-                    <div />
-                    <div />
-                  </div>
-                </div>,
+            "rendered": Object {
+              "instance": null,
+              "key": undefined,
+              "nodeType": "host",
+              "props": Object {
+                "children": Array [
+                  <ImageController
+                    alt="picture"
+                    focused={true}
+                    onGiveupControl={[Function]}
+                    url=""
+                  />,
+                  <ImageController
+                    alt="picture"
+                    focused={false}
+                    onGiveupControl={[Function]}
+                    url="http://img.zcool.cn/community/0101f856cfff206ac7252ce6214470.jpg"
+                  />,
+                ],
+                "className": "image-slides-container",
+              },
+              "ref": [Function],
+              "rendered": Array [
+                Object {
+                  "instance": null,
+                  "key": "0",
+                  "nodeType": "class",
+                  "props": Object {
+                    "alt": "picture",
+                    "focused": true,
+                    "onGiveupControl": [Function],
+                    "url": "",
+                  },
+                  "ref": null,
+                  "rendered": null,
+                  "type": [Function],
+                },
+                Object {
+                  "instance": null,
+                  "key": "http://img.zcool.cn/community/0101f856cfff206ac7252ce6214470.jpg1",
+                  "nodeType": "class",
+                  "props": Object {
+                    "alt": "picture",
+                    "focused": false,
+                    "onGiveupControl": [Function],
+                    "url": "http://img.zcool.cn/community/0101f856cfff206ac7252ce6214470.jpg",
+                  },
+                  "ref": null,
+                  "rendered": null,
+                  "type": [Function],
+                },
               ],
-              "className": "image-slides-container",
-              "style": Object {
-                "transform": "translate3d(10px, 0, 0)",
-              },
+              "type": "div",
             },
-            "ref": [Function],
-            "rendered": Array [
-              Object {
-                "instance": null,
-                "key": "0",
-                "nodeType": "host",
-                "props": Object {
-                  "children": <div
-                    className="image-slides-loading"
-                  >
-                    <div />
-                    <div />
-                    <div />
-                    <div />
-                    <div />
-                  </div>,
-                  "className": "image-slides-blackboard",
-                },
-                "ref": null,
-                "rendered": Object {
-                  "instance": null,
-                  "key": "loading",
-                  "nodeType": "host",
-                  "props": Object {
-                    "children": Array [
-                      <div />,
-                      <div />,
-                      <div />,
-                      <div />,
-                      <div />,
-                    ],
-                    "className": "image-slides-loading",
-                  },
-                  "ref": null,
-                  "rendered": Array [
-                    Object {
-                      "instance": null,
-                      "key": undefined,
-                      "nodeType": "host",
-                      "props": Object {},
-                      "ref": null,
-                      "rendered": null,
-                      "type": "div",
-                    },
-                    Object {
-                      "instance": null,
-                      "key": undefined,
-                      "nodeType": "host",
-                      "props": Object {},
-                      "ref": null,
-                      "rendered": null,
-                      "type": "div",
-                    },
-                    Object {
-                      "instance": null,
-                      "key": undefined,
-                      "nodeType": "host",
-                      "props": Object {},
-                      "ref": null,
-                      "rendered": null,
-                      "type": "div",
-                    },
-                    Object {
-                      "instance": null,
-                      "key": undefined,
-                      "nodeType": "host",
-                      "props": Object {},
-                      "ref": null,
-                      "rendered": null,
-                      "type": "div",
-                    },
-                    Object {
-                      "instance": null,
-                      "key": undefined,
-                      "nodeType": "host",
-                      "props": Object {},
-                      "ref": null,
-                      "rendered": null,
-                      "type": "div",
-                    },
-                  ],
-                  "type": "div",
-                },
-                "type": "div",
-              },
-              Object {
-                "instance": null,
-                "key": "http://img.zcool.cn/community/0101f856cfff206ac7252ce6214470.jpg1",
-                "nodeType": "host",
-                "props": Object {
-                  "children": <div
-                    className="image-slides-loading"
-                  >
-                    <div />
-                    <div />
-                    <div />
-                    <div />
-                    <div />
-                  </div>,
-                  "className": "image-slides-blackboard",
-                },
-                "ref": null,
-                "rendered": Object {
-                  "instance": null,
-                  "key": "loading",
-                  "nodeType": "host",
-                  "props": Object {
-                    "children": Array [
-                      <div />,
-                      <div />,
-                      <div />,
-                      <div />,
-                      <div />,
-                    ],
-                    "className": "image-slides-loading",
-                  },
-                  "ref": null,
-                  "rendered": Array [
-                    Object {
-                      "instance": null,
-                      "key": undefined,
-                      "nodeType": "host",
-                      "props": Object {},
-                      "ref": null,
-                      "rendered": null,
-                      "type": "div",
-                    },
-                    Object {
-                      "instance": null,
-                      "key": undefined,
-                      "nodeType": "host",
-                      "props": Object {},
-                      "ref": null,
-                      "rendered": null,
-                      "type": "div",
-                    },
-                    Object {
-                      "instance": null,
-                      "key": undefined,
-                      "nodeType": "host",
-                      "props": Object {},
-                      "ref": null,
-                      "rendered": null,
-                      "type": "div",
-                    },
-                    Object {
-                      "instance": null,
-                      "key": undefined,
-                      "nodeType": "host",
-                      "props": Object {},
-                      "ref": null,
-                      "rendered": null,
-                      "type": "div",
-                    },
-                    Object {
-                      "instance": null,
-                      "key": undefined,
-                      "nodeType": "host",
-                      "props": Object {},
-                      "ref": null,
-                      "rendered": null,
-                      "type": "div",
-                    },
-                  ],
-                  "type": "div",
-                },
-                "type": "div",
-              },
-            ],
-            "type": "div",
+            "type": [Function],
           },
         ],
         "type": "div",

@@ -3,7 +3,6 @@ import PropTypes from 'prop-types';
 import transform from 'css3transform';
 import AlloyFinger from '../AlloyFinger';
 import ImageController from '../ImageController';
-import touchEmulator from '../utils/touchEmulator';
 import Overlay from '../Overlay';
 import './style.css';
 
@@ -28,7 +27,6 @@ export default class ImageSlides extends PureComponent {
     index: PropTypes.number,
     isOpen: PropTypes.bool,
     noTapClose: PropTypes.bool,
-    useTouchEmulator: PropTypes.bool,
     addon: PropTypes.func,
     onClose: PropTypes.func,
     onChange: PropTypes.func,
@@ -39,7 +37,6 @@ export default class ImageSlides extends PureComponent {
     index: 0,
     noTapClose: false,
     isOpen: false,
-    useTouchEmulator: false,
   };
   state = {
     index: 0,
@@ -90,12 +87,8 @@ export default class ImageSlides extends PureComponent {
 
   getContainer = el => {
     if (el) {
-      const { useTouchEmulator } = this.props;
       transform(el);
       this.containerEl = el;
-      if (useTouchEmulator) {
-        touchEmulator(el);
-      }
     }
   };
 
@@ -238,18 +231,21 @@ export default class ImageSlides extends PureComponent {
 
   render() {
     const { index, isOpen } = this.state;
-    const { images, addon, noTapClose } = this.props;
+    const {
+      images, addon, noTapClose,
+    } = this.props;
     const displayMax = index + 2 > images.length ? images.length : index + 2;
     const displayMin = index - 1 < 0 ? 0 : index - 1;
     return isOpen ? (
       <Overlay onClose={this.onCloseViewer}>
         <div className="image-slides-view-port" >
-          {images.length > 0 && (
-            <div className="image-slides-index">
-              {`${index + 1} / ${images.length}`}
-            </div>
-          )}
-          {addon && addon(images[index], index, this.handleCloseViewer)}
+          {addon && addon({
+            url: images[index],
+            index,
+            close: this.handleCloseViewer,
+            next: this.next,
+            last: this.last,
+          })}
           <AlloyFinger
             onSingleTap={noTapClose ? null : this.handleCloseViewer}
             onTouchEnd={this.handleTouchEnd}
