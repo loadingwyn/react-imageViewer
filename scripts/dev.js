@@ -1,8 +1,13 @@
 const webpack = require('webpack');
-const config = require('../../webpack.config');
+const config = require('../webpack.config');
 const os = require('os');
 const superstatic = require('superstatic').server;
 
+Object.assign(config, {
+  mode: 'development',
+  entry: './demo/demo.js',
+  externals: [],
+});
 const compiler = webpack(config);
 const ifaces = os.networkInterfaces();
 let lookupIpAddress = null;
@@ -25,9 +30,12 @@ compiler.watch({
 }, (err, stats) => {
   if (err || stats.hasErrors()) {
     console.log('Error!');
+    if (err.details) {
+      console.error(err.details);
+    }
   }
 });
 
 app.listen(() => {
-  console.log(`Demo started on => http://${lookupIpAddress}:8080/demo/mobile`);
+  console.log(`Demo started on => http://${lookupIpAddress}:8080/demo`);
 });

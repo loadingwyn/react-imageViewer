@@ -1,12 +1,11 @@
 module.exports = {
-  entry: './demo/mobile/demo.js',
   output: {
     library: 'react-imageslides',
     libraryTarget: 'umd',
     filename: 'bundle.js',
   },
   devtool: 'source-map',
-  // externals: ['react', 'react-dom', 'prop-types', 'alloyfinger'],
+  externals: ['react', 'react-dom', 'prop-types', 'alloyfinger'],
   resolve: {
     extensions: ['.js', '.jsx'],
   },
