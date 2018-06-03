@@ -8,7 +8,7 @@ import Overlay from '../Overlay';
 import './style.css';
 
 const GUTTER_WIDTH = 10;
-const SWIPE_TRIGGER = 60;
+const SWIPE_TRIGGER = 50;
 
 function preload(url) {
   if (url) {
@@ -21,20 +21,23 @@ function preload(url) {
   }
   return null;
 }
+
 export default class ImageSlides extends PureComponent {
   static propTypes = {
     images: PropTypes.arrayOf(PropTypes.string),
     index: PropTypes.number,
     isOpen: PropTypes.bool,
+    noTapClose: PropTypes.bool,
     useTouchEmulator: PropTypes.bool,
     addon: PropTypes.func,
     onClose: PropTypes.func,
-    // onChange: PropTypes.func,
+    onChange: PropTypes.func,
   };
 
   static defaultProps = {
     images: [],
     index: 0,
+    noTapClose: false,
     isOpen: false,
     useTouchEmulator: false,
   };
@@ -119,13 +122,23 @@ export default class ImageSlides extends PureComponent {
   handleTouchEnd = e => {
     e.preventDefault();
     if (this.state.haveControl) {
+      const {
+        onChange,
+        images,
+      } = this.props;
       const boardWidth = (GUTTER_WIDTH + window.innerWidth);
       const baseline = boardWidth * this.getMedianIndex();
       if (-this.containerEl.translateX - baseline > SWIPE_TRIGGER) {
         const step = this.transition(160, 'next');
+        if (onChange && this.state.index < images.length - 1) {
+          onChange(this.state.index + 1);
+        }
         window.requestAnimationFrame(step);
       } else if (baseline + this.containerEl.translateX > SWIPE_TRIGGER) {
         const step = this.transition(160, 'last');
+        if (onChange && this.state.index > 0) {
+          onChange(this.state.index - 1);
+        }
         window.requestAnimationFrame(step);
       } else {
         const step = this.transition(160, 'noMove');
@@ -155,6 +168,8 @@ export default class ImageSlides extends PureComponent {
         this.next();
       } else if (direction === 'last') {
         this.last();
+      } else {
+        this.updatePosition();
       }
     };
     return step;
@@ -191,6 +206,8 @@ export default class ImageSlides extends PureComponent {
         },
         this.updatePosition,
       );
+    } else {
+      this.updatePosition();
     }
   }
 
@@ -205,6 +222,8 @@ export default class ImageSlides extends PureComponent {
         },
         this.updatePosition,
       );
+    } else {
+      this.updatePosition();
     }
   }
 
@@ -219,7 +238,7 @@ export default class ImageSlides extends PureComponent {
 
   render() {
     const { index, isOpen } = this.state;
-    const { images, addon } = this.props;
+    const { images, addon, noTapClose } = this.props;
     const displayMax = index + 2 > images.length ? images.length : index + 2;
     const displayMin = index - 1 < 0 ? 0 : index - 1;
     return isOpen ? (
@@ -230,9 +249,9 @@ export default class ImageSlides extends PureComponent {
               {`${index + 1} / ${images.length}`}
             </div>
           )}
-          {addon && addon(images[index], index)}
+          {addon && addon(images[index], index, this.handleCloseViewer)}
           <AlloyFinger
-            onSingleTap={this.handleCloseViewer}
+            onSingleTap={noTapClose ? null : this.handleCloseViewer}
             onTouchEnd={this.handleTouchEnd}
             onPressMove={this.handleContainerMove}>
             <div

@@ -110,7 +110,6 @@ export default class AlloyFinger extends Component {
 
   _handleTouchMove(evt) {
     this.singleTap = true;
-    // evt.persist();
     let preV = this.preV,
       len = evt.touches.length,
       currentX = evt.touches[0].pageX,
@@ -170,7 +169,6 @@ export default class AlloyFinger extends Component {
     }
 
     evt.origin = [this.x1, this.y1];
-    evt.persist();
     if (this.multiTouch === false) {
       if ((this.x2 && Math.abs(this.x1 - this.x2) > 30) ||
                 (this.y2 && Math.abs(this.preV.y - this.y2) > 30)) {

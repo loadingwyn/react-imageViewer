@@ -6,7 +6,8 @@
 
 ## Example
 
-![demo](demo/demo.gif)
+![demo1](demo/demo1.gif)
+![demo2](demo/demo1.gif)
 
 [![Edit l2xpwy3xrq](https://codesandbox.io/static/img/play-codesandbox.svg)](https://codesandbox.io/s/l2xpwy3xrq?view=preview)
 
@@ -19,10 +20,10 @@
 
 ## Get Started
 
-1. Run `yarn add react-imageslides react react-dom alloyfinger`
-   The package has peer dependencies on `react@^16.0.0`, `react-dom@16.0.0`, and `alloyfinger`.
+1.  Run `yarn add react-imageslides react react-dom alloyfinger`
+    The package has peer dependencies on `react@^16.0.0`, `react-dom@16.0.0`, and `alloyfinger`.
 
-2. Render it!
+2.  Render it!
 
 ```js
 import React from 'react';
@@ -48,7 +49,7 @@ ReactDOM.render(
 | isOpen           | boolean |  false  |          | whether component is open                                                 |
 | index            | number  |    0    |          | index of the first image to display                                       |
 | addon            |  func   |         |          | display extra infomation of the image (addon must return a react element) |
-| useTouchEmulator | boolean |  false  |          | use touch emulator                                          |
+| useTouchEmulator | boolean |  false  |          | use touch emulator                                                        |
 | onClose          |  func   |         |          | close window event                                                        |
 | onChange         |  func   |         |          | swipe image event                                                         |
 

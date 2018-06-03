@@ -3,7 +3,9 @@ import React, { PureComponent } from 'react';
 import AlloyFinger from '../AlloyFinger';
 import resizeImage from '../utils/resizeImage';
 
-const VERTICAL_BUFFER = 50;
+const VERTICAL_RANGE = 50;
+const BUFFER = 4;
+
 export default class ImageController extends PureComponent {
   static defaultProps = {
     alt: 'picture',
@@ -71,17 +73,20 @@ export default class ImageController extends PureComponent {
       scaleX,
       scaleY,
     } = this.target;
+    // If the image overflows or it moves back to center of screen, it can be moved.
     if (((deltaX <= 0 || left <= 0) && (deltaX >= 0 || right >= window.innerWidth))
       || Math.abs(translateX + deltaX - originX * scaleX)
         < Math.abs(translateX - originX * scaleX)) {
       this.target.translateX += deltaX;
     } else if (onGiveupControl) {
-      onGiveupControl();
+      if (Math.abs(deltaY) < BUFFER) { // optimize for looong picture
+        onGiveupControl();
+      }
     }
-    if (((deltaY < 0 || top < VERTICAL_BUFFER)
-      && (deltaY > 0 || bottom > window.innerHeight - VERTICAL_BUFFER))
-        || Math.abs(translateY + deltaY - originY * scaleY)
-          < Math.abs(translateY - originY * scaleY)) {
+    if (((deltaY < 0 || top < VERTICAL_RANGE)
+    && (deltaY > 0 || bottom > window.innerHeight - VERTICAL_RANGE))
+      || Math.abs(translateY + deltaY - originY * scaleY)
+        < Math.abs(translateY - originY * scaleY)) {
       this.target.translateY += deltaY;
     }
   };
@@ -97,7 +102,6 @@ export default class ImageController extends PureComponent {
   };
 
   handleMove = e => {
-    e.persist();
     e.preventDefault();
     window.requestAnimationFrame(() => this.checkPosition(
       parseInt(e.deltaX, 10),
@@ -105,8 +109,8 @@ export default class ImageController extends PureComponent {
     ));
   };
 
+  // Refer to https://github.com/AlloyTeam/AlloyCrop.
   handleMultipointStart = e => {
-    e.persist();
     const cr = this.target.getBoundingClientRect();
     const realX = (e.touches[0].pageX + e.touches[1].pageX) / 2;
     const realY = (e.touches[0].pageY + e.touches[1].pageY) / 2;
@@ -132,7 +136,6 @@ export default class ImageController extends PureComponent {
   };
 
   handleDoubleTap = e => {
-    e.persist();
     if (this.target.scaleX > 1) {
       this.reset();
     } else {
@@ -162,7 +165,6 @@ export default class ImageController extends PureComponent {
   };
 
   handlePinch = e => {
-    // alert(e);
     const scale = Math.max(Math.min(4, this.initScale * e.scale), 1);
     this.target.scaleX = scale;
     this.target.scaleY = scale;
@@ -170,7 +172,8 @@ export default class ImageController extends PureComponent {
 
   handleTouchEnd = e => {
     e.preventDefault();
-  }
+  };
+
   render() {
     const {
       isLoaded,
