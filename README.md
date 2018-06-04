@@ -14,9 +14,8 @@
 ## Features
 
 * Close to the native experience(use [Alloyfinger](https://github.com/AlloyTeam/AlloyFinger))
-* pinch to zoom in/out
-* preloads Images
-* no unnecessary rendering( the component only renders no more than 3 images at a time)
+* Pinch to zoom in/out
+* No unnecessary rendering( the component only renders no more than 3 images at a time)
 
 ## Get Started
 
@@ -48,7 +47,7 @@ ReactDOM.render(
 | addon      |  func  |         |          | Display extra content of the image (addon must return a react node) |
 | images     | array  |         |   yes    | Image urls to display                                               |
 | isOpen     |  bool  |  false  |          | Whether the component is open                                       |
-| index      | number |    0    |          | index of the first image to display                                 |
+| index      | number |    0    |          | Index of the first image to display                                 |
 | noTapClose |  bool  |  false  |          | If `true`, the close event will not be triggered by single tap.     |
 | onClose    |  func  |         |          | Callback fired when the component closes                            |
 | onChange   |  func  |         |          | Callback fired when the url                                         |
