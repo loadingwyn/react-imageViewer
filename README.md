@@ -51,4 +51,4 @@ ReactDOM.render(
 | loadingIcon | func \| node |         |          | The component displayed when the image is loading                   |
 | noTapClose  |     bool     |  false  |          | If `true`, the close event will not be triggered by single tap.     |
 | onClose     |     func     |         |          | Callback fired when the component closes                            |
-| onChange    |     func     |         |          | Callback fired when the url                                         |
+| onChange    |     func     |         |          | Callback fired when the index changes                               |
