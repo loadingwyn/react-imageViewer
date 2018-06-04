@@ -73,7 +73,7 @@ export default class ImageController extends PureComponent {
       scaleX,
       scaleY,
     } = this.target;
-    // If the image overflows or it moves back to center of screen, it can be moved.
+    // If the image overflows or moves back to center of screen, it can be moved.
     if (((deltaX <= 0 || left <= 0) && (deltaX >= 0 || right >= window.innerWidth))
       || Math.abs(translateX + deltaX - originX * scaleX)
         < Math.abs(translateX - originX * scaleX)) {
@@ -183,8 +183,24 @@ export default class ImageController extends PureComponent {
       alt,
       onGiveupControl,
       focused,
+      loadingIcon,
       ...other
     } = this.props;
+    let loading = (
+      <div className="image-slides-loading" >
+        <div />
+        <div />
+        <div />
+        <div />
+        <div />
+      </div>);
+    if (loadingIcon) {
+      if (typeof loadingIcon === 'function') {
+        loading = loadingIcon(url);
+      } else {
+        loading = loadingIcon;
+      }
+    }
     return (
       isLoaded ? (
         <AlloyFinger
@@ -206,12 +222,8 @@ export default class ImageController extends PureComponent {
       ) : (
         <AlloyFinger onPressMove={this.handleMove}>
           <div className="image-slides-blackboard">
-            <div className="image-slides-loading" key="loading" ref={this.getImageEl}>
-              <div />
-              <div />
-              <div />
-              <div />
-              <div />
+            <div ref={this.getImageEl}>
+              {loading}
             </div>
           </div>
         </AlloyFinger>

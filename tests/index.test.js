@@ -19,7 +19,6 @@ describe('<ImageSlides />', () => {
   });
   it('renders two imgs when then index is equal to 0', () => {
     const wrapper = mount(<ImageSlides images={images} isOpen />);
-    console.log(wrapper, 111);
     expect(wrapper.find('.image-slides-blackboard').length).toBe(2);
   });
   it('renders three imgs when then index is equal to 2', () => {

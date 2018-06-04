@@ -151,6 +151,7 @@ ShallowWrapper {
                 "props": Object {
                   "alt": "picture",
                   "focused": true,
+                  "loadingIcon": undefined,
                   "onGiveupControl": [Function],
                   "url": "",
                 },
@@ -165,6 +166,7 @@ ShallowWrapper {
                 "props": Object {
                   "alt": "picture",
                   "focused": false,
+                  "loadingIcon": undefined,
                   "onGiveupControl": [Function],
                   "url": "http://img.zcool.cn/community/0101f856cfff206ac7252ce6214470.jpg",
                 },
@@ -309,6 +311,7 @@ ShallowWrapper {
                   "props": Object {
                     "alt": "picture",
                     "focused": true,
+                    "loadingIcon": undefined,
                     "onGiveupControl": [Function],
                     "url": "",
                   },
@@ -323,6 +326,7 @@ ShallowWrapper {
                   "props": Object {
                     "alt": "picture",
                     "focused": false,
+                    "loadingIcon": undefined,
                     "onGiveupControl": [Function],
                     "url": "http://img.zcool.cn/community/0101f856cfff206ac7252ce6214470.jpg",
                   },

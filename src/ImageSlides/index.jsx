@@ -27,6 +27,7 @@ export default class ImageSlides extends PureComponent {
     index: PropTypes.number,
     isOpen: PropTypes.bool,
     noTapClose: PropTypes.bool,
+    loadingIcon: PropTypes.oneOfType([PropTypes.node, PropTypes.func]),
     addon: PropTypes.func,
     onClose: PropTypes.func,
     onChange: PropTypes.func,
@@ -232,7 +233,7 @@ export default class ImageSlides extends PureComponent {
   render() {
     const { index, isOpen } = this.state;
     const {
-      images, addon, noTapClose,
+      images, addon, noTapClose, loadingIcon,
     } = this.props;
     const displayMax = index + 2 > images.length ? images.length : index + 2;
     const displayMin = index - 1 < 0 ? 0 : index - 1;
@@ -256,6 +257,7 @@ export default class ImageSlides extends PureComponent {
               {images.slice(displayMin, displayMax).map((url, ind) => (
                 /* eslint-disable */
                 <ImageController
+                  loadingIcon={loadingIcon}
                   onGiveupControl={this.getControl}
                   url={url}
                   key={url + (ind + displayMin)}
