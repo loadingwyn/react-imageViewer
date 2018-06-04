@@ -1,4 +1,4 @@
-# React Image Slides
+# React Image Viewer
 
 [![codecov](https://codecov.io/gh/loadingwyn/react-imageslides/branch/master/graph/badge.svg)](https://codecov.io/gh/loadingwyn/react-imageslides)
 
@@ -13,9 +13,9 @@
 
 ## Features
 
-* Close to the native experience(use [Alloyfinger](https://github.com/AlloyTeam/AlloyFinger))
-* Pinch to zoom in/out
-* No unnecessary rendering( the component only renders no more than 3 images at a time)
+- Close to the native experience(use [Alloyfinger](https://github.com/AlloyTeam/AlloyFinger))
+- Pinch to zoom in/out
+- No unnecessary rendering( the component only renders no more than 3 images at a time)
 
 ## Get Started
 
