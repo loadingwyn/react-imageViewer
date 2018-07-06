@@ -5,7 +5,9 @@
 // IMPORTANT
 // When you add this file, we won't add the default configurations which is similar
 // to "React Create App". This only has babel loader to load JavaScript.
-const defaultConfig = require('../webpack.config.js');
-module.exports = {
-  module: defaultConfig.module,
+const config = require('../webpack.config.js');
+module.exports = (baseConfig, env, defaultConfig) => {
+  defaultConfig.module = config.module;
+
+  return defaultConfig;
 };

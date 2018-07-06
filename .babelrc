@@ -1,18 +1,30 @@
 {
   "presets": [
     [
-      "env",
+      "@babel/env",
       {
         "modules": false,
-        "browsers": ["Chrome >= 37", "ff >= 45", "Safari > 8", "IE >= 10"]
+        "targets": {
+          "browsers": [
+            "Chrome >= 37",
+            "ff >= 45",
+            "Safari > 8",
+            "IE >= 10"
+          ]
+        }
       }
     ],
-    "react"
+    "@babel/react"
   ],
-  "plugins": ["transform-class-properties", "transform-object-rest-spread"],
+  "plugins": [
+    "@babel/plugin-proposal-class-properties",
+    "@babel/plugin-proposal-object-rest-spread"
+  ],
   "env": {
     "test": {
-      "plugins": ["transform-es2015-modules-commonjs"]
+      "plugins": [
+        "@babel/transform-modules-commonjs"
+      ]
     }
   }
 }

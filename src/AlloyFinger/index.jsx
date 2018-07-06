@@ -9,12 +9,12 @@ export default class AlloyFinger extends Component {
     this.preV = { x: null, y: null };
     this.pinchStartLen = null;
     this.scale = 1;
+    this.isSingleTap = false;
     this.isDoubleTap = false;
     this.delta = null;
     this.last = null;
     this.now = null;
     this.end = null;
-    this.singleTap = true;
     this.multiTouch = false;
     this.tapTimeout = null;
     this.longTapTimeout = null;
@@ -90,7 +90,6 @@ export default class AlloyFinger extends Component {
       len = evt.touches.length;
 
     if (len > 1) {
-      this.singleTap = false;
       this._cancelLongTap();
       this._cancelSingleTap();
       const v = { x: evt.touches[1].pageX - this.x1, y: evt.touches[1].pageY - this.y1 };
@@ -98,6 +97,8 @@ export default class AlloyFinger extends Component {
       preV.y = v.y;
       this.pinchStartLen = this.getLen(preV);
       this._emitEvent('onMultipointStart', evt);
+    } else {
+      this.isSingleTap = true;
     }
     this.longTapTimeout = setTimeout(() => {
       this._emitEvent('onLongTap', evt);
@@ -109,14 +110,13 @@ export default class AlloyFinger extends Component {
   }
 
   _handleTouchMove(evt) {
-    this.singleTap = true;
     let preV = this.preV,
       len = evt.touches.length,
       currentX = evt.touches[0].pageX,
       currentY = evt.touches[0].pageY;
+    this.isSingleTap = false;
     this.isDoubleTap = false;
     if (len > 1) {
-      this.singleTap = false;
       const v = { x: evt.touches[1].pageX - currentX, y: evt.touches[1].pageY - currentY };
       if (preV.x !== null) {
         if (this.pinchStartLen > 0) {
@@ -161,17 +161,17 @@ export default class AlloyFinger extends Component {
   }
 
   _handleTouchEnd(evt) {
+    this._emitEvent('onTouchEnd', evt);
     this.end = Date.now();
     this._cancelLongTap();
-
-    if (this.multiTouch) {
+    if (this.multiTouch === true && evt.touches.length < 2) {
       this._emitEvent('onMultipointEnd', evt);
     }
 
     evt.origin = [this.x1, this.y1];
     if (this.multiTouch === false) {
       if ((this.x2 && Math.abs(this.x1 - this.x2) > 30) ||
-                (this.y2 && Math.abs(this.preV.y - this.y2) > 30)) {
+                (this.y2 && Math.abs(this.y1 - this.y2) > 30)) {
         evt.direction = this._swipeDirection(this.x1, this.x2, this.y1, this.y2);
         evt.distance = Math.abs(this.x1 - this.x2);
         this.swipeTimeout = setTimeout(() => {
@@ -187,16 +187,16 @@ export default class AlloyFinger extends Component {
             this._emitEvent('onDoubleTap', evt);
             clearTimeout(this.singleTapTimeout);
             this.isDoubleTap = false;
-          } else if (this.singleTap) {
+          } else if (this.isSingleTap) {
             this.singleTapTimeout = setTimeout(() => {
               this._emitEvent('onSingleTap', evt);
             }, 250);
+            this.isSingleTap = false;
           }
         }, 0);
       }
     }
 
-    this._emitEvent('onTouchEnd', evt);
     this.preV.x = 0;
     this.preV.y = 0;
     this.scale = 1;

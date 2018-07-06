@@ -10,6 +10,15 @@ export default class ImageController extends PureComponent {
   static defaultProps = {
     alt: 'picture',
     focused: false,
+    loadingIcon: (
+      <div className="image-slides-loading">
+        <div />
+        <div />
+        <div />
+        <div />
+        <div />
+      </div>
+    ),
   };
 
   state = {
@@ -17,9 +26,7 @@ export default class ImageController extends PureComponent {
   };
 
   componentDidMount() {
-    const {
-      url,
-    } = this.props;
+    const { url } = this.props;
     const loader = new Image();
     if (url) {
       new Promise((resolve, reject) => {
@@ -56,15 +63,8 @@ export default class ImageController extends PureComponent {
   };
 
   checkPosition = (deltaX, deltaY) => {
-    const {
-      onGiveupControl,
-    } = this.props;
-    const {
-      left,
-      right,
-      top,
-      bottom,
-    } = this.target.getBoundingClientRect();
+    const { onGiveupControl } = this.props;
+    const { left, right, top, bottom } = this.target.getBoundingClientRect();
     const {
       translateX,
       translateY,
@@ -74,23 +74,28 @@ export default class ImageController extends PureComponent {
       scaleY,
     } = this.target;
     // If the image overflows or moves back to center of screen, it can be moved.
-    if (((deltaX <= 0 || left <= 0) && (deltaX >= 0 || right >= window.innerWidth))
-      || Math.abs(translateX + deltaX - originX * scaleX)
-        < Math.abs(translateX - originX * scaleX)) {
+    if (
+      ((deltaX <= 0 || left <= 0) &&
+        (deltaX >= 0 || right >= window.innerWidth)) ||
+      Math.abs(translateX + deltaX - originX * scaleX) <
+        Math.abs(translateX - originX * scaleX)
+    ) {
       this.target.translateX += deltaX;
     } else if (onGiveupControl) {
-      if (Math.abs(deltaY) < BUFFER) { // optimize for looong picture
+      if (Math.abs(deltaY) < BUFFER) {
+        // optimize for looong picture
         onGiveupControl();
       }
     }
-    if (((deltaY < 0 || top < VERTICAL_RANGE)
-    && (deltaY > 0 || bottom > window.innerHeight - VERTICAL_RANGE))
-      || Math.abs(translateY + deltaY - originY * scaleY)
-        < Math.abs(translateY - originY * scaleY)) {
+    if (
+      ((deltaY < 0 || top < VERTICAL_RANGE) &&
+        (deltaY > 0 || bottom > window.innerHeight - VERTICAL_RANGE)) ||
+      Math.abs(translateY + deltaY - originY * scaleY) <
+        Math.abs(translateY - originY * scaleY)
+    ) {
       this.target.translateY += deltaY;
     }
   };
-
 
   reset = () => {
     this.target.translateX = 0;
@@ -103,10 +108,9 @@ export default class ImageController extends PureComponent {
 
   handleMove = e => {
     e.preventDefault();
-    window.requestAnimationFrame(() => this.checkPosition(
-      parseInt(e.deltaX, 10),
-      parseInt(e.deltaY, 10),
-    ));
+    window.requestAnimationFrame(() =>
+      this.checkPosition(parseInt(e.deltaX, 10), parseInt(e.deltaY, 10)),
+    );
   };
 
   // Refer to https://github.com/AlloyTeam/AlloyCrop.
@@ -114,14 +118,8 @@ export default class ImageController extends PureComponent {
     const cr = this.target.getBoundingClientRect();
     const realX = (e.touches[0].pageX + e.touches[1].pageX) / 2;
     const realY = (e.touches[0].pageY + e.touches[1].pageY) / 2;
-    const centerX = Math.min(
-      Math.max(realX, cr.left),
-      cr.left + cr.width,
-    );
-    const centerY = Math.min(
-      Math.max(realY, cr.top),
-      cr.top + cr.height,
-    );
+    const centerX = Math.min(Math.max(realX, cr.left), cr.left + cr.width);
+    const centerY = Math.min(Math.max(realY, cr.top), cr.top + cr.height);
     const imgCenterX = cr.left + cr.width / 2;
     const imgCenterY = cr.top + cr.height / 2;
     const offX = centerX - imgCenterX;
@@ -155,8 +153,8 @@ export default class ImageController extends PureComponent {
       this.target.originX = offX;
       this.target.originY = offY;
       const newScale = Math.max(
-        window.innerWidth / cr.width * 0.5,
-        window.innerHeight / cr.height * 0.5,
+        (window.innerWidth / cr.width) * 0.5,
+        (window.innerHeight / cr.height) * 0.5,
         2,
       );
       this.target.scaleX = newScale;
@@ -175,9 +173,7 @@ export default class ImageController extends PureComponent {
   };
 
   render() {
-    const {
-      isLoaded,
-    } = this.state;
+    const { isLoaded } = this.state;
     const {
       url,
       alt,
@@ -186,48 +182,34 @@ export default class ImageController extends PureComponent {
       loadingIcon,
       ...other
     } = this.props;
-    let loading = (
-      <div className="image-slides-loading" >
-        <div />
-        <div />
-        <div />
-        <div />
-        <div />
-      </div>);
-    if (loadingIcon) {
-      if (typeof loadingIcon === 'function') {
-        loading = loadingIcon(url);
-      } else {
-        loading = loadingIcon;
-      }
+    let loading = loadingIcon;
+    if (typeof loadingIcon === 'function') {
+      loading = loadingIcon(url);
     }
-    return (
-      isLoaded ? (
-        <AlloyFinger
-          onTouchEnd={this.handleTouchEnd}
-          onMultipointStart={this.handleMultipointStart}
-          onPressMove={this.handleMove}
-          onDoubleTap={this.handleDoubleTap}
-          onPinch={this.handlePinch}>
-          <div className="image-slides-blackboard">
-            <img
-              className="image-slides-content"
-              alt={alt}
-              src={url}
-              ref={this.getImageEl}
-              style={this.style}
-              {...other} />
-          </div>
-        </AlloyFinger>
-      ) : (
-        <AlloyFinger onPressMove={this.handleMove}>
-          <div className="image-slides-blackboard">
-            <div ref={this.getImageEl}>
-              {loading}
-            </div>
-          </div>
-        </AlloyFinger>
-      )
+    return isLoaded ? (
+      <AlloyFinger
+        onTouchEnd={this.handleTouchEnd}
+        onMultipointStart={this.handleMultipointStart}
+        onPressMove={this.handleMove}
+        onDoubleTap={this.handleDoubleTap}
+        onPinch={this.handlePinch}>
+        <div className="image-slides-blackboard">
+          <img
+            className="image-slides-content"
+            alt={alt}
+            src={url}
+            ref={this.getImageEl}
+            style={this.style}
+            {...other}
+          />
+        </div>
+      </AlloyFinger>
+    ) : (
+      <AlloyFinger onPressMove={this.handleMove}>
+        <div className="image-slides-blackboard">
+          <div ref={this.getImageEl}>{loading}</div>
+        </div>
+      </AlloyFinger>
     );
   }
 }

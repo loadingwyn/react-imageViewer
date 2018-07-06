@@ -84,3 +84,32 @@
   will-change: transform;
   user-select: none;
 }
+
+.image-slides-page-button {
+  position: absolute;
+  top: 50%;
+  z-index: 100;
+  width: 32px;
+  height: 75px;
+  border: none;
+  border-radius: 2px;
+  outline: none;
+  background: rgba(100, 100, 100, 0.2);
+  transform: translateY(-50%);
+  cursor: pointer;
+
+  svg {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+  }
+}
+
+.image-slides-last {
+  left: 0;
+}
+
+.image-slides-next {
+  right: 0;
+}

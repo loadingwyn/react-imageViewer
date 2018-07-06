@@ -19,16 +19,16 @@ const style = {
   color: '#fff',
   fontSize: '14px',
 };
-storiesOf('ImageSlides', module)
-  .add('ImageSlides', () => (
-    <ImageSlides
-      noTapClose
-      images={images}
-      isOpen
-      onChange={index => console.log(index)}
-      addon={({ index }) => (
-        <div style={style}>
-          {`${index + 1} / ${images.length}`}
-        </div>
-      )} />
-  ));
+
+storiesOf('ImageSlides', module).add('ImageSlides', () => (
+  <ImageSlides
+    noTapClose
+    images={images}
+    isOpen
+    showPageButton
+    onChange={index => console.log(index)}
+    addon={({ index }) => (
+      <div style={style}>{`${index + 1} / ${images.length}`}</div>
+    )}
+  />
+));

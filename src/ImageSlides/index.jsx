@@ -26,6 +26,7 @@ export default class ImageSlides extends PureComponent {
     images: PropTypes.arrayOf(PropTypes.string),
     index: PropTypes.number,
     isOpen: PropTypes.bool,
+    showPageButton: PropTypes.bool,
     noTapClose: PropTypes.bool,
     loadingIcon: PropTypes.oneOfType([PropTypes.node, PropTypes.func]),
     addon: PropTypes.func,
@@ -36,6 +37,7 @@ export default class ImageSlides extends PureComponent {
   static defaultProps = {
     images: [],
     index: 0,
+    showPageButton: false,
     noTapClose: false,
     isOpen: false,
   };
@@ -60,12 +62,8 @@ export default class ImageSlides extends PureComponent {
   }
 
   componentDidMount() {
-    const {
-      images,
-    } = this.props;
-    const {
-      index,
-    } = this.state;
+    const { images } = this.props;
+    const { index } = this.state;
     preload(images[index]);
     preload(images[index + 1]);
     preload(images[index - 1]);
@@ -109,18 +107,16 @@ export default class ImageSlides extends PureComponent {
 
   move = e => () => {
     if (this.state.haveControl) {
-      this.containerEl.translateX = this.containerEl.translateX + parseInt(e.deltaX, 10);
+      this.containerEl.translateX =
+        this.containerEl.translateX + parseInt(e.deltaX, 10);
     }
   };
 
   handleTouchEnd = e => {
     e.preventDefault();
     if (this.state.haveControl) {
-      const {
-        onChange,
-        images,
-      } = this.props;
-      const boardWidth = (GUTTER_WIDTH + window.innerWidth);
+      const { onChange, images } = this.props;
+      const boardWidth = GUTTER_WIDTH + window.innerWidth;
       const baseline = boardWidth * this.getMedianIndex();
       if (-this.containerEl.translateX - baseline > SWIPE_TRIGGER) {
         const step = this.transition(160, 'next');
@@ -145,17 +141,27 @@ export default class ImageSlides extends PureComponent {
   };
 
   transition(time, direction) {
-    const boardWidth = (GUTTER_WIDTH + window.innerWidth);
+    const boardWidth = GUTTER_WIDTH + window.innerWidth;
     let startTime;
     const startPos = this.containerEl.translateX;
-    const size = (this.state.index === 0 && direction === 'last')
-      || (this.state.index === this.props.images.length - 1 && direction === 'next')
-      || direction === 'noMove' ? 0 : 1;
+    const size =
+      (this.state.index === 0 && direction === 'last') ||
+      (this.state.index === this.props.images.length - 1 &&
+        direction === 'next') ||
+      direction === 'noMove'
+        ? 0
+        : 1;
     const step = timestamp => {
       if (!startTime) startTime = timestamp;
       const progress = timestamp - startTime;
-      this.containerEl.translateX = parseInt(startPos
-        + progress / time * (-boardWidth * (this.getMedianIndex() + (direction === 'next' ? size : -size)) - startPos), 10);
+      this.containerEl.translateX = parseInt(
+        startPos +
+          (progress / time) *
+            (-boardWidth *
+              (this.getMedianIndex() + (direction === 'next' ? size : -size)) -
+              startPos),
+        10,
+      );
       if (progress < time) {
         window.requestAnimationFrame(step);
       } else if (direction === 'next') {
@@ -168,7 +174,6 @@ export default class ImageSlides extends PureComponent {
     };
     return step;
   }
-
 
   getMedianIndex() {
     const { index } = this.state;
@@ -185,11 +190,11 @@ export default class ImageSlides extends PureComponent {
   }
 
   updatePosition = () => {
-    this.containerEl.translateX = -(GUTTER_WIDTH + window.innerWidth) *
-    this.getMedianIndex();
+    this.containerEl.translateX =
+      -(GUTTER_WIDTH + window.innerWidth) * this.getMedianIndex();
   };
 
-  next() {
+  next = () => {
     const { index } = this.state;
     const { images } = this.props;
     if (index < images.length - 1) {
@@ -203,9 +208,9 @@ export default class ImageSlides extends PureComponent {
     } else {
       this.updatePosition();
     }
-  }
+  };
 
-  last() {
+  last = () => {
     const { index } = this.state;
     const { images } = this.props;
     if (index > 0) {
@@ -219,7 +224,7 @@ export default class ImageSlides extends PureComponent {
     } else {
       this.updatePosition();
     }
-  }
+  };
 
   handleCloseViewer = e => {
     const { index } = this.state;
@@ -233,27 +238,70 @@ export default class ImageSlides extends PureComponent {
   render() {
     const { index, isOpen } = this.state;
     const {
-      images, addon, noTapClose, loadingIcon,
+      images,
+      addon,
+      noTapClose,
+      loadingIcon,
+      showPageButton,
     } = this.props;
     const displayMax = index + 2 > images.length ? images.length : index + 2;
     const displayMin = index - 1 < 0 ? 0 : index - 1;
     return isOpen ? (
       <Overlay onClose={this.onCloseViewer}>
-        <div className="image-slides-view-port" >
-          {addon && addon({
-            url: images[index],
-            index,
-            close: this.handleCloseViewer,
-            next: this.next,
-            last: this.last,
-          })}
+        <div className="image-slides-view-port">
+          {addon &&
+            addon({
+              url: images[index],
+              index,
+              close: this.handleCloseViewer,
+              next: this.next,
+              last: this.last,
+            })}
+          {index > 0 && showPageButton ? (
+            <button
+              className="image-slides-page-button image-slides-last"
+              onClick={this.last}>
+              <svg
+                version="1.1"
+                id="Layer_1"
+                xmlns="http://www.w3.org/2000/svg"
+                xmlnsXlink="http://www.w3.org/1999/xlink"
+                width="30px"
+                height="30px"
+                viewBox="0 0 24 24">
+                <path
+                  stroke="#eee"
+                  fill="#eee"
+                  d="M15.41,16.59L10.83,12l4.58-4.59L14,6l-6,6l6,6L15.41,16.59z"
+                />
+              </svg>
+            </button>
+          ) : null}
+          {index < images.length - 1 && showPageButton ? (
+            <button
+              className="image-slides-page-button image-slides-next"
+              onClick={this.next}>
+              <svg
+                version="1.1"
+                id="Layer_1"
+                xmlns="http://www.w3.org/2000/svg"
+                xmlnsXlink="http://www.w3.org/1999/xlink"
+                width="30px"
+                height="30px"
+                viewBox="0 0 24 24">
+                <path
+                  stroke="#eee"
+                  fill="#eee"
+                  d="M8.59,16.59L13.17,12L8.59,7.41L10,6l6,6l-6,6L8.59,16.59z"
+                />
+              </svg>
+            </button>
+          ) : null}
           <AlloyFinger
             onSingleTap={noTapClose ? null : this.handleCloseViewer}
             onTouchEnd={this.handleTouchEnd}
             onPressMove={this.handleContainerMove}>
-            <div
-              className="image-slides-container"
-              ref={this.getContainer}>
+            <div className="image-slides-container" ref={this.getContainer}>
               {images.slice(displayMin, displayMax).map((url, ind) => (
                 /* eslint-disable */
                 <ImageController
@@ -261,8 +309,9 @@ export default class ImageSlides extends PureComponent {
                   onGiveupControl={this.getControl}
                   url={url}
                   key={url + (ind + displayMin)}
-                  focused={ind === this.getMedianIndex()} />
-            ))}
+                  focused={ind === this.getMedianIndex()}
+                />
+              ))}
             </div>
           </AlloyFinger>
         </div>

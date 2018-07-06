@@ -1,6 +1,7 @@
 import React, { PureComponent } from 'react';
 import ReactDOM from 'react-dom';
 import PropTypes from 'prop-types';
+import classNames from 'classnames';
 import './style.css';
 
 let originalBodyOverflow = null;
@@ -52,7 +53,7 @@ export default class Overlay extends PureComponent {
       this.layer = el;
       el.addEventListener('touchstart', preventDefault);
     }
-  }
+  };
 
   static preventScrolling() {
     const { body } = document;
@@ -67,8 +68,12 @@ export default class Overlay extends PureComponent {
   }
 
   render() {
+    const { className, parentSelector, ...other } = this.props;
     return ReactDOM.createPortal(
-      <div className="image-slides-overlay" ref={this.getLayer} >
+      <div
+        className={classNames('image-slides-overlay', className)}
+        ref={this.getLayer}
+        {...other}>
         {this.props.children}
       </div>,
       this.node,
