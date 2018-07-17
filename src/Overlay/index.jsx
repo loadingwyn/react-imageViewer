@@ -23,13 +23,15 @@ export default class Overlay extends PureComponent {
   node = document.createElement('div');
 
   componentDidMount() {
+    const { parentSelector } = this.props;
     Overlay.preventScrolling();
-    const parent = this.props.parentSelector();
+    const parent = parentSelector();
     parent.appendChild(this.node);
   }
 
   componentWillReceiveProps(newProps) {
-    const currentParent = this.props.parentSelector();
+    const { parentSelector } = this.props;
+    const currentParent = parentSelector();
     const newParent = newProps.parentSelector();
 
     if (newParent !== currentParent) {
@@ -42,7 +44,8 @@ export default class Overlay extends PureComponent {
     if (this.layer) {
       this.layer.removeEventListener('touchstart', preventDefault);
     }
-    const parent = this.props.parentSelector();
+    const { parentSelector } = this.props;
+    const parent = parentSelector();
     if (!this.node) return;
     parent.removeChild(this.node);
     Overlay.allowScrolling();
@@ -73,9 +76,7 @@ export default class Overlay extends PureComponent {
       <div
         className={classNames('image-slides-overlay', className)}
         ref={this.getLayer}
-        {...other}>
-        {this.props.children}
-      </div>,
+        {...other} />,
       this.node,
     );
   }

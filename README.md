@@ -34,21 +34,19 @@ const images = [
   'http://img.zcool.cn/community/0101f856cfff206ac7252ce6214470.jpg',
   'https://timgsa.baidu.com/timg?image&quality=80&size=b9999_10000&sec=1503235534249&di=4c198d5a305627d12e5dae4c581c9e57&imgtype=0&src=http%3A%2F%2Fimg2.niutuku.com%2Fdesk%2Fanime%2F0529%2F0529-17277.jpg',
 ];
-ReactDOM.render(
-  <ImageSlides images={images} isOpen />,
-  document.getElementById('root'),
-);
+ReactDOM.render(<ImageSlides images={images} isOpen />, document.getElementById('root'));
 ```
 
 ## Apis
 
-| Property    |     Type     | Default | Required | Description                                                         |
-| :---------- | :----------: | :-----: | :------: | :------------------------------------------------------------------ |
-| addon       |     func     |         |          | Display extra content of the image (addon must return a react node) |
-| images      |    array     |         |   yes    | Image urls to display                                               |
-| isOpen      |     bool     |  false  |          | Whether the component is open                                       |
-| index       |    number    |    0    |          | Index of the first image to display                                 |
-| loadingIcon | func \| node |         |          | The component displayed when the image is loading                   |
-| noTapClose  |     bool     |  false  |          | If `true`, the close event will not be triggered by single tap.     |
-| onClose     |     func     |         |          | Callback fired when the component closes                            |
-| onChange    |     func     |         |          | Callback fired when the index changes                               |
+| Property       |     Type     | Default | Required | Description                                                         |
+| :------------- | :----------: | :-----: | :------: | :------------------------------------------------------------------ |
+| addon          |     func     |         |          | Display extra content of the image (addon must return a react node) |
+| showPageButton |     bool     |  false  |          | Display page buttons                                                |
+| images         |    array     |         |   yes    | Image urls to display                                               |
+| isOpen         |     bool     |  false  |          | Whether the component is open                                       |
+| index          |    number    |    0    |          | Index of the first image to display                                 |
+| loadingIcon    | func \| node |         |          | The component displayed when the image is loading                   |
+| noTapClose     |     bool     |  false  |          | If `true`, the close event will not be triggered by single tap.     |
+| onClose        |     func     |         |          | Callback fired when the component closes                            |
+| onChange       |     func     |         |          | Callback fired when the index changes                               |

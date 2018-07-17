@@ -41,21 +41,23 @@ export default class ImageSlides extends PureComponent {
     noTapClose: false,
     isOpen: false,
   };
+
   state = {
-    index: 0,
     haveControl: true,
     isOpen: false,
   };
 
   lastContainerOffsetX = 0;
+
   initialStyle = {};
+
   imageController = {};
 
   constructor(props) {
     super(props);
     const { index, isOpen } = props;
     this.state = {
-      index: index || this.state.index,
+      index,
       haveControl: false,
       isOpen,
     };
@@ -92,7 +94,8 @@ export default class ImageSlides extends PureComponent {
   };
 
   getControl = () => {
-    if (!this.state.haveControl) {
+    const { haveControl } = this.state;
+    if (!haveControl) {
       this.setState({
         haveControl: true,
       });
@@ -106,28 +109,29 @@ export default class ImageSlides extends PureComponent {
   };
 
   move = e => () => {
-    if (this.state.haveControl) {
-      this.containerEl.translateX =
-        this.containerEl.translateX + parseInt(e.deltaX, 10);
+    const { haveControl } = this.state;
+    if (haveControl) {
+      this.containerEl.translateX = this.containerEl.translateX + parseInt(e.deltaX, 10);
     }
   };
 
   handleTouchEnd = e => {
     e.preventDefault();
-    if (this.state.haveControl) {
+    const { haveControl, index } = this.state;
+    if (haveControl) {
       const { onChange, images } = this.props;
       const boardWidth = GUTTER_WIDTH + window.innerWidth;
       const baseline = boardWidth * this.getMedianIndex();
       if (-this.containerEl.translateX - baseline > SWIPE_TRIGGER) {
         const step = this.transition(160, 'next');
-        if (onChange && this.state.index < images.length - 1) {
-          onChange(this.state.index + 1);
+        if (onChange && index < images.length - 1) {
+          onChange(index + 1);
         }
         window.requestAnimationFrame(step);
       } else if (baseline + this.containerEl.translateX > SWIPE_TRIGGER) {
         const step = this.transition(160, 'last');
-        if (onChange && this.state.index > 0) {
-          onChange(this.state.index - 1);
+        if (onChange && index > 0) {
+          onChange(index - 1);
         }
         window.requestAnimationFrame(step);
       } else {
@@ -141,25 +145,26 @@ export default class ImageSlides extends PureComponent {
   };
 
   transition(time, direction) {
+    const { index } = this.state;
+    const { images } = this.props;
     const boardWidth = GUTTER_WIDTH + window.innerWidth;
     let startTime;
     const startPos = this.containerEl.translateX;
-    const size =
-      (this.state.index === 0 && direction === 'last') ||
-      (this.state.index === this.props.images.length - 1 &&
-        direction === 'next') ||
-      direction === 'noMove'
-        ? 0
-        : 1;
+    const size = (index === 0 && direction === 'last')
+      || (index === images.length - 1
+        && direction === 'next')
+      || direction === 'noMove'
+      ? 0
+      : 1;
     const step = timestamp => {
       if (!startTime) startTime = timestamp;
       const progress = timestamp - startTime;
       this.containerEl.translateX = parseInt(
-        startPos +
-          (progress / time) *
-            (-boardWidth *
-              (this.getMedianIndex() + (direction === 'next' ? size : -size)) -
-              startPos),
+        startPos
+          + (progress / time)
+            * (-boardWidth
+              * (this.getMedianIndex() + (direction === 'next' ? size : -size))
+              - startPos),
         10,
       );
       if (progress < time) {
@@ -190,8 +195,7 @@ export default class ImageSlides extends PureComponent {
   }
 
   updatePosition = () => {
-    this.containerEl.translateX =
-      -(GUTTER_WIDTH + window.innerWidth) * this.getMedianIndex();
+    this.containerEl.translateX = -(GUTTER_WIDTH + window.innerWidth) * this.getMedianIndex();
   };
 
   next = () => {
@@ -249,8 +253,8 @@ export default class ImageSlides extends PureComponent {
     return isOpen ? (
       <Overlay onClose={this.onCloseViewer}>
         <div className="image-slides-view-port">
-          {addon &&
-            addon({
+          {addon
+            && addon({
               url: images[index],
               index,
               close: this.handleCloseViewer,
@@ -272,8 +276,7 @@ export default class ImageSlides extends PureComponent {
                 <path
                   stroke="#eee"
                   fill="#eee"
-                  d="M15.41,16.59L10.83,12l4.58-4.59L14,6l-6,6l6,6L15.41,16.59z"
-                />
+                  d="M15.41,16.59L10.83,12l4.58-4.59L14,6l-6,6l6,6L15.41,16.59z" />
               </svg>
             </button>
           ) : null}
@@ -292,8 +295,7 @@ export default class ImageSlides extends PureComponent {
                 <path
                   stroke="#eee"
                   fill="#eee"
-                  d="M8.59,16.59L13.17,12L8.59,7.41L10,6l6,6l-6,6L8.59,16.59z"
-                />
+                  d="M8.59,16.59L13.17,12L8.59,7.41L10,6l6,6l-6,6L8.59,16.59z" />
               </svg>
             </button>
           ) : null}
