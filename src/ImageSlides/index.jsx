@@ -1,7 +1,7 @@
 import React, { PureComponent } from 'react';
 import PropTypes from 'prop-types';
 import transform from 'css3transform';
-import AlloyFinger from '../AlloyFinger';
+import AlloyFinger from 'alloyfinger/react/AlloyFinger';
 import ImageController from '../ImageController';
 import Overlay from '../Overlay';
 import './style.css';
@@ -16,7 +16,7 @@ function preload(url) {
       loader.onload = resolve;
       loader.onerror = reject;
       loader.src = url;
-    });
+    }).catch(e => e);
   }
   return null;
 }

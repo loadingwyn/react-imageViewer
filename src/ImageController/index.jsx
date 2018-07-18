@@ -1,6 +1,6 @@
 import transform from 'css3transform';
 import React, { PureComponent } from 'react';
-import AlloyFinger from '../AlloyFinger';
+import AlloyFinger from 'alloyfinger/react/AlloyFinger';
 import resizeImage from '../utils/resizeImage';
 
 const VERTICAL_RANGE = 50;
@@ -40,7 +40,7 @@ export default class ImageController extends PureComponent {
             isLoaded: true,
           });
         }
-      });
+      }, e => e);
     }
   }
 
@@ -74,7 +74,7 @@ export default class ImageController extends PureComponent {
     const {
       translateX, translateY, originX, originY, scaleX, scaleY,
     } = this.target;
-    // If the image overflows or moves back to center of screen, it can be moved.
+    // If the image overflows or is moving towards the center of screen, it should be abled to move.
     if (
       ((deltaX <= 0 || left <= 0) && (deltaX >= 0 || right >= window.innerWidth))
       || Math.abs(translateX + deltaX - originX * scaleX) < Math.abs(translateX - originX * scaleX)
@@ -140,8 +140,12 @@ export default class ImageController extends PureComponent {
       const centerY = Math.min(Math.max(e.origin[1], cr.top), cr.top + cr.height);
       const offX = centerX - imgCenterX;
       const offY = centerY - imgCenterY;
+      const preOriginX = this.target.originX;
+      const preOriginY = this.target.originY;
       this.target.originX = offX;
       this.target.originY = offY;
+      this.target.translateX += offX - preOriginX * this.target.scaleX;
+      this.target.translateY += offY - preOriginY * this.target.scaleX;
       const newScale = Math.max(
         (window.innerWidth / cr.width) * 0.5,
         (window.innerHeight / cr.height) * 0.5,

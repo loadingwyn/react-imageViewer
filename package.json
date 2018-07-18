@@ -29,10 +29,7 @@
     "moduleNameMapper": {
       "\\.(jpg|jpeg|png|gif|eot|otf|webp|svg|ttf|woff|woff2|mp4|webm|wav|mp3|m4a|aac|oga)$": "<rootDir>/tests/__mocks__/fileMock.js",
       "\\.(css|less)$": "<rootDir>/tests/__mocks__/styleMock.js"
-    },
-    "testPathIgnorePatterns": [
-      "<rootDir>/node_modules/"
-    ]
+    }
   },
   "author": "loadingwyn",
   "devDependencies": {
@@ -47,16 +44,11 @@
     "@storybook/react": "^3.4.8",
     "alloyfinger": "^0.1.15",
     "autoprefixer": "^8.6.5",
-    "babel-core": "^6.26.3",
+    "babel-core": "^7.0.0-0",
     "babel-eslint": "^8.2.5",
-    "babel-jest": "^23.2.0",
+    "babel-jest": "^23.4.0",
     "babel-loader": "^8.0.0-beta.4",
-    "babel-plugin-transform-class-properties": "^6.24.1",
-    "babel-plugin-transform-es2015-modules-commonjs": "^6.26.2",
-    "babel-plugin-transform-object-rest-spread": "^6.26.0",
-    "babel-preset-env": "^1.7.0",
-    "babel-preset-react": "^6.24.1",
-    "css-loader": "^0.28.11",
+    "css-loader": "^1.0.0",
     "enzyme": "^3.3.0",
     "enzyme-adapter-react-16": "^1.1.1",
     "enzyme-to-json": "^3.3.4",
@@ -74,7 +66,6 @@
     "prop-types": "^15.6.2",
     "react": "^16.4.1",
     "react-dom": "^16.4.1",
-    "react-imageslides": "^1.1.1",
     "react-test-renderer": "^16.4.1",
     "rimraf": "^2.6.2",
     "style-loader": "^0.21.0",

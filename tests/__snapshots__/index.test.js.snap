@@ -4,7 +4,7 @@ exports[`<ImageSlides /> should render a loading 1`] = `
 ShallowWrapper {
   "length": 1,
   Symbol(enzyme.__root__): [Circular],
-  Symbol(enzyme.__unrendered__): <ImageSlides
+  Symbol(enzyme.__unrendered__): <e
     images={
       Array [
         "",
@@ -17,6 +17,7 @@ ShallowWrapper {
     index={0}
     isOpen={true}
     noTapClose={false}
+    showPageButton={false}
   />,
   Symbol(enzyme.__renderer__): Object {
     "batchedUpdates": [Function],
@@ -33,7 +34,7 @@ ShallowWrapper {
       "children": <div
         className="image-slides-view-port"
       >
-        <AlloyFinger
+        <u
           onPressMove={[Function]}
           onSingleTap={[Function]}
           onTouchEnd={[Function]}
@@ -41,20 +42,42 @@ ShallowWrapper {
           <div
             className="image-slides-container"
           >
-            <ImageController
+            <e
               alt="picture"
               focused={true}
+              loadingIcon={
+                <div
+                  className="image-slides-loading"
+                >
+                  <div />
+                  <div />
+                  <div />
+                  <div />
+                  <div />
+                </div>
+              }
               onGiveupControl={[Function]}
               url=""
             />
-            <ImageController
+            <e
               alt="picture"
               focused={false}
+              loadingIcon={
+                <div
+                  className="image-slides-loading"
+                >
+                  <div />
+                  <div />
+                  <div />
+                  <div />
+                  <div />
+                </div>
+              }
               onGiveupControl={[Function]}
               url="http://img.zcool.cn/community/0101f856cfff206ac7252ce6214470.jpg"
             />
           </div>
-        </AlloyFinger>
+        </u>
       </div>,
       "onClose": undefined,
       "parentSelector": [Function],
@@ -67,7 +90,9 @@ ShallowWrapper {
       "props": Object {
         "children": Array [
           undefined,
-          <AlloyFinger
+          null,
+          null,
+          <u
             onPressMove={[Function]}
             onSingleTap={[Function]}
             onTouchEnd={[Function]}
@@ -75,26 +100,50 @@ ShallowWrapper {
             <div
               className="image-slides-container"
             >
-              <ImageController
+              <e
                 alt="picture"
                 focused={true}
+                loadingIcon={
+                  <div
+                    className="image-slides-loading"
+                  >
+                    <div />
+                    <div />
+                    <div />
+                    <div />
+                    <div />
+                  </div>
+                }
                 onGiveupControl={[Function]}
                 url=""
               />
-              <ImageController
+              <e
                 alt="picture"
                 focused={false}
+                loadingIcon={
+                  <div
+                    className="image-slides-loading"
+                  >
+                    <div />
+                    <div />
+                    <div />
+                    <div />
+                    <div />
+                  </div>
+                }
                 onGiveupControl={[Function]}
                 url="http://img.zcool.cn/community/0101f856cfff206ac7252ce6214470.jpg"
               />
             </div>
-          </AlloyFinger>,
+          </u>,
         ],
         "className": "image-slides-view-port",
       },
       "ref": null,
       "rendered": Array [
         undefined,
+        null,
+        null,
         Object {
           "instance": null,
           "key": undefined,
@@ -103,15 +152,37 @@ ShallowWrapper {
             "children": <div
               className="image-slides-container"
             >
-              <ImageController
+              <e
                 alt="picture"
                 focused={true}
+                loadingIcon={
+                  <div
+                    className="image-slides-loading"
+                  >
+                    <div />
+                    <div />
+                    <div />
+                    <div />
+                    <div />
+                  </div>
+                }
                 onGiveupControl={[Function]}
                 url=""
               />
-              <ImageController
+              <e
                 alt="picture"
                 focused={false}
+                loadingIcon={
+                  <div
+                    className="image-slides-loading"
+                  >
+                    <div />
+                    <div />
+                    <div />
+                    <div />
+                    <div />
+                  </div>
+                }
                 onGiveupControl={[Function]}
                 url="http://img.zcool.cn/community/0101f856cfff206ac7252ce6214470.jpg"
               />
@@ -127,15 +198,37 @@ ShallowWrapper {
             "nodeType": "host",
             "props": Object {
               "children": Array [
-                <ImageController
+                <e
                   alt="picture"
                   focused={true}
+                  loadingIcon={
+                    <div
+                      className="image-slides-loading"
+                    >
+                      <div />
+                      <div />
+                      <div />
+                      <div />
+                      <div />
+                    </div>
+                  }
                   onGiveupControl={[Function]}
                   url=""
                 />,
-                <ImageController
+                <e
                   alt="picture"
                   focused={false}
+                  loadingIcon={
+                    <div
+                      className="image-slides-loading"
+                    >
+                      <div />
+                      <div />
+                      <div />
+                      <div />
+                      <div />
+                    </div>
+                  }
                   onGiveupControl={[Function]}
                   url="http://img.zcool.cn/community/0101f856cfff206ac7252ce6214470.jpg"
                 />,
@@ -151,7 +244,15 @@ ShallowWrapper {
                 "props": Object {
                   "alt": "picture",
                   "focused": true,
-                  "loadingIcon": undefined,
+                  "loadingIcon": <div
+                    className="image-slides-loading"
+                  >
+                    <div />
+                    <div />
+                    <div />
+                    <div />
+                    <div />
+                  </div>,
                   "onGiveupControl": [Function],
                   "url": "",
                 },
@@ -166,7 +267,15 @@ ShallowWrapper {
                 "props": Object {
                   "alt": "picture",
                   "focused": false,
-                  "loadingIcon": undefined,
+                  "loadingIcon": <div
+                    className="image-slides-loading"
+                  >
+                    <div />
+                    <div />
+                    <div />
+                    <div />
+                    <div />
+                  </div>,
                   "onGiveupControl": [Function],
                   "url": "http://img.zcool.cn/community/0101f856cfff206ac7252ce6214470.jpg",
                 },
@@ -193,7 +302,7 @@ ShallowWrapper {
         "children": <div
           className="image-slides-view-port"
         >
-          <AlloyFinger
+          <u
             onPressMove={[Function]}
             onSingleTap={[Function]}
             onTouchEnd={[Function]}
@@ -201,20 +310,42 @@ ShallowWrapper {
             <div
               className="image-slides-container"
             >
-              <ImageController
+              <e
                 alt="picture"
                 focused={true}
+                loadingIcon={
+                  <div
+                    className="image-slides-loading"
+                  >
+                    <div />
+                    <div />
+                    <div />
+                    <div />
+                    <div />
+                  </div>
+                }
                 onGiveupControl={[Function]}
                 url=""
               />
-              <ImageController
+              <e
                 alt="picture"
                 focused={false}
+                loadingIcon={
+                  <div
+                    className="image-slides-loading"
+                  >
+                    <div />
+                    <div />
+                    <div />
+                    <div />
+                    <div />
+                  </div>
+                }
                 onGiveupControl={[Function]}
                 url="http://img.zcool.cn/community/0101f856cfff206ac7252ce6214470.jpg"
               />
             </div>
-          </AlloyFinger>
+          </u>
         </div>,
         "onClose": undefined,
         "parentSelector": [Function],
@@ -227,7 +358,9 @@ ShallowWrapper {
         "props": Object {
           "children": Array [
             undefined,
-            <AlloyFinger
+            null,
+            null,
+            <u
               onPressMove={[Function]}
               onSingleTap={[Function]}
               onTouchEnd={[Function]}
@@ -235,26 +368,50 @@ ShallowWrapper {
               <div
                 className="image-slides-container"
               >
-                <ImageController
+                <e
                   alt="picture"
                   focused={true}
+                  loadingIcon={
+                    <div
+                      className="image-slides-loading"
+                    >
+                      <div />
+                      <div />
+                      <div />
+                      <div />
+                      <div />
+                    </div>
+                  }
                   onGiveupControl={[Function]}
                   url=""
                 />
-                <ImageController
+                <e
                   alt="picture"
                   focused={false}
+                  loadingIcon={
+                    <div
+                      className="image-slides-loading"
+                    >
+                      <div />
+                      <div />
+                      <div />
+                      <div />
+                      <div />
+                    </div>
+                  }
                   onGiveupControl={[Function]}
                   url="http://img.zcool.cn/community/0101f856cfff206ac7252ce6214470.jpg"
                 />
               </div>
-            </AlloyFinger>,
+            </u>,
           ],
           "className": "image-slides-view-port",
         },
         "ref": null,
         "rendered": Array [
           undefined,
+          null,
+          null,
           Object {
             "instance": null,
             "key": undefined,
@@ -263,15 +420,37 @@ ShallowWrapper {
               "children": <div
                 className="image-slides-container"
               >
-                <ImageController
+                <e
                   alt="picture"
                   focused={true}
+                  loadingIcon={
+                    <div
+                      className="image-slides-loading"
+                    >
+                      <div />
+                      <div />
+                      <div />
+                      <div />
+                      <div />
+                    </div>
+                  }
                   onGiveupControl={[Function]}
                   url=""
                 />
-                <ImageController
+                <e
                   alt="picture"
                   focused={false}
+                  loadingIcon={
+                    <div
+                      className="image-slides-loading"
+                    >
+                      <div />
+                      <div />
+                      <div />
+                      <div />
+                      <div />
+                    </div>
+                  }
                   onGiveupControl={[Function]}
                   url="http://img.zcool.cn/community/0101f856cfff206ac7252ce6214470.jpg"
                 />
@@ -287,15 +466,37 @@ ShallowWrapper {
               "nodeType": "host",
               "props": Object {
                 "children": Array [
-                  <ImageController
+                  <e
                     alt="picture"
                     focused={true}
+                    loadingIcon={
+                      <div
+                        className="image-slides-loading"
+                      >
+                        <div />
+                        <div />
+                        <div />
+                        <div />
+                        <div />
+                      </div>
+                    }
                     onGiveupControl={[Function]}
                     url=""
                   />,
-                  <ImageController
+                  <e
                     alt="picture"
                     focused={false}
+                    loadingIcon={
+                      <div
+                        className="image-slides-loading"
+                      >
+                        <div />
+                        <div />
+                        <div />
+                        <div />
+                        <div />
+                      </div>
+                    }
                     onGiveupControl={[Function]}
                     url="http://img.zcool.cn/community/0101f856cfff206ac7252ce6214470.jpg"
                   />,
@@ -311,7 +512,15 @@ ShallowWrapper {
                   "props": Object {
                     "alt": "picture",
                     "focused": true,
-                    "loadingIcon": undefined,
+                    "loadingIcon": <div
+                      className="image-slides-loading"
+                    >
+                      <div />
+                      <div />
+                      <div />
+                      <div />
+                      <div />
+                    </div>,
                     "onGiveupControl": [Function],
                     "url": "",
                   },
@@ -326,7 +535,15 @@ ShallowWrapper {
                   "props": Object {
                     "alt": "picture",
                     "focused": false,
-                    "loadingIcon": undefined,
+                    "loadingIcon": <div
+                      className="image-slides-loading"
+                    >
+                      <div />
+                      <div />
+                      <div />
+                      <div />
+                      <div />
+                    </div>,
                     "onGiveupControl": [Function],
                     "url": "http://img.zcool.cn/community/0101f856cfff206ac7252ce6214470.jpg",
                   },
