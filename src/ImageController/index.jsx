@@ -67,13 +67,14 @@ export default class ImageController extends PureComponent {
   };
 
   checkPosition = (deltaX, deltaY) => {
-    const { onGiveupControl } = this.props;
+    const { onGiveupControl, containerHaveControl } = this.props;
     const {
       left, right, top, bottom,
     } = this.target.getBoundingClientRect();
     const {
       translateX, translateY, originX, originY, scaleX, scaleY,
     } = this.target;
+    if (containerHaveControl) return;
     // If the image overflows or is moving towards the center of screen, it should be abled to move.
     if (
       ((deltaX <= 0 || left <= 0) && (deltaX >= 0 || right >= window.innerWidth))

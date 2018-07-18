@@ -240,7 +240,7 @@ export default class ImageSlides extends PureComponent {
   };
 
   render() {
-    const { index, isOpen } = this.state;
+    const { index, isOpen, haveControl } = this.state;
     const {
       images,
       addon,
@@ -307,6 +307,7 @@ export default class ImageSlides extends PureComponent {
               {images.slice(displayMin, displayMax).map((url, ind) => (
                 /* eslint-disable */
                 <ImageController
+                  containerHaveControl={haveControl}
                   loadingIcon={loadingIcon}
                   onGiveupControl={this.getControl}
                   url={url}
