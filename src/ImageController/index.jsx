@@ -77,7 +77,7 @@ export default class ImageController extends PureComponent {
     if (containerHaveControl) return;
     // If the image overflows or is moving towards the center of screen, it should be abled to move.
     if (
-      ((deltaX <= 0 || left <= 0) && (deltaX >= 0 || right >= window.innerWidth))
+      ((deltaX <= 0 || left < 0) && (deltaX >= 0 || right > window.innerWidth))
       || Math.abs(translateX + deltaX - originX * scaleX) < Math.abs(translateX - originX * scaleX)
     ) {
       this.target.translateX += deltaX;
@@ -170,7 +170,13 @@ export default class ImageController extends PureComponent {
   render() {
     const { isLoaded } = this.state;
     const {
-      url, alt, onGiveupControl, focused, loadingIcon, ...other
+      url,
+      alt,
+      onGiveupControl,
+      focused,
+      loadingIcon,
+      containerHaveControl,
+      ...other
     } = this.props;
     let loading = loadingIcon;
     if (typeof loadingIcon === 'function') {
