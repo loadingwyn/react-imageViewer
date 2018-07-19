@@ -11,6 +11,6 @@ export default function resizeImage(imageWidth, imageHeight) {
   }
   return {
     width: 'auto',
-    height: screenHeight < imageHeight ? '100%' : `${imageWidth}px`,
+    height: screenHeight < imageHeight ? '100%' : `${imageHeight}px`,
   };
 }
