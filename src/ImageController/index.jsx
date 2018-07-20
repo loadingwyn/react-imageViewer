@@ -75,23 +75,21 @@ export default class ImageController extends PureComponent {
       translateX, translateY, originX, originY, scaleX, scaleY,
     } = this.target;
     if (containerHaveControl) return;
+    const XcanMove = ((deltaX <= 0 || left < 0) && (deltaX >= 0 || right > window.innerWidth))
+      || Math.abs(translateX + deltaX - originX * scaleX) < Math.abs(translateX - originX * scaleX);
+    const YcanMove = ((deltaY < 0 || top < VERTICAL_RANGE)
+        && (deltaY > 0 || bottom > window.innerHeight - VERTICAL_RANGE))
+      || Math.abs(translateY + deltaY - originY * scaleY) < Math.abs(translateY - originY * scaleY);
     // If the image overflows or is moving towards the center of screen, it should be abled to move.
-    if (
-      ((deltaX <= 0 || left < 0) && (deltaX >= 0 || right > window.innerWidth))
-      || Math.abs(translateX + deltaX - originX * scaleX) < Math.abs(translateX - originX * scaleX)
-    ) {
+    if (XcanMove) {
       this.target.translateX += deltaX;
-    } else if (onGiveupControl) {
+    } else if (onGiveupControl && Math.abs(deltaY) < (YcanMove ? 2 : 200)) {
       if (Math.abs(deltaY) < BUFFER) {
         // optimize for looong picture
         onGiveupControl();
       }
     }
-    if (
-      ((deltaY < 0 || top < VERTICAL_RANGE)
-        && (deltaY > 0 || bottom > window.innerHeight - VERTICAL_RANGE))
-      || Math.abs(translateY + deltaY - originY * scaleY) < Math.abs(translateY - originY * scaleY)
-    ) {
+    if (YcanMove) {
       this.target.translateY += deltaY;
     }
   };
@@ -167,6 +165,12 @@ export default class ImageController extends PureComponent {
     e.preventDefault();
   };
 
+  handleMultipointEnd = e => {
+    if (this.target.scaleX <= 1 && e.scale < 1) {
+      this.reset();
+    }
+  };
+
   render() {
     const { isLoaded } = this.state;
     const {
@@ -186,6 +190,7 @@ export default class ImageController extends PureComponent {
       <AlloyFinger
         onTouchEnd={this.handleTouchEnd}
         onMultipointStart={this.handleMultipointStart}
+        onMultipointEnd={this.handleMultipointEnd}
         onPressMove={this.handleMove}
         onDoubleTap={this.handleDoubleTap}
         onPinch={this.handlePinch}>
