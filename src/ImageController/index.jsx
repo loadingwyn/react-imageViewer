@@ -4,7 +4,7 @@ import AlloyFinger from 'alloyfinger/react/AlloyFinger';
 import resizeImage from '../utils/resizeImage';
 
 const VERTICAL_RANGE = 50;
-const BUFFER = 4;
+const BUFFER = 2;
 
 export default class ImageController extends PureComponent {
   static defaultProps = {
@@ -83,11 +83,9 @@ export default class ImageController extends PureComponent {
     // If the image overflows or is moving towards the center of screen, it should be abled to move.
     if (XcanMove) {
       this.target.translateX += deltaX;
-    } else if (onGiveupControl && Math.abs(deltaY) < (YcanMove ? 2 : 200)) {
-      if (Math.abs(deltaY) < BUFFER) {
-        // optimize for looong picture
-        onGiveupControl();
-      }
+    } else if (onGiveupControl && Math.abs(deltaY) < (YcanMove ? BUFFER : 20)) {
+      // optimize for looong picture
+      onGiveupControl();
     }
     if (YcanMove) {
       this.target.translateY += deltaY;
