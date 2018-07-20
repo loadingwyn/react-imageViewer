@@ -6,8 +6,7 @@
 
 ## Example
 
-![demo1](demo/demo1.gif)
-![demo2](demo/demo2.gif)
+![demo](demo/demo.gif)
 
 [![Edit l2xpwy3xrq](https://codesandbox.io/static/img/play-codesandbox.svg)](https://codesandbox.io/s/l2xpwy3xrq?view=preview)
 
