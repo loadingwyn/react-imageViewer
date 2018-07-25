@@ -2,8 +2,7 @@ node_modules/
 .vscode
 .idea
 .npm
-*.log
-*.pid
+.pid
 configs/*
 !src/configs/
 tools/*
@@ -12,3 +11,4 @@ utils/*
 !src/utils/
 /public/*
 npm-debug.*
+.log
