@@ -33,14 +33,17 @@ export default class ImageController extends PureComponent {
         loader.onload = resolve;
         loader.onerror = reject;
         loader.src = url;
-      }).then(() => {
-        if (!this.unMount) {
-          this.style = resizeImage(loader.naturalWidth, loader.naturalHeight);
-          this.setState({
-            isLoaded: true,
-          });
-        }
-      }, e => e);
+      }).then(
+        () => {
+          if (!this.unMount) {
+            this.style = resizeImage(loader.naturalWidth, loader.naturalHeight);
+            this.setState({
+              isLoaded: true,
+            });
+          }
+        },
+        e => e,
+      );
     }
   }
 
@@ -205,9 +208,7 @@ export default class ImageController extends PureComponent {
     ) : (
       <AlloyFinger onPressMove={this.handleMove}>
         <div className="image-slides-blackboard">
-          <div ref={this.getImageEl}>
-            {loading}
-          </div>
+          <div ref={this.getImageEl}>{loading}</div>
         </div>
       </AlloyFinger>
     );

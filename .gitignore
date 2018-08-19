@@ -4,7 +4,7 @@ node_modules/
 .npm
 .pid
 configs/*
-!src/configs/
+!src/configs
 tools/*
 !src/tools/
 utils/*
