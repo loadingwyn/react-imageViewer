@@ -27,9 +27,6 @@ storiesOf('ImageSlides', module).add('ImageSlides', () => (
     isOpen
     showPageButton
     onChange={index => console.log(index)}
-    addon={({ index }) => (
-      <div style={style}>
-        {`${index + 1} / ${images.length}`}
-      </div>
-    )} />
+    addon={({ index }) => <div style={style}>{`${index + 1} / ${images.length}`}</div>}
+  />
 ));

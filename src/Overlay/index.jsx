@@ -76,7 +76,8 @@ export default class Overlay extends PureComponent {
       <div
         className={classNames('image-slides-overlay', className)}
         ref={this.getLayer}
-        {...other} />,
+        {...other}
+      />,
       this.node,
     );
   }

@@ -23,7 +23,16 @@ export default class ImageController extends PureComponent {
 
   state = {
     isLoaded: false,
+    desktopMode: false,
   };
+
+  clientX = 0;
+
+  clientY = 0;
+
+  initScale = 1;
+
+  style = {};
 
   componentDidMount() {
     const { url } = this.props;
@@ -58,10 +67,6 @@ export default class ImageController extends PureComponent {
     this.unMount = true;
   }
 
-  initScale = 1;
-
-  style = {};
-
   getImageEl = el => {
     if (el) {
       this.target = el;
@@ -71,18 +76,17 @@ export default class ImageController extends PureComponent {
 
   checkPosition = (deltaX, deltaY) => {
     const { onGiveupControl, containerHaveControl } = this.props;
-    const {
-      left, right, top, bottom,
-    } = this.target.getBoundingClientRect();
-    const {
-      translateX, translateY, originX, originY, scaleX, scaleY,
-    } = this.target;
-    if (containerHaveControl) return;
-    const XcanMove = ((deltaX <= 0 || left < 0) && (deltaX >= 0 || right > window.innerWidth))
-      || Math.abs(translateX + deltaX - originX * scaleX) < Math.abs(translateX - originX * scaleX);
-    const YcanMove = ((deltaY < 0 || top < VERTICAL_RANGE)
-        && (deltaY > 0 || bottom > window.innerHeight - VERTICAL_RANGE))
-      || Math.abs(translateY + deltaY - originY * scaleY) < Math.abs(translateY - originY * scaleY);
+    const { desktopMode } = this.state;
+    const { left, right, top, bottom } = this.target.getBoundingClientRect();
+    const { translateX, translateY, originX, originY, scaleX, scaleY } = this.target;
+    if (containerHaveControl && !desktopMode) return;
+    const XcanMove =
+      ((deltaX <= 0 || left < 0) && (deltaX >= 0 || right > window.innerWidth)) ||
+      Math.abs(translateX + deltaX - originX * scaleX) < Math.abs(translateX - originX * scaleX);
+    const YcanMove =
+      ((deltaY < 0 || top < VERTICAL_RANGE) &&
+        (deltaY > 0 || bottom > window.innerHeight - VERTICAL_RANGE)) ||
+      Math.abs(translateY + deltaY - originY * scaleY) < Math.abs(translateY - originY * scaleY);
     // If the image overflows or is moving towards the center of screen, it should be abled to move.
     if (XcanMove) {
       this.target.translateX += deltaX;
@@ -106,7 +110,9 @@ export default class ImageController extends PureComponent {
 
   handleMove = e => {
     e.preventDefault();
-    window.requestAnimationFrame(() => this.checkPosition(parseInt(e.deltaX, 10), parseInt(e.deltaY, 10)));
+    window.requestAnimationFrame(() =>
+      this.checkPosition(parseInt(e.deltaX, 10), parseInt(e.deltaY, 10)),
+    );
   };
 
   // Refer to https://github.com/AlloyTeam/AlloyCrop.
@@ -127,6 +133,15 @@ export default class ImageController extends PureComponent {
     this.target.translateX += offX - preOriginX * this.target.scaleX;
     this.target.translateY += offY - preOriginY * this.target.scaleX;
     this.initScale = this.target.scaleX;
+  };
+
+  handleDoubleClick = e => {
+    const { desktopMode } = this.state;
+    this.setState({
+      desktopMode: !desktopMode,
+    });
+    e.origin = [e.clientX, e.clientY];
+    this.handleDoubleTap(e);
   };
 
   handleDoubleTap = e => {
@@ -172,6 +187,30 @@ export default class ImageController extends PureComponent {
     }
   };
 
+  handleMouseDown = e => {
+    this.clientX = e.clientX;
+    this.clientY = e.clientY;
+    e.target.addEventListener('mousemove', this.handleMouseMove);
+    e.target.addEventListener('mouseup', this.handleMouseUp);
+  };
+
+  handleMouseMove = e => {
+    e.deltaX = e.clientX - this.clientX;
+    e.deltaY = e.clientY - this.clientY;
+    this.clientX = e.clientX;
+    this.clientY = e.clientY;
+    this.handleMove(e);
+  };
+
+  handleMouseUp = e => {
+    e.target.removeEventListener('mousemove', this.handleMouseMove);
+    e.target.removeEventListener('mouseup', this.handleMouseUp);
+  };
+
+  handleDrag = e => {
+    e.preventDefault();
+  };
+
   render() {
     const { isLoaded } = this.state;
     const {
@@ -195,14 +234,19 @@ export default class ImageController extends PureComponent {
         onPressMove={this.handleMove}
         onDoubleTap={this.handleDoubleTap}
         onPinch={this.handlePinch}>
-        <div className="image-slides-blackboard">
+        <div
+          className="image-slides-blackboard"
+          onDoubleClick={this.handleDoubleClick}
+          onMouseDown={this.handleMouseDown}>
           <img
+            onDragStart={this.handleDrag}
             className="image-slides-content"
             alt={alt}
             src={url}
             ref={this.getImageEl}
             style={this.style}
-            {...other} />
+            {...other}
+          />
         </div>
       </AlloyFinger>
     ) : (
