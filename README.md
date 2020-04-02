@@ -1,6 +1,6 @@
 # React Image Viewer
 
-[![codecov](https://codecov.io/gh/loadingwyn/react-imageslides/branch/master/graph/badge.svg)](https://codecov.io/gh/loadingwyn/react-imageslides)
+[![version](https://img.shields.io/npm/v/react-imageslides)](https://www.npmjs.com/package/react-imageslides)
 
 > A mobile friendly images slideshow react component
 
@@ -12,14 +12,15 @@
 
 ## Features
 
-- Close to the native experience(use [Alloyfinger](https://github.com/AlloyTeam/AlloyFinger))
+- Close to the native experience(powered by [Alloyfinger](https://github.com/AlloyTeam/AlloyFinger))
 - Pinch to zoom in/out
 - No unnecessary rendering( the component only renders no more than 3 images at a time)
+- Support touch and mouse events both
 
 ## Get Started
 
 1.  Run `yarn add react-imageslides react react-dom`
-    The package has peer dependencies on `react@^16.0.0`, `react-dom@16.0.0`, and `alloyfinger`.
+    The package has peer dependencies on `react@^16.#.0`, `react-dom@^16.3.0`, and `alloyfinger`.
 
 2.  Render it!
 
