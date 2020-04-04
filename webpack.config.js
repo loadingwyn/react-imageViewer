@@ -24,7 +24,6 @@ module.exports = {
             loader: 'css-loader',
             options: {
               // sourceMap: process.env.NODE_ENV !== 'production',
-              minimize: true,
               importLoaders: 1,
             },
           },

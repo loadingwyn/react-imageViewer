@@ -7,25 +7,6 @@ const VERTICAL_RANGE = 50;
 const BUFFER = 2;
 
 export default class ImageController extends PureComponent {
-  static defaultProps = {
-    alt: 'picture',
-    focused: false,
-    loadingIcon: (
-      <div className="image-slides-loading">
-        <div />
-        <div />
-        <div />
-        <div />
-        <div />
-      </div>
-    ),
-  };
-
-  state = {
-    isLoaded: false,
-    desktopMode: false,
-  };
-
   clientX = 0;
 
   clientY = 0;
@@ -33,6 +14,14 @@ export default class ImageController extends PureComponent {
   initScale = 1;
 
   style = {};
+
+  constructor(props) {
+    super(props);
+    this.state = {
+      isLoaded: false,
+      desktopMode: false,
+    };
+  }
 
   componentDidMount() {
     const { url } = this.props;
@@ -258,3 +247,17 @@ export default class ImageController extends PureComponent {
     );
   }
 }
+
+ImageController.defaultProps = {
+  alt: 'picture',
+  focused: false,
+  loadingIcon: (
+    <div className="image-slides-loading">
+      <div />
+      <div />
+      <div />
+      <div />
+      <div />
+    </div>
+  ),
+};

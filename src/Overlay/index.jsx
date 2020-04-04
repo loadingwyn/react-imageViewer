@@ -10,16 +10,6 @@ function preventDefault(e) {
   e.preventDefault();
 }
 export default class Overlay extends PureComponent {
-  static propTypes = {
-    parentSelector: PropTypes.func,
-  };
-
-  static defaultProps = {
-    parentSelector() {
-      return document.body;
-    },
-  };
-
   node = document.createElement('div');
 
   componentDidMount() {
@@ -29,14 +19,14 @@ export default class Overlay extends PureComponent {
     parent.appendChild(this.node);
   }
 
-  componentWillReceiveProps(newProps) {
+  componentDidUpdate(prevProps) {
     const { parentSelector } = this.props;
     const currentParent = parentSelector();
-    const newParent = newProps.parentSelector();
+    const prevParent = prevProps.parentSelector();
 
-    if (newParent !== currentParent) {
-      currentParent.removeChild(this.node);
-      newParent.appendChild(this.node);
+    if (prevParent !== currentParent) {
+      prevParent.removeChild(this.node);
+      currentParent.appendChild(this.node);
     }
   }
 
@@ -82,3 +72,12 @@ export default class Overlay extends PureComponent {
     );
   }
 }
+Overlay.propTypes = {
+  parentSelector: PropTypes.func,
+};
+
+Overlay.defaultProps = {
+  parentSelector() {
+    return document.body;
+  },
+};

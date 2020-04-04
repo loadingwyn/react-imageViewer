@@ -74,8 +74,10 @@
     "rimraf": "^2.6.2",
     "style-loader": "^0.22.1",
     "stylelint": "^13.2.1",
+    "stylelint-config-prettier": "^8.0.1",
     "stylelint-config-standard": "^20.0.0",
     "stylelint-order": "^4.0.0",
+    "stylelint-prettier": "^1.1.2",
     "superstatic": "^6.0.1",
     "webpack": "^4.16.5",
     "webpack-cli": "^3.1.0"

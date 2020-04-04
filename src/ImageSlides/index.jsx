@@ -22,34 +22,6 @@ function preload(url) {
 }
 
 export default class ImageSlides extends PureComponent {
-  static propTypes = {
-    images: PropTypes.arrayOf(PropTypes.string),
-    index: PropTypes.number,
-    isOpen: PropTypes.bool,
-    showPageButton: PropTypes.bool,
-    noTapClose: PropTypes.bool,
-    loadingIcon: PropTypes.oneOfType([PropTypes.node, PropTypes.func]),
-    addon: PropTypes.func,
-    onClose: PropTypes.func,
-    onChange: PropTypes.func,
-  };
-
-  static defaultProps = {
-    images: [],
-    index: 0,
-    showPageButton: false,
-    noTapClose: false,
-    isOpen: false,
-  };
-
-  state = {
-    haveControl: true,
-    isOpen: false,
-    index: 0,
-    prevIsOpen: false,
-    prevIndex: 0,
-  };
-
   lastContainerOffsetX = 0;
 
   initialStyle = {};
@@ -63,6 +35,8 @@ export default class ImageSlides extends PureComponent {
       index,
       haveControl: false,
       isOpen,
+      prevIsOpen: false,
+      prevIndex: 0,
     };
   }
 
@@ -121,7 +95,7 @@ export default class ImageSlides extends PureComponent {
   move = e => () => {
     const { haveControl } = this.state;
     if (haveControl) {
-      this.containerEl.translateX = this.containerEl.translateX + parseInt(e.deltaX, 10);
+      this.containerEl.translateX += parseInt(e.deltaX, 10);
     }
   };
 
@@ -324,3 +298,22 @@ export default class ImageSlides extends PureComponent {
     ) : null;
   }
 }
+ImageSlides.propTypes = {
+  images: PropTypes.arrayOf(PropTypes.string),
+  index: PropTypes.number,
+  isOpen: PropTypes.bool,
+  showPageButton: PropTypes.bool,
+  noTapClose: PropTypes.bool,
+  loadingIcon: PropTypes.oneOfType([PropTypes.node, PropTypes.func]),
+  addon: PropTypes.func,
+  onClose: PropTypes.func,
+  onChange: PropTypes.func,
+};
+
+ImageSlides.defaultProps = {
+  images: [],
+  index: 0,
+  showPageButton: false,
+  noTapClose: false,
+  isOpen: false,
+};

@@ -1,30 +1,23 @@
 {
-  "extends": [
-    "stylelint-config-standard"
-  ],
-  "plugins": [
-    "stylelint-order"
-  ],
-  "ignoreFiles": [
-    "**/*.js",
-    "**/*.jsx"
-  ],
+  "extends": ["stylelint-config-standard", "stylelint-prettier/recommended"],
+  "plugins": ["stylelint-order"],
+  "ignoreFiles": ["**/*.js", "**/*.jsx"],
   "rules": {
     "order/order": [
       {
         "type": "at-rule",
-        "name": "include",
+        "name": "include"
       },
       {
         "type": "at-rule",
-        "name": "extend",
+        "name": "extend"
       },
       "at-variables",
       "dollar-variables",
       "custom-properties",
       "declarations",
       "rules",
-      "at-rules",
+      "at-rules"
     ],
     "no-descending-specificity": null,
     "order/properties-order": [
