@@ -12,4 +12,6 @@ utils/*
 /public/*
 npm-debug.*
 yarn-error.log
+dist/*
+dist-esm/*
 .log

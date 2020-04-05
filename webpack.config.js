@@ -17,6 +17,12 @@ module.exports = {
         use: [
           {
             loader: 'ts-loader',
+            options: {
+              compilerOptions: {
+                declaration: false,
+                declarationMap: false,
+              },
+            },
           },
         ],
       },
