@@ -7,14 +7,18 @@ module.exports = {
   devtool: 'source-map',
   externals: ['react', 'react-dom', 'prop-types', 'alloyfinger'],
   resolve: {
-    extensions: ['.js', '.jsx'],
+    extensions: ['.js', '.jsx', '.ts', '.tsx'],
   },
   module: {
     rules: [
       {
-        test: /\.jsx?$/,
-        loader: 'babel-loader',
+        test: /\.tsx?$/,
         exclude: /node_modules/,
+        use: [
+          {
+            loader: 'ts-loader',
+          },
+        ],
       },
       {
         test: /\.css$/,

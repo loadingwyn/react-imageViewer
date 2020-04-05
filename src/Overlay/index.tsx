@@ -1,16 +1,39 @@
-import React, { PureComponent } from 'react';
+import React, { PureComponent, SyntheticEvent } from 'react';
 import ReactDOM from 'react-dom';
 import PropTypes from 'prop-types';
 import classNames from 'classnames';
 import './style.css';
 
-let originalBodyOverflow = null;
+let originalBodyOverflow: string | null = null;
 
-function preventDefault(e) {
+function preventDefault(e: Event) {
   e.preventDefault();
 }
-export default class Overlay extends PureComponent {
+
+interface OverlayProps {
+  className?: string;
+  parentSelector: () => HTMLElement;
+}
+export default class Overlay extends PureComponent<OverlayProps> {
+  static defaultProps = {
+    parentSelector() {
+      return document.body;
+    },
+  };
+  static preventScrolling() {
+    const { body } = document;
+    originalBodyOverflow = body.style.overflow;
+    body.style.overflow = 'hidden';
+  }
+
+  static allowScrolling() {
+    const { body } = document;
+    body.style.overflow = originalBodyOverflow || '';
+    originalBodyOverflow = null;
+  }
+
   node = document.createElement('div');
+  layer: HTMLDivElement | null = null;
 
   componentDidMount() {
     const { parentSelector } = this.props;
@@ -19,7 +42,7 @@ export default class Overlay extends PureComponent {
     parent.appendChild(this.node);
   }
 
-  componentDidUpdate(prevProps) {
+  componentDidUpdate(prevProps: OverlayProps) {
     const { parentSelector } = this.props;
     const currentParent = parentSelector();
     const prevParent = prevProps.parentSelector();
@@ -41,24 +64,12 @@ export default class Overlay extends PureComponent {
     Overlay.allowScrolling();
   }
 
-  getLayer = el => {
+  getLayer = (el: HTMLDivElement) => {
     if (el) {
       this.layer = el;
       el.addEventListener('touchstart', preventDefault);
     }
   };
-
-  static preventScrolling() {
-    const { body } = document;
-    originalBodyOverflow = body.style.overflow;
-    body.style.overflow = 'hidden';
-  }
-
-  static allowScrolling() {
-    const { body } = document;
-    body.style.overflow = originalBodyOverflow || '';
-    originalBodyOverflow = null;
-  }
 
   render() {
     const { className, parentSelector, ...other } = this.props;
@@ -72,12 +83,3 @@ export default class Overlay extends PureComponent {
     );
   }
 }
-Overlay.propTypes = {
-  parentSelector: PropTypes.func,
-};
-
-Overlay.defaultProps = {
-  parentSelector() {
-    return document.body;
-  },
-};

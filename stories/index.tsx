@@ -1,5 +1,5 @@
 import { storiesOf } from '@storybook/react';
-import React from 'react';
+import React, { CSSProperties } from 'react';
 import ImageSlides from '../src/ImageSlides';
 
 const images = [
@@ -9,24 +9,12 @@ const images = [
   'https://timgsa.baidu.com/timg?image&quality=80&size=b9999_10000&sec=1503235534249&di=4c198d5a305627d12e5dae4c581c9e57&imgtype=0&src=http%3A%2F%2Fimg2.niutuku.com%2Fdesk%2Fanime%2F0529%2F0529-17277.jpg',
 ];
 
-const style = {
-  position: 'absolute',
-  right: '10%',
-  bottom: '10%',
-  zIndex: '100',
-  borderRadius: '2px',
-  backgroundColor: 'rgba(0, 0, 0, 0.15)',
-  color: '#fff',
-  fontSize: '14px',
-};
-
 storiesOf('ImageSlides', module).add('ImageSlides', () => (
   <ImageSlides
-    noTapClose
+    tapClose={false}
     images={images}
     isOpen
     showPageButton
-    onChange={index => console.log(index)}
-    addon={({ index }) => <div style={style}>{`${index + 1} / ${images.length}`}</div>}
+    onChange={(index: number) => console.log(index)}
   />
 ));

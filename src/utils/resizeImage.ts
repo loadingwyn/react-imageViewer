@@ -1,4 +1,4 @@
-export default function resizeImage(imageWidth, imageHeight) {
+export default function resizeImage(imageWidth: number, imageHeight: number) {
   const screenWidth = window.innerWidth;
   const screenHeight = window.innerHeight;
   const screenRadio = screenWidth / screenHeight;

@@ -1,12 +1,44 @@
 import transform from 'css3transform';
-import React, { PureComponent } from 'react';
+import React, { PureComponent, ReactNode, SyntheticEvent } from 'react';
 import AlloyFinger from 'alloyfinger/react/AlloyFinger';
 import resizeImage from '../utils/resizeImage';
 
 const VERTICAL_RANGE = 50;
 const BUFFER = 2;
 
-export default class ImageController extends PureComponent {
+interface ControllerProps {
+  presented: boolean;
+  url: string;
+  onExceedLimit: () => void;
+  containerFocused: boolean;
+  loadingIcon: ReactNode;
+}
+interface ControllerStates {
+  isLoaded: boolean;
+  desktopMode: boolean;
+}
+
+export interface TransformedElement extends HTMLElement {
+  translateX: number;
+  translateY: number;
+  originX: number;
+  originY: number;
+  scaleX: number;
+  scaleY: number;
+}
+export default class ImageController extends PureComponent<ControllerProps, ControllerStates> {
+  static defaultProps = {
+    presented: false,
+    loadingIcon: (
+      <div className="image-slides-loading">
+        <div />
+        <div />
+        <div />
+        <div />
+        <div />
+      </div>
+    ),
+  };
   clientX = 0;
 
   clientY = 0;
@@ -15,7 +47,10 @@ export default class ImageController extends PureComponent {
 
   style = {};
 
-  constructor(props) {
+  unMount = false;
+
+  target: TransformedElement | null = null;
+  constructor(props: Readonly<ControllerProps>) {
     super(props);
     this.state = {
       isLoaded: false,
@@ -45,9 +80,9 @@ export default class ImageController extends PureComponent {
     }
   }
 
-  componentDidUpdate(prevProps) {
-    const { focused } = this.props;
-    if (prevProps.focused === true && focused === false) {
+  componentDidUpdate(prevProps: ControllerProps) {
+    const { presented } = this.props;
+    if (prevProps.presented === true && presented === false) {
       this.reset();
     }
   }
@@ -56,19 +91,20 @@ export default class ImageController extends PureComponent {
     this.unMount = true;
   }
 
-  getImageEl = el => {
+  getImageEl = (el: HTMLElement | null) => {
     if (el) {
-      this.target = el;
       transform(el);
+      this.target = el as TransformedElement;
     }
   };
 
-  checkPosition = (deltaX, deltaY) => {
-    const { onGiveupControl, containerHaveControl } = this.props;
+  checkPosition = (deltaX: number, deltaY: number) => {
+    if (!this.target) return;
+    const { onExceedLimit, containerFocused } = this.props;
     const { desktopMode } = this.state;
     const { left, right, top, bottom } = this.target.getBoundingClientRect();
     const { translateX, translateY, originX, originY, scaleX, scaleY } = this.target;
-    if (containerHaveControl && !desktopMode) return;
+    if (containerFocused && !desktopMode) return;
     const XcanMove =
       ((deltaX <= 0 || left < 0) && (deltaX >= 0 || right > window.innerWidth)) ||
       Math.abs(translateX + deltaX - originX * scaleX) < Math.abs(translateX - originX * scaleX);
@@ -79,9 +115,9 @@ export default class ImageController extends PureComponent {
     // If the image overflows or is moving towards the center of screen, it should be abled to move.
     if (XcanMove) {
       this.target.translateX += deltaX;
-    } else if (onGiveupControl && Math.abs(deltaY) < (YcanMove ? BUFFER : 20)) {
+    } else if (onExceedLimit && Math.abs(deltaY) < (YcanMove ? BUFFER : 20)) {
       // optimize for looong picture
-      onGiveupControl();
+      onExceedLimit();
     }
     if (YcanMove) {
       this.target.translateY += deltaY;
@@ -89,6 +125,7 @@ export default class ImageController extends PureComponent {
   };
 
   reset = () => {
+    if (!this.target) return;
     this.target.translateX = 0;
     this.target.translateY = 0;
     this.target.scaleX = 1;
@@ -97,7 +134,7 @@ export default class ImageController extends PureComponent {
     this.target.originY = 0;
   };
 
-  handleMove = e => {
+  handleMove = (e: any) => {
     e.preventDefault();
     window.requestAnimationFrame(() =>
       this.checkPosition(parseInt(e.deltaX, 10), parseInt(e.deltaY, 10)),
@@ -105,7 +142,8 @@ export default class ImageController extends PureComponent {
   };
 
   // Refer to https://github.com/AlloyTeam/AlloyCrop.
-  handleMultipointStart = e => {
+  handleMultipointStart = (e: any) => {
+    if (!this.target) return;
     const cr = this.target.getBoundingClientRect();
     const realX = (e.touches[0].pageX + e.touches[1].pageX) / 2;
     const realY = (e.touches[0].pageY + e.touches[1].pageY) / 2;
@@ -124,7 +162,7 @@ export default class ImageController extends PureComponent {
     this.initScale = this.target.scaleX;
   };
 
-  handleDoubleClick = e => {
+  handleDoubleClick = (e: any) => {
     const { desktopMode } = this.state;
     this.setState({
       desktopMode: !desktopMode,
@@ -133,7 +171,8 @@ export default class ImageController extends PureComponent {
     this.handleDoubleTap(e);
   };
 
-  handleDoubleTap = e => {
+  handleDoubleTap = (e: any) => {
+    if (!this.target) return;
     if (this.target.scaleX > 1) {
       this.reset();
     } else {
@@ -160,30 +199,32 @@ export default class ImageController extends PureComponent {
     }
   };
 
-  handlePinch = e => {
+  handlePinch = (e: any) => {
+    if (!this.target) return;
     const scale = Math.max(Math.min(4, this.initScale * e.scale), 1);
     this.target.scaleX = scale;
     this.target.scaleY = scale;
   };
 
-  handleTouchEnd = e => {
+  handleTouchEnd = (e: SyntheticEvent) => {
     e.preventDefault();
   };
 
-  handleMultipointEnd = e => {
+  handleMultipointEnd = (e: any) => {
+    if (!this.target) return;
     if (this.target.scaleX <= 1 && e.scale < 1) {
       this.reset();
     }
   };
 
-  handleMouseDown = e => {
+  handleMouseDown = (e: any) => {
     this.clientX = e.clientX;
     this.clientY = e.clientY;
     e.target.addEventListener('mousemove', this.handleMouseMove);
     e.target.addEventListener('mouseup', this.handleMouseUp);
   };
 
-  handleMouseMove = e => {
+  handleMouseMove = (e: any) => {
     e.deltaX = e.clientX - this.clientX;
     e.deltaY = e.clientY - this.clientY;
     this.clientX = e.clientX;
@@ -191,30 +232,19 @@ export default class ImageController extends PureComponent {
     this.handleMove(e);
   };
 
-  handleMouseUp = e => {
+  handleMouseUp = (e: any) => {
     e.target.removeEventListener('mousemove', this.handleMouseMove);
     e.target.removeEventListener('mouseup', this.handleMouseUp);
   };
 
-  handleDrag = e => {
+  handleDrag = (e: any) => {
     e.preventDefault();
   };
 
   render() {
     const { isLoaded } = this.state;
-    const {
-      url,
-      alt,
-      onGiveupControl,
-      focused,
-      loadingIcon,
-      containerHaveControl,
-      ...other
-    } = this.props;
+    const { url, onExceedLimit, presented, loadingIcon, containerFocused, ...other } = this.props;
     let loading = loadingIcon;
-    if (typeof loadingIcon === 'function') {
-      loading = loadingIcon(url);
-    }
     return isLoaded ? (
       <AlloyFinger
         onTouchEnd={this.handleTouchEnd}
@@ -230,7 +260,6 @@ export default class ImageController extends PureComponent {
           <img
             onDragStart={this.handleDrag}
             className="image-slides-content"
-            alt={alt}
             src={url}
             ref={this.getImageEl}
             style={this.style}
@@ -247,17 +276,3 @@ export default class ImageController extends PureComponent {
     );
   }
 }
-
-ImageController.defaultProps = {
-  alt: 'picture',
-  focused: false,
-  loadingIcon: (
-    <div className="image-slides-loading">
-      <div />
-      <div />
-      <div />
-      <div />
-      <div />
-    </div>
-  ),
-};
