@@ -47,6 +47,6 @@ ReactDOM.render(<ImageSlides images={images} isOpen />, document.getElementById(
 | isOpen         |     bool     |  false  |          | Whether the component is open                                       |
 | index          |    number    |    0    |          | Index of the first image to display                                 |
 | loadingIcon    | func \| node |         |          | The component displayed when the image is loading                   |
-| noTapClose     |     bool     |  false  |          | If `true`, the close event will not be triggered by single tap.     |
+| tapClose       |     bool     |  true   |          | If `false`, the close event will not be triggered by single tap.    |
 | onClose        |     func     |         |          | Callback fired when the component closes                            |
 | onChange       |     func     |         |          | Callback fired when the index changes                               |
