@@ -1,5 +1,4 @@
 import React, { PureComponent, ReactNode } from 'react';
-import PropTypes from 'prop-types';
 import transform from 'css3transform';
 import AlloyFinger from 'alloyfinger/react/AlloyFinger';
 import ImageController, { TransformedElement } from '../ImageController';
@@ -166,7 +165,7 @@ export default class ImageSlides extends PureComponent<SlidesProps, SlidesStates
   };
 
   transition(time: number, direction: 'prev' | 'next' | 'noMove') {
-    if (!this.containerEl) return () => {};
+    if (!this.containerEl) return () => null;
     const { index } = this.state;
     const { images } = this.props;
     const boardWidth = GUTTER_WIDTH + window.innerWidth;
@@ -288,8 +287,7 @@ export default class ImageSlides extends PureComponent<SlidesProps, SlidesStates
                 <path
                   stroke="#eee"
                   fill="#eee"
-                  d="M15.41,16.59L10.83,12l4.58-4.59L14,6l-6,6l6,6L15.41,16.59z"
-                />
+                  d="M15.41,16.59L10.83,12l4.58-4.59L14,6l-6,6l6,6L15.41,16.59z"/>
               </svg>
             </button>
           ) : null}
@@ -306,8 +304,7 @@ export default class ImageSlides extends PureComponent<SlidesProps, SlidesStates
                 <path
                   stroke="#eee"
                   fill="#eee"
-                  d="M8.59,16.59L13.17,12L8.59,7.41L10,6l6,6l-6,6L8.59,16.59z"
-                />
+                  d="M8.59,16.59L13.17,12L8.59,7.41L10,6l6,6l-6,6L8.59,16.59z"/>
               </svg>
             </button>
           ) : null}

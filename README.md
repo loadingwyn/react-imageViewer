@@ -39,14 +39,14 @@ ReactDOM.render(<ImageSlides images={images} isOpen />, document.getElementById(
 
 ## Apis
 
-| Property       |     Type     | Default | Required | Description                                                         |
-| :------------- | :----------: | :-----: | :------: | :------------------------------------------------------------------ |
-| addon          |     func     |         |          | Display extra content of the image (addon must return a react node) |
-| showPageButton |     bool     |  false  |          | Display page buttons                                                |
-| images         |    array     |         |   yes    | Image urls to display                                               |
-| isOpen         |     bool     |  false  |          | Whether the component is open                                       |
-| index          |    number    |    0    |          | Index of the first image to display                                 |
-| loadingIcon    | func \| node |         |          | The component displayed when the image is loading                   |
-| tapClose       |     bool     |  true   |          | If `false`, the close event will not be triggered by single tap.    |
-| onClose        |     func     |         |          | Callback fired when the component closes                            |
-| onChange       |     func     |         |          | Callback fired when the index changes                               |
+| Property       |  Type  | Default | Required | Description                                                         |
+| :------------- | :----: | :-----: | :------: | :------------------------------------------------------------------ |
+| addon          |  func  |         |          | Display extra content of the image (addon must return a react node) |
+| showPageButton |  bool  |  false  |          | Display page buttons                                                |
+| images         | array  |         |   yes    | Image urls to display                                               |
+| isOpen         |  bool  |  false  |          | Whether the component is open                                       |
+| index          | number |    0    |          | Index of the first image to display                                 |
+| loadingIcon    |  node  |         |          | Placeholder when image is loading                                   |
+| tapClose       |  bool  |  true   |          | If `false`, the close event will not be triggered by single tap.    |
+| onClose        |  func  |         |          | Callback fired when the component closes                            |
+| onChange       |  func  |         |          | Callback fired when the index changes                               |
