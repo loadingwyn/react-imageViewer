@@ -1,6 +1,5 @@
-import React, { PureComponent, SyntheticEvent } from 'react';
+import React, { PureComponent } from 'react';
 import ReactDOM from 'react-dom';
-import PropTypes from 'prop-types';
 import classNames from 'classnames';
 import './style.css';
 
@@ -77,8 +76,7 @@ export default class Overlay extends PureComponent<OverlayProps> {
       <div
         className={classNames('image-slides-overlay', className)}
         ref={this.getLayer}
-        {...other}
-      />,
+        {...other}/>,
       this.node,
     );
   }

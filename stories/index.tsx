@@ -11,10 +11,9 @@ const images = [
 
 storiesOf('ImageSlides', module).add('ImageSlides', () => (
   <ImageSlides
-    tapClose={false}
+    tapClose={true}
     images={images}
     isOpen
     showPageButton
-    onChange={(index: number) => console.log(index)}
-  />
+    onChange={(index: number) => console.log(index)}/>
 ));

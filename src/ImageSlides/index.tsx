@@ -310,7 +310,8 @@ export default class ImageSlides extends PureComponent<SlidesProps, SlidesStates
           ) : null}
           <AlloyFinger
             // onSwipe={this.handleSwipe}
-            onSingleTap={tapClose || this.handleCloseViewer}
+            onSingleTap={tapClose
+              ? this.handleCloseViewer : null}
             onTouchEnd={this.handleTouchEnd}
             onPressMove={this.handleContainerMove}>
             <div className="image-slides-container" ref={this.getContainer}>
