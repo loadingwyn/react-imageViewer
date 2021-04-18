@@ -244,7 +244,7 @@ export default class ImageController extends PureComponent<ControllerProps, Cont
   render() {
     const { isLoaded } = this.state;
     const { url, onExceedLimit, presented, loadingIcon, containerFocused, ...other } = this.props;
-    let loading = loadingIcon;
+    const loading = loadingIcon;
     return isLoaded ? (
       <AlloyFinger
         onTouchEnd={this.handleTouchEnd}
