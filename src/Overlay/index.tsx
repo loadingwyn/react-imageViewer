@@ -251,10 +251,8 @@ class Over {
   }
 
   componentWillUnmount() {
-    if (this.layer) {
-      this.layer.removeEventListener('touchstart', preventDefault);
-    }
     const { parentSelector } = this.props;
+    document.body.classList.remove('image-slides-overlay-scrolling-preventer');
     const parent = parentSelector();
     if (!this.node) return;
     parent.removeChild(this.node);
@@ -264,7 +262,7 @@ class Over {
   getLayer = (el: HTMLDivElement) => {
     if (el) {
       this.layer = el;
-      el.addEventListener('touchstart', preventDefault);
+      document.body.classList.add('image-slides-overlay-scrolling-preventer');
     }
   };
 
@@ -274,7 +272,8 @@ class Over {
       <div
         className={classNames('image-slides-overlay', className)}
         ref={this.getLayer}
-        {...other}/>,
+        {...other}
+      />,
       this.node,
     );
   }

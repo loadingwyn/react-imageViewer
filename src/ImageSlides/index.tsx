@@ -20,7 +20,7 @@ function preload(url: string): Promise<any> | null {
   return null;
 }
 type Operations = {
-  close: (e?: MouseEvent | TouchEvent) => void;
+  close: (e: any) => void;
   next: () => void;
   prev: () => void;
 };
@@ -32,7 +32,7 @@ interface SlidesProps {
   tapClose: boolean;
   loadingIcon?: ReactNode;
   addon?: (index: number, operations: Operations) => ReactNode;
-  onClose?: (e: MouseEvent | TouchEvent, index: number) => void;
+  onClose?: (e: any, index: number) => void;
   onChange?: (index: number) => void;
 }
 
@@ -80,6 +80,7 @@ export default class ImageSlides extends PureComponent<SlidesProps, SlidesStates
     preload(images[index]);
     preload(images[index + 1]);
     preload(images[index - 1]);
+    this.updatePosition();
   }
 
   static getDerivedStateFromProps(props: SlidesProps, state: SlidesStates) {
@@ -251,7 +252,7 @@ export default class ImageSlides extends PureComponent<SlidesProps, SlidesStates
     }
   };
 
-  handleCloseViewer = (e: MouseEvent) => {
+  handleCloseViewer = (e: any) => {
     const { index } = this.state;
     const { onClose } = this.props;
     this.setState({
@@ -265,6 +266,7 @@ export default class ImageSlides extends PureComponent<SlidesProps, SlidesStates
     const { images, addon, tapClose, loadingIcon, showPageButton } = this.props;
     const displayMax = index + 2 > images.length ? images.length : index + 2;
     const displayMin = index - 1 < 0 ? 0 : index - 1;
+
     return isOpen ? (
       <Overlay>
         <div className="image-slides-view-port">
@@ -287,7 +289,8 @@ export default class ImageSlides extends PureComponent<SlidesProps, SlidesStates
                 <path
                   stroke="#eee"
                   fill="#eee"
-                  d="M15.41,16.59L10.83,12l4.58-4.59L14,6l-6,6l6,6L15.41,16.59z"/>
+                  d="M15.41,16.59L10.83,12l4.58-4.59L14,6l-6,6l6,6L15.41,16.59z"
+                />
               </svg>
             </button>
           ) : null}
@@ -304,17 +307,20 @@ export default class ImageSlides extends PureComponent<SlidesProps, SlidesStates
                 <path
                   stroke="#eee"
                   fill="#eee"
-                  d="M8.59,16.59L13.17,12L8.59,7.41L10,6l6,6l-6,6L8.59,16.59z"/>
+                  d="M8.59,16.59L13.17,12L8.59,7.41L10,6l6,6l-6,6L8.59,16.59z"
+                />
               </svg>
             </button>
           ) : null}
           <AlloyFinger
             // onSwipe={this.handleSwipe}
-            onSingleTap={tapClose
-              ? this.handleCloseViewer : null}
+            onSingleTap={tapClose ? this.handleCloseViewer : null}
             onTouchEnd={this.handleTouchEnd}
             onPressMove={this.handleContainerMove}>
-            <div className="image-slides-container" ref={this.getContainer}>
+            <div
+              className="image-slides-container"
+              ref={this.getContainer}
+              onClick={tapClose ? this.handleCloseViewer : undefined}>
               {images.slice(displayMin, displayMax).map((url, ind) => (
                 /* eslint-disable */
                 <ImageController
