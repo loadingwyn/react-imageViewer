@@ -3,12 +3,12 @@ const config = require('../webpack.config');
 const os = require('os');
 const superstatic = require('superstatic').server;
 
-Object.assign(config, {
+const compiler = webpack({
+  ...config,
   mode: 'development',
-  entry: './demo/demo.js',
+  entry: './demo/demo.tsx',
   externals: [],
 });
-const compiler = webpack(config);
 const ifaces = os.networkInterfaces();
 let lookupIpAddress = null;
 
@@ -22,18 +22,34 @@ const app = superstatic({
   host: lookupIpAddress,
   port: 8080,
 });
-compiler.watch({
-  // Example watchOptions
-  aggregateTimeout: 300,
-  poll: undefined,
-}, (err, stats) => {
-  if (err || stats.hasErrors()) {
-    console.log('Error!');
-    if (err && err.details) {
-      console.error(err.details);
+compiler.watch(
+  {
+    // Example [watchOptions](/configuration/watch/#watchoptions)
+    aggregateTimeout: 300,
+    poll: undefined,
+  },
+  (err, stats) => {
+    if (err) {
+      console.error(err.stack || err);
+      if (err.details) {
+        console.error(err.details);
+      }
+      return;
     }
-  }
-});
+
+    const info = stats.toJson();
+
+    if (stats.hasErrors()) {
+      console.error(info.errors);
+    }
+
+    if (stats.hasWarnings()) {
+      console.warn(info.warnings);
+    }
+
+    // Log result..
+  },
+);
 
 app.listen(() => {
   console.log(`Demo started on => http://${lookupIpAddress}:8080/demo`);

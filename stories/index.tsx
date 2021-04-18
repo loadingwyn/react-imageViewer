@@ -1,5 +1,5 @@
+import React from 'react';
 import { storiesOf } from '@storybook/react';
-import React, { CSSProperties } from 'react';
 import ImageSlides from '../src/ImageSlides';
 
 const images = [
@@ -11,9 +11,10 @@ const images = [
 
 storiesOf('ImageSlides', module).add('ImageSlides', () => (
   <ImageSlides
-    tapClose={true}
+    tapClose
     images={images}
     isOpen
     showPageButton
-    onChange={(index: number) => console.log(index)}/>
+    onChange={(index: number) => console.log(index)}
+  />
 ));

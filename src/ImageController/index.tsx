@@ -39,6 +39,7 @@ export default class ImageController extends PureComponent<ControllerProps, Cont
       </div>
     ),
   };
+
   clientX = 0;
 
   clientY = 0;
@@ -50,6 +51,7 @@ export default class ImageController extends PureComponent<ControllerProps, Cont
   unMount = false;
 
   target: TransformedElement | null = null;
+
   constructor(props: Readonly<ControllerProps>) {
     super(props);
     this.state = {
@@ -244,7 +246,7 @@ export default class ImageController extends PureComponent<ControllerProps, Cont
   render() {
     const { isLoaded } = this.state;
     const { url, onExceedLimit, presented, loadingIcon, containerFocused, ...other } = this.props;
-    let loading = loadingIcon;
+    const loading = loadingIcon;
     return isLoaded ? (
       <AlloyFinger
         onTouchEnd={this.handleTouchEnd}

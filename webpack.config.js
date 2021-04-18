@@ -42,20 +42,4 @@ module.exports = {
       },
     ],
   },
-  //   plugins:
-  //  [
-  //    new webpack.optimize.UglifyJsPlugin({
-  //      beautify: false,
-  //      comments: false,
-  //      sourceMap: true,
-  //      compress: {
-  //        warnings: false,
-  //        drop_console: true,
-  //        collapse_vars: true,
-  //        reduce_vars: true,
-  //      },
-  //    }),
-  //    new webpack.optimize.ModuleConcatenationPlugin(),
-  //    new BundleAnalyzerPlugin(),
-  //  ],
 };

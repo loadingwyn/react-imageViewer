@@ -1,10 +1,15 @@
 {
   "parser": "@typescript-eslint/parser", // Specifies the ESLint parser
   "extends": [
-    "plugin:react/recommended", // Uses the recommended rules from @eslint-plugin-react
+    "airbnb",
+    "airbnb/hooks",
+    "prettier",
+    "prettier/react",
     "prettier/@typescript-eslint",
-    "plugin:@typescript-eslint/recommended" // Uses the recommended rules from @typescript-eslint/eslint-plugin
+    "plugin:@typescript-eslint/recommended",
+    "plugin:import/typescript"
   ],
+  "plugins": ["@typescript-eslint"],
   "parserOptions": {
     "ecmaVersion": 2018, // Allows for the parsing of modern ECMAScript features
     "sourceType": "module", // Allows for the use of imports
@@ -25,21 +30,14 @@
     "jest": true,
     "es6": true
   },
+  "settings": {
+    "import/parsers": {
+      "@typescript-eslint/parser": [".ts", ".tsx"]
+    },
+    "import/extensions": [".js", ".jsx"]
+  },
   "rules": {
-    "jsx-a11y/no-static-element-interactions": 0,
-    "react/jsx-props-no-spreading": 0,
-    "react/prop-types": 0,
-    "react/button-has-type": 0,
-    "react/jsx-filename-extension": [
-      1,
-      {
-        "extensions": [".js", ".jsx"]
-      }
-    ],
-    "react/require-default-props": 1,
-    "react/jsx-closing-bracket-location": [1, "after-props"],
-    "react/sort-comp": 0,
-    "react/forbid-prop-types": 0,
+    "import/extensions": "off",
     "func-names": 0,
     "prefer-arrow-callback": 0,
     "arrow-parens": ["error", "as-needed"],
