@@ -2,7 +2,7 @@ import { PureComponent, ReactNode } from 'react';
 import { TransformedElement } from '../ImageController';
 import './style.css';
 declare type Operations = {
-    close: (e?: MouseEvent | TouchEvent) => void;
+    close: (e: any) => void;
     next: () => void;
     prev: () => void;
 };
@@ -14,7 +14,7 @@ interface SlidesProps {
     tapClose: boolean;
     loadingIcon?: ReactNode;
     addon?: (index: number, operations: Operations) => ReactNode;
-    onClose?: (e: MouseEvent | TouchEvent, index: number) => void;
+    onClose?: (e: any, index: number) => void;
     onChange?: (index: number) => void;
 }
 interface SlidesStates {
@@ -50,7 +50,7 @@ export default class ImageSlides extends PureComponent<SlidesProps, SlidesStates
     updatePosition: () => void;
     next: () => void;
     prev: () => void;
-    handleCloseViewer: (e: MouseEvent) => void;
+    handleCloseViewer: (e: any) => void;
     render(): JSX.Element | null;
 }
 export {};
