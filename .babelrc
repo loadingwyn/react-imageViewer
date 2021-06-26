@@ -6,19 +6,17 @@
         "modules": false,
         "targets": {
           "browsers": ["Chrome >= 37", "ff >= 45", "Safari > 8", "IE >= 10"]
-        }
+        },
+        "loose": true
       }
-    ],
-    "airbnb"
+    ]
+    // "airbnb"
   ],
-  "plugins": [
-    "@babel/plugin-proposal-class-properties",
-    "@babel/plugin-proposal-object-rest-spread"
-  ],
-  "env": {
-    "test": {
-      "presets": ["@babel/env", "@babel/react"],
-      "plugins": ["@babel/transform-modules-commonjs"]
-    }
-  }
+  "plugins": [["@babel/plugin-proposal-class-properties", { "loose": true }]]
+  // "env": {
+  //   "test": {
+  //     "presets": ["@babel/env", "@babel/react"],
+  //     "plugins": ["@babel/transform-modules-commonjs"]
+  //   }
+  // }
 }

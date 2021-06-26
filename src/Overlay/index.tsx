@@ -1,280 +1,313 @@
 import * as React from 'react';
-import ReactDOM from 'react-dom';
-import classNames from 'classnames';
+import { createPortal } from 'react-dom';
+import {
+  cloneElement,
+  forwardRef,
+  ReactElement,
+  KeyboardEvent,
+  SyntheticEvent,
+  useCallback,
+  useRef,
+  useState,
+  useEffect,
+} from 'react';
+import createChainedFunction from '../utils/createChainedFunction';
 import './style.css';
+import {
+  getPaddingRight,
+  getScrollbarSize,
+  isOverflowing,
+  ownerDocument,
+  ownerWindow,
+} from '../utils/disableScrolling';
+import useEnhancedEffect from '../utils/useEnhancedEffect';
 
-let originalBodyOverflow: string | null = null;
-
-function preventDefault(e: Event) {
-  e.preventDefault();
+export function setRef<T>(
+  ref: React.MutableRefObject<T | null> | ((instance: T | null) => void) | null | undefined,
+  value: T | null,
+): void {
+  if (typeof ref === 'function') {
+    ref(value);
+  } else if (ref) {
+    ref.current = value;
+  }
 }
-interface OverlayProps {
+
+export function useForkRef<Instance>(
+  refA: React.Ref<Instance> | null | undefined,
+  refB: React.Ref<Instance> | null | undefined,
+): React.Ref<Instance> | null {
   /**
-   * The children to render into the `container`.
+   * This will create a new function if the ref props change and are defined.
+   * This means react will call the old forkRef with `null` and the new forkRef
+   * with the ref. Cleanup naturally emerges from this behavior.
    */
-  children?: React.ReactNode;
-  /**
-   * An HTML element or function that returns one.
-   * The `container` will have the portal children appended to it.
-   *
-   * By default, it uses the body of the top-level document object,
-   * so it's simply `document.body` most of the time.
-   */
-  container?: Element | (() => Element | null) | null;
+  return React.useMemo(() => {
+    if (refA == null && refB == null) {
+      return null;
+    }
+    return refValue => {
+      setRef(refA, refValue);
+      setRef(refB, refValue);
+    };
+  }, [refA, refB]);
+}
+export function ariaHidden(element: Element, show: boolean): void {
+  if (show) {
+    element.setAttribute('aria-hidden', 'true');
+  } else {
+    element.removeAttribute('aria-hidden');
+  }
+}
+export interface RenderModalDialogProps {
+  style: React.CSSProperties | undefined;
+  className: string | undefined;
+  tabIndex: number;
+  role: string;
+  ref: React.RefCallback<Element>;
+  'aria-modal': boolean | undefined;
+}
+
+export interface RenderModalBackdropProps {
+  ref: React.RefCallback<Element>;
+  onClick: (event: React.SyntheticEvent) => void;
+}
+export interface PortalProps {
+  onEnter?(node: HTMLElement, isAppearing: boolean): any;
+  onExited?(node: HTMLElement): any;
+  children: ReactElement;
+  backdrop?: ReactElement;
+  role?: string;
+  style?: React.CSSProperties;
   className?: string;
+  disablePortal?: boolean;
+  disableEscapeKeyDown?: boolean;
+  open: boolean;
+  container?: HTMLElement;
+  keepMounted?: boolean;
+  onOpen?: () => void;
+  onClose?: (e: SyntheticEvent, reason: string) => void;
+  onHide?: () => void;
+  onKeyDown?: (e: KeyboardEvent) => void;
+  hideBackdrop?: boolean;
+  onBackdropClick?: (e: React.SyntheticEvent) => void;
+  containerClassName?: string;
+  closeAfterTransition?: boolean;
+  keyboard?: boolean;
+  // transition?: ModalTransitionComponent;
+  // backdropTransition?: ModalTransitionComponent;
 }
 
-const Overlay: React.FC<OverlayProps> = (
-  {
-    children,
-    container,
-    className
-  }
-) => {
-    const {
-    BackdropComponent,
-    BackdropProps,
-    children,
-    classes: classesProp,
-    className,
-    closeAfterTransition = false,
-    component = 'div',
-    components = {},
-    componentsProps = {},
-    container,
-    disableAutoFocus = false,
-    disableEnforceFocus = false,
-    disableEscapeKeyDown = false,
-    disablePortal = false,
-    disableRestoreFocus = false,
-    disableScrollLock = false,
-    hideBackdrop = false,
-    keepMounted = false,
-    // private
-    // eslint-disable-next-line react/prop-types
-    manager = defaultManager,
-    onBackdropClick,
-    onClose,
-    onKeyDown,
-    open,
-    /* eslint-disable react/prop-types */
-    theme,
-    onTransitionEnter,
-    onTransitionExited,
-    ...other
-  } = props;
+export const Portal = forwardRef(
+  (
+    {
+      backdrop,
+      children,
+      className,
+      container = document.body,
+      disablePortal,
+      disableEscapeKeyDown,
+      hideBackdrop,
+      keepMounted,
+      onBackdropClick,
+      onOpen,
+      onClose,
+      onExited,
+      onEnter,
+      onKeyDown,
+      open = false,
+      closeAfterTransition,
+      style,
+    }: PortalProps,
+    ref: React.ForwardedRef<any>,
+  ) => {
+    const [exited, setExited] = useState(true);
+    const [originalProperties, setOriginalProperties] = useState([] as any[]);
+    const [mountNode, setMountNode] = useState<HTMLElement>();
+    const modalRef = useRef<HTMLDivElement>(null);
+    const handleModalRef = useForkRef(modalRef, ref);
+    const hasTransition = Object.prototype.hasOwnProperty.call(children.props, 'in');
 
-  const [exited, setExited] = React.useState(true);
-  const modal = React.useRef({});
-  const mountNodeRef = React.useRef(null);
-  const modalRef = React.useRef(null);
-  const handleRef = useForkRef(modalRef, ref);
+    const handleMounted = useCallback(() => {
+      if (onOpen) {
+        onOpen();
+      }
 
-  const getDoc = () => ownerDocument(mountNodeRef.current);
-  const getModal = () => {
-    modal.current.modalRef = modalRef.current;
-    modal.current.mountNode = mountNodeRef.current;
-    return modal.current;
-  };
+      if (isOverflowing(container)) {
+        // Compute the size before applying overflow hidden to avoid any scroll jumps.
+        const scrollbarSize = getScrollbarSize(ownerDocument(container));
+        setOriginalProperties(prevState => [
+          ...prevState,
+          [container, 'padding-right', container?.style.paddingRight],
+        ]);
+        // Use computed style, here to get the real padding to add our scrollbar width.
+        container.style.paddingRight = `${getPaddingRight(container) + scrollbarSize}px`;
+      }
 
-  const handleMounted = () => {
-    // Fix a bug on Chrome where the scroll isn't initially 0.
-    modalRef.current.scrollTop = 0;
-  };
+      setOriginalProperties(prevState => [
+        ...prevState,
+        [container, 'touch-action', container?.style.touchAction],
+      ]);
+      container.style.touchAction = 'none';
+      // Block the scroll even if no scrollbar is visible to account for mobile keyboard
+      // screensize shrink.
+      const parent = container.parentElement;
+      const containerWindow = ownerWindow(container);
+      const scrollContainer =
+        parent?.nodeName === 'HTML' &&
+        containerWindow.getComputedStyle(parent).overflowY === 'scroll'
+          ? parent
+          : container;
+      setOriginalProperties(prevState => [
+        ...prevState,
+        [scrollContainer, 'overflow', scrollContainer.style.overflow],
+      ]);
+      scrollContainer.style.overflow = 'hidden';
 
-  const handleOpen = useEventCallback(() => {
-    manager.add(getModal(), resolvedContainer);
+      if (modalRef?.current) {
+        // Fix a bug on Chrome where the scroll isn't initially 0.
+        modalRef.current.scrollTop = 0;
+      }
+    }, [onOpen, modalRef, container]);
+    const handleClose = useCallback(() => {
+      originalProperties.forEach(([el, property, value]) => {
+        if (value) {
+          el.style.setProperty(property, value);
+        } else {
+          el.style.removeProperty(property);
+        }
+        setOriginalProperties([]);
+      });
+    }, [originalProperties]);
+    const handlePortalRef = useCallback(
+      node => {
+        if (!node) {
+          return;
+        }
+        if (open) {
+          handleMounted();
+        } else if (modalRef.current) {
+          ariaHidden(modalRef.current, true);
+        }
+      },
+      [open, handleMounted],
+    );
+    useEffect(() => {
+      if (open) {
+        handleMounted();
+      } else if (!hasTransition || !closeAfterTransition) {
+        handleClose();
+      }
+    }, [handleMounted, handleClose, closeAfterTransition, hasTransition, open]);
+    useEnhancedEffect(() => {
+      if (mountNode && !disablePortal) {
+        handlePortalRef(mountNode);
+        return () => {
+          handleClose();
+          handlePortalRef(null);
+        };
+      }
+      return undefined;
+    }, [handlePortalRef, mountNode, disablePortal]);
+    useEnhancedEffect(() => {
+      if (!disablePortal) {
+        setMountNode(container || document.body);
+      }
+    }, [container, disablePortal]);
 
-    // The element was already mounted.
-    if (modalRef.current) {
-      handleMounted();
-    }
-  });
-
-  const isTopModal = React.useCallback(() => manager.isTopModal(getModal()), [manager]);
-
-  const handleClose = React.useCallback(() => {
-    manager.remove(getModal());
-  }, [manager]);
-
-  if (!keepMounted && !open && (exited)) {
-    return null;
-  }
-
-  const handleEnter = () => {
-    setExited(false);
-
-    if (onTransitionEnter) {
-      onTransitionEnter();
-    }
-  };
-
-  const handleExited = () => {
-    setExited(true);
-
-    if (onTransitionExited) {
-      onTransitionExited();
-    }
-
-    if (closeAfterTransition) {
-      handleClose();
-    }
-  };
-
-  const handleBackdropClick = (event) => {
-    if (event.target !== event.currentTarget) {
-      return;
-    }
-
-    if (onBackdropClick) {
-      onBackdropClick(event);
-    }
-
-    if (onClose) {
-      onClose(event, 'backdropClick');
-    }
-  };
-
-  const handleKeyDown = (event) => {
-    if (onKeyDown) {
-      onKeyDown(event);
-    }
-
-    // The handler doesn't take event.defaultPrevented into account:
-    //
-    // event.preventDefault() is meant to stop default behaviors like
-    // clicking a checkbox to check it, hitting a button to submit a form,
-    // and hitting left arrow to move the cursor in a text input etc.
-    // Only special HTML elements have these default behaviors.
-    if (event.key !== 'Escape' || !isTopModal()) {
-      return;
+    if (!keepMounted && !open && (!hasTransition || exited)) {
+      return null;
     }
 
-    if (!disableEscapeKeyDown) {
-      // Swallow the event, in case someone is listening for the escape key on the body.
-      event.stopPropagation();
+    const handleEnter = (node: HTMLElement, isAppearing: boolean) => {
+      setExited(false);
+
+      if (onEnter) {
+        onEnter(node, isAppearing);
+      }
+    };
+
+    const handleExited = (node: HTMLElement) => {
+      setExited(true);
+
+      if (onExited) {
+        onExited(node);
+      }
+      if (closeAfterTransition) {
+        handleClose();
+      }
+    };
+
+    const handleBackdropClick = (event: SyntheticEvent) => {
+      if (event.target !== event.currentTarget) {
+        return;
+      }
+
+      if (onBackdropClick) {
+        onBackdropClick(event);
+      }
 
       if (onClose) {
-        onClose(event, 'escapeKeyDown');
+        onClose(event, 'backdropClick');
       }
+    };
+
+    const handleKeyDown = (event: KeyboardEvent) => {
+      if (onKeyDown) {
+        onKeyDown(event);
+      }
+
+      // The handler doesn't take event.defaultPrevented into account:
+      //
+      // event.preventDefault() is meant to stop default behaviors like
+      // clicking a checkbox to check it, hitting a button to submit a form,
+      // and hitting left arrow to move the cursor in a text input etc.
+      // Only special HTML elements have these default behaviors.
+      if (event.key !== 'Escape') {
+        return;
+      }
+
+      if (!disableEscapeKeyDown) {
+        // Swallow the event, in case someone is listening for the escape key on the body.
+        event.stopPropagation();
+
+        if (onClose) {
+          onClose(event, 'escapeKeyDown');
+        }
+      }
+    };
+
+    const childProps = {} as any;
+
+    if (children.props.tabIndex === undefined) {
+      childProps.tabIndex = children.props.tabIndex || '-1';
     }
-  };
-
-  const childProps = {};
-  if (children.props.tabIndex === undefined) {
-    childProps.tabIndex = children.props.tabIndex || '-1';
-  }
-
-  // It's a Transition like component
-  if (hasTransition) {
-    childProps.onEnter = createChainedFunction(handleEnter, children.props.onEnter);
-    childProps.onExited = createChainedFunction(handleExited, children.props.onExited);
-  }
-
-  const Root = components.Root || component;
-  const rootProps = componentsProps.root || {};
-
-      {/*
-       * Marking an element with the role presentation indicates to assistive technology
-       * that this element should be ignored; it exists to support the web application and
-       * is not meant for humans to interact with directly.
-       * https://github.com/evcohen/eslint-plugin-jsx-a11y/blob/master/docs/rules/no-static-element-interactions.md
-       */}
-      <Root
-        role="presentation"
-        {...rootProps}
-        {...(!isHostComponent(Root) && {
-          as: component,
-          styleProps: { ...styleProps, ...rootProps.styleProps },
-          theme,
-        })}
-        {...other}
-        ref={handleRef}
-        onKeyDown={handleKeyDown}
-        className={clsx(classes.root, rootProps.className, className)}
-      >
-        {!hideBackdrop && BackdropComponent ? (
-          <BackdropComponent open={open} onClick={handleBackdropClick} {...BackdropProps} />
-        ) : null}
-        <TrapFocus
-          disableEnforceFocus={disableEnforceFocus}
-          disableAutoFocus={disableAutoFocus}
-          disableRestoreFocus={disableRestoreFocus}
-          getDoc={getDoc}
-          isEnabled={isTopModal}
-          open={open}
-        >
-          {React.cloneElement(children, childProps)}
-        </TrapFocus>
-      </Root>
-  );
-  return ReactDOM.createPortal(children, document.body);
-  };
-
-export default Overlay;
-class Over {
-  static defaultProps = {
-    parentSelector() {
-      return document.body;
-    },
-  static preventScrolling() {
-    const { body } = document;
-    originalBodyOverflow = body.style.overflow;
-    body.style.overflow = 'hidden';
-  }
-
-  static allowScrolling() {
-    const { body } = document;
-    body.style.overflow = originalBodyOverflow || '';
-    originalBodyOverflow = null;
-  }
-
-  node = document.createElement('div');
-  layer: HTMLDivElement | null = null;
-
-  componentDidMount() {
-    const { parentSelector } = this.props;
-    Overlay.preventScrolling();
-    const parent = parentSelector();
-    parent.appendChild(this.node);
-  }
-
-  componentDidUpdate(prevProps: OverlayProps) {
-    const { parentSelector } = this.props;
-    const currentParent = parentSelector();
-    const prevParent = prevProps.parentSelector();
-
-    if (prevParent !== currentParent) {
-      prevParent.removeChild(this.node);
-      currentParent.appendChild(this.node);
+    if (hasTransition) {
+      childProps.onEnter = createChainedFunction(handleEnter, children.props.onEnter);
+      childProps.onExited = createChainedFunction(handleExited, children.props.onExited);
     }
-  }
-
-  componentWillUnmount() {
-    const { parentSelector } = this.props;
-    document.body.classList.remove('image-slides-overlay-scrolling-preventer');
-    const parent = parentSelector();
-    if (!this.node) return;
-    parent.removeChild(this.node);
-    Overlay.allowScrolling();
-  }
-
-  getLayer = (el: HTMLDivElement) => {
-    if (el) {
-      this.layer = el;
-      document.body.classList.add('image-slides-overlay-scrolling-preventer');
-    }
-  };
-
-  render() {
-    const { className, parentSelector, ...other } = this.props;
-    return ReactDOM.createPortal(
+    const content = (
       <div
-        className={classNames('image-slides-overlay', className)}
-        ref={this.getLayer}
-        {...other}
-      />,
-      this.node,
+        ref={handleModalRef}
+        onKeyDown={handleKeyDown}
+        role="presentation"
+        className="react-image-viewer-portal">
+        {!hideBackdrop && backdrop
+          ? cloneElement(backdrop, {
+              onClick: handleBackdropClick,
+              ref: disablePortal ? handlePortalRef : null,
+            })
+          : null}
+        {cloneElement(children, childProps)}
+      </div>
     );
-  }
-}
+
+    if (disablePortal) {
+      return content;
+    }
+    return mountNode ? createPortal(content, mountNode) : null;
+  },
+);
+
+Portal.displayName = 'Portal';
+export default Portal;

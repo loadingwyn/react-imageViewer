@@ -1,8 +1,8 @@
-import React, { PureComponent, ReactNode } from 'react';
+import React, { Component, PureComponent, ReactNode, useState } from 'react';
 import transform from 'css3transform';
 import AlloyFinger from 'alloyfinger/react/AlloyFinger';
 import ImageController, { TransformedElement } from '../ImageController';
-import Overlay from '../Overlay';
+import { Portal } from '../Overlay';
 import './style.css';
 
 const GUTTER_WIDTH = 10;
@@ -24,7 +24,7 @@ type Operations = {
   next: () => void;
   prev: () => void;
 };
-interface SlidesProps {
+export interface SlidesProps {
   images: string[];
   index: number;
   isOpen: boolean;
@@ -44,7 +44,35 @@ interface SlidesStates {
   prevIndex: number;
 }
 
-export default class ImageSlides extends PureComponent<SlidesProps, SlidesStates> {
+export function Gallery ({
+  isOpen,
+  images
+}: SlidesProps) {
+  const [index, setIndex] = useState(0);
+    return <Portal open={isOpen}>
+        <div className="image-slides-view-port" aria-roledescription="carousel">
+          <AlloyFinger
+            // onSwipe={this.handleSwipe}
+            onSingleTap={this.handleCloseViewer}
+            onTouchEnd={this.handleTouchEnd}
+            onPressMove={this.handleContainerMove}>
+            <div
+              className="image-slides-container"
+              ref={this.getContainer}
+              // onClick={tapClose ? this.handleCloseViewer : undefined}>
+            >
+                <ImageController
+                  onExceedLimit={this.getControl}
+                  url={images[index]}
+                  presented={}
+                />
+            </div>
+          </AlloyFinger>
+        </div>
+      </Portal>
+    ;
+}
+export default class ImageSlides extends Component<SlidesProps, SlidesStates> {
   static defaultProps = {
     images: [],
     index: 0,
@@ -52,6 +80,7 @@ export default class ImageSlides extends PureComponent<SlidesProps, SlidesStates
     tapClose: true,
     isOpen: false,
   };
+
   lastContainerOffsetX = 0;
 
   initialStyle = {};
@@ -127,14 +156,6 @@ export default class ImageSlides extends PureComponent<SlidesProps, SlidesStates
     }
   };
 
-  move = (e: any) => () => {
-    if (!this.containerEl) return;
-    const { focused } = this.state;
-    if (focused) {
-      this.containerEl.translateX += Math.floor(e.deltaX);
-    }
-  };
-
   handleTouchEnd = (e: any) => {
     e.preventDefault();
     if (!this.containerEl) return;
@@ -165,42 +186,6 @@ export default class ImageSlides extends PureComponent<SlidesProps, SlidesStates
     }
   };
 
-  transition(time: number, direction: 'prev' | 'next' | 'noMove') {
-    if (!this.containerEl) return () => null;
-    const { index } = this.state;
-    const { images } = this.props;
-    const boardWidth = GUTTER_WIDTH + window.innerWidth;
-    let startTime: number;
-    const startPos = this.containerEl.translateX;
-    const size =
-      (index === 0 && direction === 'prev') ||
-      (index === images.length - 1 && direction === 'next') ||
-      direction === 'noMove'
-        ? 0
-        : 1;
-    const step = (timestamp: number) => {
-      if (!this.containerEl) return;
-      if (!startTime) startTime = timestamp;
-      const progress = timestamp - startTime;
-      this.containerEl.translateX = Math.floor(
-        startPos +
-          (progress / time) *
-            (-boardWidth * (this.getMedianIndex() + (direction === 'next' ? size : -size)) -
-              startPos),
-      );
-      if (progress < time) {
-        window.requestAnimationFrame(step);
-      } else if (direction === 'next') {
-        this.next();
-      } else if (direction === 'prev') {
-        this.prev();
-      } else {
-        this.updatePosition();
-      }
-    };
-    return step;
-  }
-
   getMedianIndex() {
     const { index } = this.state;
     const { images } = this.props;
@@ -214,6 +199,14 @@ export default class ImageSlides extends PureComponent<SlidesProps, SlidesStates
     }
     return center;
   }
+
+  move = (e: any) => () => {
+    if (!this.containerEl) return;
+    const { focused } = this.state;
+    if (focused) {
+      this.containerEl.translateX += Math.floor(e.deltaX);
+    }
+  };
 
   updatePosition = () => {
     if (!this.containerEl) return;
@@ -261,6 +254,42 @@ export default class ImageSlides extends PureComponent<SlidesProps, SlidesStates
     if (onClose) onClose(e, index);
   };
 
+  transition(time: number, direction: 'prev' | 'next' | 'noMove') {
+    if (!this.containerEl) return () => null;
+    const { index } = this.state;
+    const { images } = this.props;
+    const boardWidth = GUTTER_WIDTH + window.innerWidth;
+    let startTime: number;
+    const startPos = this.containerEl.translateX;
+    const size =
+      (index === 0 && direction === 'prev') ||
+      (index === images.length - 1 && direction === 'next') ||
+      direction === 'noMove'
+        ? 0
+        : 1;
+    const step = (timestamp: number) => {
+      if (!this.containerEl) return;
+      if (!startTime) startTime = timestamp;
+      const progress = timestamp - startTime;
+      this.containerEl.translateX = Math.floor(
+        startPos +
+          (progress / time) *
+            (-boardWidth * (this.getMedianIndex() + (direction === 'next' ? size : -size)) -
+              startPos),
+      );
+      if (progress < time) {
+        window.requestAnimationFrame(step);
+      } else if (direction === 'next') {
+        this.next();
+      } else if (direction === 'prev') {
+        this.prev();
+      } else {
+        this.updatePosition();
+      }
+    };
+    return step;
+  }
+
   render() {
     const { index, isOpen, focused } = this.state;
     const { images, addon, tapClose, loadingIcon, showPageButton } = this.props;
@@ -268,8 +297,8 @@ export default class ImageSlides extends PureComponent<SlidesProps, SlidesStates
     const displayMin = index - 1 < 0 ? 0 : index - 1;
 
     return isOpen ? (
-      <Overlay>
-        <div className="image-slides-view-port">
+      <Portal open={isOpen}>
+        <div className="image-slides-view-port" aria-roledescription="carousel">
           {addon &&
             addon(index, {
               close: this.handleCloseViewer,
@@ -277,7 +306,10 @@ export default class ImageSlides extends PureComponent<SlidesProps, SlidesStates
               prev: this.prev,
             } as Operations)}
           {index > 0 && showPageButton ? (
-            <button className="image-slides-page-button image-slides-prev" onClick={this.prev}>
+            <button
+              type="button"
+              className="image-slides-page-button image-slides-prev"
+              onClick={this.prev}>
               <svg
                 version="1.1"
                 id="Layer_1"
@@ -295,7 +327,10 @@ export default class ImageSlides extends PureComponent<SlidesProps, SlidesStates
             </button>
           ) : null}
           {index < images.length - 1 && showPageButton ? (
-            <button className="image-slides-page-button image-slides-next" onClick={this.next}>
+            <button
+              type="button"
+              className="image-slides-page-button image-slides-next"
+              onClick={this.next}>
               <svg
                 version="1.1"
                 id="Layer_1"
@@ -320,7 +355,8 @@ export default class ImageSlides extends PureComponent<SlidesProps, SlidesStates
             <div
               className="image-slides-container"
               ref={this.getContainer}
-              onClick={tapClose ? this.handleCloseViewer : undefined}>
+              // onClick={tapClose ? this.handleCloseViewer : undefined}>
+            >
               {images.slice(displayMin, displayMax).map((url, ind) => (
                 /* eslint-disable */
                 <ImageController
@@ -335,7 +371,7 @@ export default class ImageSlides extends PureComponent<SlidesProps, SlidesStates
             </div>
           </AlloyFinger>
         </div>
-      </Overlay>
+      </Portal>
     ) : null;
   }
 }
