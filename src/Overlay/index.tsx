@@ -21,6 +21,7 @@ import {
   ownerWindow,
 } from '../utils/disableScrolling';
 import useEnhancedEffect from '../utils/useEnhancedEffect';
+import useEventCallback from '../utils/useEventCallback';
 
 export function setRef<T>(
   ref: React.MutableRefObject<T | null> | ((instance: T | null) => void) | null | undefined,
@@ -163,21 +164,22 @@ export const Portal = forwardRef(
         [scrollContainer, 'overflow', scrollContainer.style.overflow],
       ]);
       scrollContainer.style.overflow = 'hidden';
-
       if (modalRef?.current) {
         // Fix a bug on Chrome where the scroll isn't initially 0.
         modalRef.current.scrollTop = 0;
       }
     }, [onOpen, modalRef, container]);
-    const handleClose = useCallback(() => {
-      originalProperties.forEach(([el, property, value]) => {
-        if (value) {
-          el.style.setProperty(property, value);
-        } else {
-          el.style.removeProperty(property);
-        }
-        setOriginalProperties([]);
-      });
+    const handleClose = useEventCallback(() => {
+      if (!open) {
+        originalProperties.forEach(([el, property, value]) => {
+          if (value) {
+            el.style.setProperty(property, value);
+          } else {
+            el.style.removeProperty(property);
+          }
+          setOriginalProperties([]);
+        });
+      }
     }, [originalProperties]);
     const handlePortalRef = useCallback(
       node => {

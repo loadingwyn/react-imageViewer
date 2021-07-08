@@ -41,6 +41,7 @@
     "arrow-parens": ["error", "as-needed"],
     "no-mixed-operators": 0,
     "no-use-before-define": "off",
+    "no-plusplus": ["error", { "allowForLoopAfterthoughts": true }],
     "import/extensions": "off",
     "import/no-extraneous-dependencies": 0,
     "react/jsx-filename-extension": [1, { "extensions": [".tsx", ".jsx"] }],

@@ -1,7 +1,7 @@
 {
   "extends": ["stylelint-config-standard", "stylelint-prettier/recommended"],
   "plugins": ["stylelint-order"],
-  "ignoreFiles": ["**/*.js", "**/*.jsx"],
+  "ignoreFiles": ["**/*.(t|j)sx", "**/*.(t|j)s"],
   "rules": {
     "order/order": [
       {

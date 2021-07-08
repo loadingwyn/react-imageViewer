@@ -38,18 +38,15 @@
   width: 100%;
   height: 100%;
   background-color: #000;
-  touch-action: none;
 }
 
 .image-slides-container {
-  display: inline-block;
   position: relative;
   overflow: visible;
   width: 100%;
   height: 100%;
-  white-space: nowrap;
   will-change: transform;
-  touch-action: none;
+  transition: transform 0.2s;
 }
 
 .image-slides-close {
@@ -67,20 +64,21 @@
 
 .image-slides-blackboard {
   display: inline-flex;
-  position: relative;
+  position: absolute;
   overflow: hidden;
   align-items: center;
   justify-content: center;
   width: 100%;
   height: 100%;
-  margin-right: 10px;
-  text-align: center;
-  vertical-align: middle;
+  & > * {
+    object-fit: contain;
+  }
 }
 
 .image-slides-content {
   will-change: transform;
   user-select: none;
+  transform-origin: 0 0;
 }
 
 .image-slides-page-button {

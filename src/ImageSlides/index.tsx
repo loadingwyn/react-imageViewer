@@ -1,377 +1,194 @@
-import React, { Component, PureComponent, ReactNode, useState } from 'react';
-import transform from 'css3transform';
+/* eslint-disable jsx-a11y/no-noninteractive-element-interactions */
+import React, { ReactNode, useCallback, useLayoutEffect, useState } from 'react';
 import AlloyFinger from 'alloyfinger/react/AlloyFinger';
-import ImageController, { TransformedElement } from '../ImageController';
+import ImageController from '../ImageController';
 import { Portal } from '../Overlay';
+import { ownerWindow } from '../utils/disableScrolling';
 import './style.css';
+import useMouseEvents from '../utils/useMouseEvents';
 
 const GUTTER_WIDTH = 10;
 const SWIPE_TRIGGER = 40;
 
-function preload(url: string): Promise<any> | null {
-  if (url) {
-    const loader = new Image();
-    return new Promise((resolve, reject) => {
-      loader.onload = resolve;
-      loader.onerror = reject;
-      loader.src = url;
-    }).catch(e => e);
+function getTranslateValue(node: HTMLElement): number {
+  if (!node) return 0;
+  const containerWindow = ownerWindow(node);
+  const computedStyle = containerWindow.getComputedStyle(node);
+  const transform =
+    computedStyle.getPropertyValue('-webkit-transform') ||
+    computedStyle.getPropertyValue('transform');
+  let offsetX = 0;
+  if (transform && transform !== 'none' && typeof transform === 'string') {
+    const transformValues = transform.split('(')[1].split(')')[0].split(',');
+    offsetX = parseInt(transformValues[4], 10);
   }
-  return null;
+  return offsetX;
 }
-type Operations = {
-  close: (e: any) => void;
-  next: () => void;
-  prev: () => void;
-};
-export interface SlidesProps {
+
+function setTranslateValue(node: HTMLElement, offset: number) {
+  if (!node) return;
+  const newTranslate = `translateX(${offset}px)`;
+  node.style.webkitTransform = newTranslate;
+  node.style.transform = newTranslate;
+}
+
+export interface GalleryProps {
   images: string[];
   index: number;
   isOpen: boolean;
-  showPageButton: boolean;
+  showPageButton?: boolean | 'auto';
   tapClose: boolean;
   loadingIcon?: ReactNode;
-  addon?: (index: number, operations: Operations) => ReactNode;
-  onClose?: (e: any, index: number) => void;
-  onChange?: (index: number) => void;
+  onClose?: (index: number) => any;
+  onChange: (index: number) => any;
 }
 
-interface SlidesStates {
-  index: number;
-  focused: boolean;
-  isOpen: boolean;
-  prevIsOpen: boolean;
-  prevIndex: number;
-}
+export function Gallery({ isOpen, images, index, onChange, showPageButton = true }: GalleryProps) {
+  const [isMovable, setIsMovable] = useState(false);
+  const [containerSize, setContainerSize] = useState({ width: 0, height: 0 });
+  const [containerNode, setContainerNode] = useState<HTMLElement | null>(null);
 
-export function Gallery ({
-  isOpen,
-  images
-}: SlidesProps) {
-  const [index, setIndex] = useState(0);
-    return <Portal open={isOpen}>
-        <div className="image-slides-view-port" aria-roledescription="carousel">
-          <AlloyFinger
-            // onSwipe={this.handleSwipe}
-            onSingleTap={this.handleCloseViewer}
-            onTouchEnd={this.handleTouchEnd}
-            onPressMove={this.handleContainerMove}>
-            <div
-              className="image-slides-container"
-              ref={this.getContainer}
-              // onClick={tapClose ? this.handleCloseViewer : undefined}>
-            >
-                <ImageController
-                  onExceedLimit={this.getControl}
-                  url={images[index]}
-                  presented={}
-                />
-            </div>
-          </AlloyFinger>
-        </div>
-      </Portal>
-    ;
-}
-export default class ImageSlides extends Component<SlidesProps, SlidesStates> {
-  static defaultProps = {
-    images: [],
-    index: 0,
-    showPageButton: false,
-    tapClose: true,
-    isOpen: false,
-  };
-
-  lastContainerOffsetX = 0;
-
-  initialStyle = {};
-
-  imageController = {};
-
-  containerEl: TransformedElement | null = null;
-
-  containerOffsetX = 0;
-
-  constructor(props: Readonly<SlidesProps>) {
-    super(props);
-    const { index, isOpen } = props;
-    this.state = {
-      index,
-      focused: false,
-      isOpen,
-      prevIsOpen: false,
-      prevIndex: 0,
-    };
-  }
-
-  componentDidMount() {
-    const { images } = this.props;
-    const { index } = this.state;
-    preload(images[index]);
-    preload(images[index + 1]);
-    preload(images[index - 1]);
-    this.updatePosition();
-  }
-
-  static getDerivedStateFromProps(props: SlidesProps, state: SlidesStates) {
-    let newState: Partial<SlidesStates> | null = null;
-
-    if (props.index !== state.prevIndex) {
-      newState = {};
-      newState.prevIndex = props.index;
-      newState.index = props.index;
+  const containerRef = useCallback(node => {
+    setContainerNode(node);
+  }, []);
+  useLayoutEffect(() => {
+    if (containerNode) {
+      const size = containerNode.getBoundingClientRect();
+      setContainerSize({ width: size.width, height: size.height });
     }
-    if (props.isOpen !== state.prevIsOpen) {
-      if (!newState) {
-        newState = {};
-      }
-      newState.prevIsOpen = props.isOpen;
-      newState.isOpen = props.isOpen;
+  }, [containerNode]);
+  useLayoutEffect(() => {
+    if (containerNode) {
+      setTranslateValue(containerNode, -index * containerSize.width);
     }
-    return newState;
-  }
-
-  getContainer = (el: HTMLElement | null) => {
-    if (el) {
-      transform(el);
-      this.containerEl = el as TransformedElement;
-    }
-  };
-
-  getControl = () => {
-    const { focused } = this.state;
-    if (!focused) {
-      this.setState({
-        focused: true,
-      });
-    }
-  };
-
-  handleContainerMove = (e: any) => {
-    e.persist();
-    window.requestAnimationFrame(this.move(e));
-    e.preventDefault();
-    e.stopPropagation();
-    if (e.changedTouches[0].pageX > window.innerWidth || e.changedTouches[0].pageX < 0) {
-      this.handleTouchEnd(e);
-    }
-  };
-
-  handleTouchEnd = (e: any) => {
-    e.preventDefault();
-    if (!this.containerEl) return;
-    const { focused, index } = this.state;
-    if (focused) {
-      const { onChange, images } = this.props;
-      const boardWidth = GUTTER_WIDTH + window.innerWidth;
-      const baseline = boardWidth * this.getMedianIndex();
-      if (-this.containerEl.translateX - baseline > SWIPE_TRIGGER) {
-        const step = this.transition(160, 'next');
-        if (onChange && index < images.length - 1) {
-          onChange(index + 1);
-        }
-        window.requestAnimationFrame(step);
-      } else if (baseline + this.containerEl.translateX > SWIPE_TRIGGER) {
-        const step = this.transition(160, 'prev');
-        if (onChange && index > 0) {
-          onChange(index - 1);
-        }
-        window.requestAnimationFrame(step);
+  }, [containerNode, index, containerSize]);
+  const handleTouchEnd = useCallback(() => {
+    setIsMovable(false);
+    if (!containerNode) return;
+    (containerNode.style.transition as any) = null;
+    const originalOffset = -index * containerSize.width;
+    const offset = getTranslateValue(containerNode);
+    requestAnimationFrame(() => {
+      if (offset - originalOffset < -SWIPE_TRIGGER && onChange && index < images.length - 1) {
+        onChange(index + 1);
+      } else if (offset - originalOffset > SWIPE_TRIGGER && onChange && index > 0) {
+        onChange(index - 1);
       } else {
-        const step = this.transition(160, 'noMove');
-        window.requestAnimationFrame(step);
+        setTranslateValue(containerNode, originalOffset);
       }
-      this.setState({
-        focused: false,
-      });
-    }
-  };
-
-  getMedianIndex() {
-    const { index } = this.state;
-    const { images } = this.props;
-    const displayMax = index + 2 > images.length ? images.length : index + 2;
-    const displayMin = index - 1 < 0 ? 0 : index - 1;
-    let center = Math.floor((displayMax - displayMin) / 2);
-    if (index < 1) {
-      center = index;
-    } else if (index > images.length - 2) {
-      center = images.length - index;
-    }
-    return center;
-  }
-
-  move = (e: any) => () => {
-    if (!this.containerEl) return;
-    const { focused } = this.state;
-    if (focused) {
-      this.containerEl.translateX += Math.floor(e.deltaX);
-    }
-  };
-
-  updatePosition = () => {
-    if (!this.containerEl) return;
-    this.containerEl.translateX = -(GUTTER_WIDTH + window.innerWidth) * this.getMedianIndex();
-  };
-
-  next = () => {
-    const { index } = this.state;
-    const { images } = this.props;
-    if (index < images.length - 1) {
-      preload(images[index + 2]);
-      this.setState(
-        {
-          index: index + 1,
-        },
-        this.updatePosition,
-      );
-    } else {
-      this.updatePosition();
-    }
-  };
-
-  prev = () => {
-    const { index } = this.state;
-    const { images } = this.props;
-    if (index > 0) {
-      preload(images[index - 2]);
-      this.setState(
-        {
-          index: index - 1,
-        },
-        this.updatePosition,
-      );
-    } else {
-      this.updatePosition();
-    }
-  };
-
-  handleCloseViewer = (e: any) => {
-    const { index } = this.state;
-    const { onClose } = this.props;
-    this.setState({
-      isOpen: false,
     });
-    if (onClose) onClose(e, index);
-  };
-
-  transition(time: number, direction: 'prev' | 'next' | 'noMove') {
-    if (!this.containerEl) return () => null;
-    const { index } = this.state;
-    const { images } = this.props;
-    const boardWidth = GUTTER_WIDTH + window.innerWidth;
-    let startTime: number;
-    const startPos = this.containerEl.translateX;
-    const size =
-      (index === 0 && direction === 'prev') ||
-      (index === images.length - 1 && direction === 'next') ||
-      direction === 'noMove'
-        ? 0
-        : 1;
-    const step = (timestamp: number) => {
-      if (!this.containerEl) return;
-      if (!startTime) startTime = timestamp;
-      const progress = timestamp - startTime;
-      this.containerEl.translateX = Math.floor(
-        startPos +
-          (progress / time) *
-            (-boardWidth * (this.getMedianIndex() + (direction === 'next' ? size : -size)) -
-              startPos),
-      );
-      if (progress < time) {
-        window.requestAnimationFrame(step);
-      } else if (direction === 'next') {
-        this.next();
-      } else if (direction === 'prev') {
-        this.prev();
-      } else {
-        this.updatePosition();
+  }, [onChange, containerNode, index, images, containerSize, setIsMovable]);
+  const handleMove = useCallback(
+    e => {
+      if (e.persist) {
+        e.persist();
       }
-    };
-    return step;
-  }
-
-  render() {
-    const { index, isOpen, focused } = this.state;
-    const { images, addon, tapClose, loadingIcon, showPageButton } = this.props;
-    const displayMax = index + 2 > images.length ? images.length : index + 2;
-    const displayMin = index - 1 < 0 ? 0 : index - 1;
-
-    return isOpen ? (
-      <Portal open={isOpen}>
-        <div className="image-slides-view-port" aria-roledescription="carousel">
-          {addon &&
-            addon(index, {
-              close: this.handleCloseViewer,
-              next: this.next,
-              prev: this.prev,
-            } as Operations)}
-          {index > 0 && showPageButton ? (
-            <button
-              type="button"
-              className="image-slides-page-button image-slides-prev"
-              onClick={this.prev}>
-              <svg
-                version="1.1"
-                id="Layer_1"
-                xmlns="http://www.w3.org/2000/svg"
-                xmlnsXlink="http://www.w3.org/1999/xlink"
-                width="30px"
-                height="30px"
-                viewBox="0 0 24 24">
-                <path
-                  stroke="#eee"
-                  fill="#eee"
-                  d="M15.41,16.59L10.83,12l4.58-4.59L14,6l-6,6l6,6L15.41,16.59z"
-                />
-              </svg>
-            </button>
-          ) : null}
-          {index < images.length - 1 && showPageButton ? (
-            <button
-              type="button"
-              className="image-slides-page-button image-slides-next"
-              onClick={this.next}>
-              <svg
-                version="1.1"
-                id="Layer_1"
-                xmlns="http://www.w3.org/2000/svg"
-                xmlnsXlink="http://www.w3.org/1999/xlink"
-                width="30px"
-                height="30px"
-                viewBox="0 0 24 24">
-                <path
-                  stroke="#eee"
-                  fill="#eee"
-                  d="M8.59,16.59L13.17,12L8.59,7.41L10,6l6,6l-6,6L8.59,16.59z"
-                />
-              </svg>
-            </button>
-          ) : null}
-          <AlloyFinger
-            // onSwipe={this.handleSwipe}
-            onSingleTap={tapClose ? this.handleCloseViewer : null}
-            onTouchEnd={this.handleTouchEnd}
-            onPressMove={this.handleContainerMove}>
-            <div
-              className="image-slides-container"
-              ref={this.getContainer}
-              // onClick={tapClose ? this.handleCloseViewer : undefined}>
-            >
-              {images.slice(displayMin, displayMax).map((url, ind) => (
-                /* eslint-disable */
-                <ImageController
-                  containerFocused={focused}
-                  loadingIcon={loadingIcon}
-                  onExceedLimit={this.getControl}
-                  url={url}
-                  key={url + (ind + displayMin)}
-                  presented={ind === this.getMedianIndex()}
-                />
-              ))}
-            </div>
-          </AlloyFinger>
-        </div>
-      </Portal>
-    ) : null;
-  }
+      if (containerNode) {
+        containerNode.style.transition = 'none';
+      }
+      if (isMovable) {
+        window.requestAnimationFrame(() => {
+          if (containerNode) {
+            const oldOffsetX = getTranslateValue(containerNode);
+            setTranslateValue(containerNode, oldOffsetX + Math.floor(e.deltaX));
+          }
+        });
+      }
+    },
+    [containerNode, isMovable],
+  );
+  const handleImageMove = useCallback(
+    (galleryIsMovable: boolean) => {
+      setIsMovable(galleryIsMovable);
+    },
+    [setIsMovable],
+  );
+  const handleMouseEvents = useMouseEvents(handleMove, handleTouchEnd);
+  return (
+    <Portal open={isOpen}>
+      <div className="image-slides-view-port" aria-roledescription="carousel">
+        {index > 0 && showPageButton ? (
+          <button
+            type="button"
+            className="image-slides-page-button image-slides-prev"
+            onClick={() => onChange(index - 1)}>
+            <svg
+              version="1.1"
+              id="Layer_1"
+              xmlns="http://www.w3.org/2000/svg"
+              xmlnsXlink="http://www.w3.org/1999/xlink"
+              width="30px"
+              height="30px"
+              viewBox="0 0 24 24">
+              <path
+                stroke="#eee"
+                fill="#eee"
+                d="M15.41,16.59L10.83,12l4.58-4.59L14,6l-6,6l6,6L15.41,16.59z"
+              />
+            </svg>
+          </button>
+        ) : null}
+        {index < images.length - 1 && showPageButton ? (
+          <button
+            type="button"
+            className="image-slides-page-button image-slides-next"
+            onClick={() => onChange(index + 1)}>
+            <svg
+              version="1.1"
+              id="Layer_1"
+              xmlns="http://www.w3.org/2000/svg"
+              xmlnsXlink="http://www.w3.org/1999/xlink"
+              width="30px"
+              height="30px"
+              viewBox="0 0 24 24">
+              <path
+                stroke="#eee"
+                fill="#eee"
+                d="M8.59,16.59L13.17,12L8.59,7.41L10,6l6,6l-6,6L8.59,16.59z"
+              />
+            </svg>
+          </button>
+        ) : null}
+        <AlloyFinger onTouchEnd={handleTouchEnd} onPressMove={handleMove}>
+          <ul
+            className="image-slides-container"
+            ref={containerRef}
+            onMouseDown={handleMouseEvents[0]}
+            onMouseMove={handleMouseEvents[1]}
+            onMouseUp={handleMouseEvents[2]}
+            // onClick={tapClose ? this.handleCloseViewer : undefined}>
+          >
+            {index > 0 ? (
+              <ImageController
+                isMovable={!isMovable}
+                containerSize={containerSize}
+                index={index - 1}
+                key={index - 1}
+                onMove={handleImageMove}>
+                <img className="image-slides-content" src={images[index - 1]} alt="" />
+              </ImageController>
+            ) : null}
+            <ImageController
+              isMovable={!isMovable}
+              containerSize={containerSize}
+              index={index}
+              key={index}
+              onMove={handleImageMove}>
+              <img className="image-slides-content" src={images[index]} alt="" />
+            </ImageController>
+            {index < images.length - 1 ? (
+              <ImageController
+                isMovable={!isMovable}
+                containerSize={containerSize}
+                index={index + 1}
+                key={index + 1}
+                onMove={handleImageMove}>
+                <img className="image-slides-content" src={images[index + 1]} alt="" />
+              </ImageController>
+            ) : null}
+          </ul>
+        </AlloyFinger>
+      </div>
+    </Portal>
+  );
 }
