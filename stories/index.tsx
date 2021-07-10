@@ -1,6 +1,6 @@
 import React, { useCallback, useEffect, useState } from 'react';
 import { Story, Meta } from '@storybook/react';
-import ImageSlides, { Gallery, SlidesProps } from '../src/ImageSlides';
+import Gallery, { GalleryProps } from '../src/Gallery';
 
 export default {
   title: 'Example',
@@ -12,7 +12,7 @@ const images = [
   'http://dingyue.nosdn.127.net/9sFTTWDQoHjxyIkU9wzm8CiDNVbq48Mwf2hyhgRghxA5O1527909480497compressflag.jpeg',
   'http://dingyue.nosdn.127.net/lXMRCRbP9PYbv2gMBmHGXRnjspn6pT1PM5DrIGcEZSUTu1531904526913compressflag.jpeg',
 ];
-const Template: Story<SlidesProps> = ({ index }) => {
+const Template: Story<GalleryProps> = ({ index }) => {
   const [activeIndex, setActiveIndex] = useState(index);
   useEffect(() => {
     setActiveIndex(index);

@@ -104,7 +104,6 @@ export const Portal = forwardRef(
     {
       backdrop,
       children,
-      className,
       container = document.body,
       disablePortal,
       disableEscapeKeyDown,
@@ -118,9 +117,8 @@ export const Portal = forwardRef(
       onKeyDown,
       open = false,
       closeAfterTransition,
-      style,
     }: PortalProps,
-    ref: React.ForwardedRef<any>,
+    ref: React.ForwardedRef<HTMLDivElement>,
   ) => {
     const [exited, setExited] = useState(true);
     const [originalProperties, setOriginalProperties] = useState([] as any[]);

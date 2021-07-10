@@ -1,3 +1,3 @@
-import ImageSlides from './ImageSlides';
+import Gallery from './Gallery';
 
-export default ImageSlides;
+export default Gallery;
