@@ -53,6 +53,7 @@ export default function ImageController({
   const imageContainerRef = useRef<HTMLLIElement>(null);
   const imageRef = useRef<HTMLElement>(null);
   const transformRef = useRef(identity());
+  const scaleRef = useRef(1);
   useLayoutEffect(() => {
     if (imageRef?.current) {
       imageRef.current.style.transform = matrixArrayToCssMatrix(transformRef.current);
@@ -177,24 +178,45 @@ export default function ImageController({
     },
     [isLoaded, containerSize, imageRef, onMove, isMovable],
   );
+  const handleMultipointStart = useCallback(
+    e => {
+      if (!imageRef?.current || scaleRef.current == null) {
+        return;
+      }
+      const matrix = transformRef.current;
+      const oldScale = getScale(matrix)[0];
+      scaleRef.current = oldScale;
+    },
+    [scaleRef, transformRef],
+  );
   const handlePinch = useCallback(
     e => {
-      if (!imageRef?.current) {
+      if (!imageRef?.current || scaleRef.current == null) {
         return;
       }
       const matrix = transformRef.current;
       const imageElement = imageRef.current;
       const cr = imageElement.getBoundingClientRect();
       const oldScale = getScale(matrix)[0];
+      const touchCenterX = (e.touches[0].pageX + e.touches[1].pageX) / 2;
+      const touchCenterY = (e.touches[0].pageY + e.touches[1].pageY) / 2;
       const maxScale = Math.max(
         (containerSize.width / cr.width) * 0.75,
         (containerSize.height / cr.height) * 0.75,
         5,
       );
-      const newScale = Math.max(Math.min(e.scale, maxScale / oldScale), 1 / oldScale);
-      scaleImage({ x: e.origin[0], y: e.origin[1] }, newScale);
+      const newScale = Math.max(
+        Math.min((e.scale * scaleRef.current) / oldScale, maxScale / oldScale),
+        1 / oldScale,
+      );
+      if (oldScale * newScale <= 1) {
+        transformRef.current = identity();
+        imageRef.current.style.transform = matrixArrayToCssMatrix(transformRef.current);
+        return;
+      }
+      scaleImage({ x: touchCenterX, y: touchCenterY }, newScale);
     },
-    [scaleImage, containerSize],
+    [scaleImage, containerSize, scaleRef],
   );
   const handleDoubleClick = useCallback(
     e => {
@@ -210,7 +232,11 @@ export default function ImageController({
     : children;
   const handleMouseEvents = useMouseEvents(handlePressMove);
   return (
-    <AlloyFinger onPinch={handlePinch} onDoubleTap={handleDoubleTap} onPressMove={handlePressMove}>
+    <AlloyFinger
+      onPinch={handlePinch}
+      onDoubleTap={handleDoubleTap}
+      onPressMove={handlePressMove}
+      onMultipointStart={handleMultipointStart}>
       <li
         style={{ left: (GAP_WIDTH + containerSize.width) * index }}
         onDoubleClick={handleDoubleClick}

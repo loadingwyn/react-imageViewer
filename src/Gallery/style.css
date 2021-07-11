@@ -44,8 +44,9 @@
   overflow: visible;
   width: 100%;
   height: 100%;
+  margin: 0;
   padding: 0;
-  transition: transform 0.2s;
+  transition: transform 0.25s;
   will-change: transform;
 }
 .image-slides-blackboard {
