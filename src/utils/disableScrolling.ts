@@ -1,12 +1,7 @@
 /* eslint-disable no-param-reassign */
-export function ownerDocument(node: Node | null | undefined): Document {
-  return (node && node.ownerDocument) || document;
-}
 
-export function ownerWindow(node: Node | undefined): Window {
-  const doc = ownerDocument(node);
-  return doc.defaultView || window;
-}
+import ownerDocument from './ownerDocument';
+import ownerWindow from './ownerWindow';
 
 export function getScrollbarSize(doc: Document): number {
   const scrollDiv = doc.createElement('div');

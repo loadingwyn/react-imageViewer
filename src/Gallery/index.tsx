@@ -3,31 +3,9 @@ import React, { ReactNode, useCallback, useLayoutEffect, useState } from 'react'
 import AlloyFinger from 'alloyfinger/react/AlloyFinger';
 import ImageController, { GAP_WIDTH } from '../ImageController';
 import { Portal } from '../Overlay';
-import { ownerWindow } from '../utils/disableScrolling';
 import './style.css';
 import useMouseEvents from '../utils/useMouseEvents';
-
-function getTranslateValue(node: HTMLElement): number {
-  if (!node) return 0;
-  const containerWindow = ownerWindow(node);
-  const computedStyle = containerWindow.getComputedStyle(node);
-  const transform =
-    computedStyle.getPropertyValue('-webkit-transform') ||
-    computedStyle.getPropertyValue('transform');
-  let offsetX = 0;
-  if (transform && transform !== 'none' && typeof transform === 'string') {
-    const transformValues = transform.split('(')[1].split(')')[0].split(',');
-    offsetX = parseInt(transformValues[4], 10);
-  }
-  return offsetX;
-}
-
-function setTranslateValue(node: HTMLElement, offset: number) {
-  if (!node) return;
-  const newTranslate = `translateX(${offset}px)`;
-  node.style.webkitTransform = newTranslate;
-  node.style.transform = newTranslate;
-}
+import { getTranslateValue, setTranslateValue } from '../utils/translate';
 
 export interface GalleryProps {
   images: string[];
