@@ -1,4 +1,4 @@
-import { ownerWindow } from './disableScrolling';
+import ownerWindow from './ownerWindow';
 
 export function getTranslateValue(node: HTMLElement): number {
   if (!node) return 0;

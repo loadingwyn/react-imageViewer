@@ -2,12 +2,13 @@
   "name": "react-imageslides",
   "version": "2.2.0",
   "description": "A mobile friendly images slideshow react component",
-  "main": "dist/bundle.js",
-  "types": "dist-esm/index.d.ts",
+  "main": "lib/index.js",
+  "types": "lib/index.d.ts",
   "scripts": {
     "clean": "rimraf dist && rimraf dist-esm",
     "dev": "npm run clean && node ./scripts/dev.js",
-    "build": "npm run clean && tsc -m es6 --outDir dist-esm --emitDeclarationOnly && webpack --mode production",
+    "ts-types": " tsc --emitDeclarationOnly --outDir lib",
+    "build": "rimraf lib && node ./esbuild.js && npm run ts-types",
     "test": "jest",
     "test:watch": "jest --watch",
     "test:coverage": "jest --coverage",
@@ -79,5 +80,7 @@
     "react": "^17.0.2",
     "react-dom": "^17.0.2"
   },
-  "dependencies": {}
+  "dependencies": {
+    "esbuild": "^0.12.15"
+  }
 }

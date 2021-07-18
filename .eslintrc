@@ -48,5 +48,13 @@
     "react/prop-types": "off",
     "react/static-property-placement": "off",
     "@typescript-eslint/no-use-before-define": ["error"]
-  }
+  },
+  "overrides": [
+    {
+      "files": ["*.js"],
+      "rules": {
+        "@typescript-eslint/no-var-requires": "off"
+      }
+    }
+  ]
 }
