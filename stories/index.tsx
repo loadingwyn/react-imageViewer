@@ -18,7 +18,6 @@ const Template: Story<GalleryProps> = ({ index }) => {
     setActiveIndex(index);
   }, [index]);
   const handleChange = useCallback((newIndex: number) => {
-    console.log(newIndex, 'new');
     setActiveIndex(newIndex);
   }, []);
   return <Gallery isOpen images={images} index={activeIndex} onChange={handleChange} />;

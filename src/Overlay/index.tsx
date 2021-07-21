@@ -258,7 +258,7 @@ export const Portal = forwardRef(
         ref={handleModalRef}
         onKeyDown={handleKeyDown}
         role="presentation"
-        className="react-image-viewer-portal">
+        className="image-slides-portal">
         {!hideBackdrop && backdrop
           ? cloneElement(backdrop, {
               onClick: handleBackdropClick,
