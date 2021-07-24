@@ -22,11 +22,13 @@
   ],
   "keywords": [
     "react",
+    "gallery",
     "slides",
     "picture",
     "viewer",
     "lightbox",
-    "typescript"
+    "typescript",
+    "hooks"
   ],
   "repository": {
     "type": "git",

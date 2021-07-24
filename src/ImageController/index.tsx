@@ -2,6 +2,7 @@
 import React, {
   cloneElement,
   isValidElement,
+  ReactElement,
   ReactNode,
   useCallback,
   useEffect,
@@ -19,14 +20,28 @@ import {
   translateMatrix,
 } from '../utils/transform';
 import useMouseEvents from '../utils/useMouseEvents';
+import fitToViewport from '../utils/fitToViewport';
 
+export interface ContainerRect {
+  width: number;
+  height: number;
+  top: number;
+  right: number;
+  bottom: number;
+  left: number;
+}
 export interface ControllerProps {
-  children: ReactNode;
-  containerSize: { width: number; height: number; top: number; left: number };
+  containerRect: ContainerRect;
   index: number;
   isMovable: boolean;
-  loadingIcon?: ReactNode;
   onMove: (isMovable: boolean) => void;
+  imageRenderer?: (
+    url: string,
+    index: number,
+    containerRect: ContainerRect,
+    imageSize: { width: number; height: number },
+  ) => ReactElement;
+  loadingIcon?: ReactNode;
   url?: string;
 }
 
@@ -40,16 +55,29 @@ export const defaultLoadingIcon = (
     <div />
   </div>
 );
+export function defaultImageRenderer(
+  url: string,
+  index: number,
+  containerRect: ContainerRect,
+  imageSize: { width: number; height: number },
+): ReactElement {
+  const style = fitToViewport(imageSize, containerRect);
+  return <img className="image-slides-content" src={url} alt="" style={style} />;
+}
 export default function ImageController({
-  children,
-  containerSize,
+  containerRect,
   index,
   isMovable,
-  loadingIcon = defaultLoadingIcon,
   onMove,
+  imageRenderer = defaultImageRenderer,
+  loadingIcon = defaultLoadingIcon,
   url = '',
 }: ControllerProps) {
   const [isLoaded, setIsLoaded] = useState(false);
+  const [imageSize, setImageSize] = useState<{ width: number; height: number }>({
+    width: 0,
+    height: 0,
+  });
   const imageContainerRef = useRef<HTMLLIElement>(null);
   const imageRef = useRef<HTMLElement>(null);
   const transformRef = useRef(identity());
@@ -67,9 +95,13 @@ export default function ImageController({
         loader.onerror = reject;
         loader.src = url;
       }).catch(e => e);
-      imagePromise.finally(() => {
-        setIsLoaded(true);
-      });
+      imagePromise
+        .then(() => {
+          setImageSize({ width: loader.naturalWidth, height: loader.naturalHeight });
+        })
+        .finally(() => {
+          setIsLoaded(true);
+        });
     } else {
       setIsLoaded(true);
     }
@@ -112,8 +144,8 @@ export default function ImageController({
       const cr = imageElement.getBoundingClientRect();
       const oldScale = getScale(matrix)[0];
       const maxScale = Math.max(
-        (containerSize.width / cr.width) * 0.75,
-        (containerSize.height / cr.height) * 0.75,
+        (containerRect.width / cr.width) * 0.75,
+        (containerRect.height / cr.height) * 0.75,
         5,
       );
       const newScale = Math.min(1.5, maxScale / oldScale);
@@ -124,7 +156,7 @@ export default function ImageController({
       }
       scaleImage({ x: e.origin[0], y: e.origin[1] }, newScale);
     },
-    [scaleImage, containerSize],
+    [scaleImage, containerRect],
   );
   const handlePressMove = useCallback(
     e => {
@@ -146,7 +178,7 @@ export default function ImageController({
         height: containerHeight,
         top: containerTop,
         left: containerLeft,
-      } = containerSize;
+      } = containerRect;
       const { deltaX, deltaY } = e;
       const offsetX = left + width / 2 - containerLeft - containerWidth / 2;
       const offsetY = top + height / 2 - containerTop - containerHeight / 2;
@@ -160,12 +192,17 @@ export default function ImageController({
         deltaX > 0
           ? Math.min(deltaX, Math.max(-left, -offsetX))
           : Math.max(deltaX, Math.min(containerWidth - right, -offsetX));
-      const shiftY =
+      let shiftY =
         deltaY > 0
           ? Math.min(deltaY, Math.max(-top, -offsetY))
           : Math.max(deltaY, Math.min(containerHeight - bottom, -offsetY));
       if (!isMovableByX && deltaX !== 0) {
-        onMove(true);
+        if (Math.abs(deltaY) < (isMovableByY ? 2 : 20)) {
+          // optimization for looooong pictures
+          onMove(true);
+        } else {
+          shiftY = 0;
+        }
       }
       if (!isMovableByX && !isMovableByY) {
         return;
@@ -176,7 +213,7 @@ export default function ImageController({
       ]);
       imageRef.current.style.transform = matrixArrayToCssMatrix(transformRef.current);
     },
-    [isLoaded, containerSize, imageRef, onMove, isMovable],
+    [isLoaded, containerRect, imageRef, onMove, isMovable],
   );
   const handleMultipointStart = useCallback(
     e => {
@@ -201,8 +238,8 @@ export default function ImageController({
       const touchCenterX = (e.touches[0].pageX + e.touches[1].pageX) / 2;
       const touchCenterY = (e.touches[0].pageY + e.touches[1].pageY) / 2;
       const maxScale = Math.max(
-        (containerSize.width / cr.width) * 0.75,
-        (containerSize.height / cr.height) * 0.75,
+        (containerRect.width / cr.width) * 0.75,
+        (containerRect.height / cr.height) * 0.75,
         5,
       );
       const newScale = Math.max(
@@ -216,7 +253,7 @@ export default function ImageController({
       }
       scaleImage({ x: touchCenterX, y: touchCenterY }, newScale);
     },
-    [scaleImage, containerSize, scaleRef],
+    [scaleImage, containerRect, scaleRef],
   );
   const handleDoubleClick = useCallback(
     e => {
@@ -225,11 +262,10 @@ export default function ImageController({
     },
     [handleDoubleTap],
   );
-  const imageContent = isValidElement(children)
-    ? cloneElement(children, {
-        ref: imageRef,
-      })
-    : children;
+  const content = imageRenderer(url, index, containerRect, imageSize);
+  const imageContent = cloneElement(content, {
+    ref: imageRef,
+  });
   const handleMouseEvents = useMouseEvents(handlePressMove);
   return (
     <AlloyFinger
@@ -238,7 +274,7 @@ export default function ImageController({
       onPressMove={handlePressMove}
       onMultipointStart={handleMultipointStart}>
       <li
-        style={{ left: (GAP_WIDTH + containerSize.width) * index }}
+        style={{ left: (GAP_WIDTH + containerRect.width) * index }}
         onDoubleClick={handleDoubleClick}
         onMouseDown={handleMouseEvents[0]}
         onMouseMove={handleMouseEvents[1]}

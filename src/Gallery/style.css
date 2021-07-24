@@ -59,12 +59,11 @@
   height: 100%;
 }
 .image-slides-blackboard > * {
-  object-fit: contain;
   overflow: hidden;
 }
 
 .image-slides-content {
+  transform-origin: 0 0;
   will-change: transform;
   user-select: none;
-  transform-origin: 0 0;
 }

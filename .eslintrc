@@ -47,6 +47,7 @@
     "react/jsx-filename-extension": [1, { "extensions": [".tsx", ".jsx"] }],
     "react/prop-types": "off",
     "react/static-property-placement": "off",
+    "@typescript-eslint/explicit-module-boundary-types": "off",
     "@typescript-eslint/no-use-before-define": ["error"]
   },
   "overrides": [

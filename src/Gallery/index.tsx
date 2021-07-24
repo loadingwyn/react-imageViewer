@@ -1,7 +1,7 @@
 /* eslint-disable jsx-a11y/no-noninteractive-element-interactions */
-import React, { ReactNode, useCallback, useLayoutEffect, useState } from 'react';
+import React, { ReactElement, ReactNode, useCallback, useLayoutEffect, useState } from 'react';
 import AlloyFinger from 'alloyfinger/react/AlloyFinger';
-import ImageController, { GAP_WIDTH } from '../ImageController';
+import ImageController, { ContainerRect, GAP_WIDTH } from '../ImageController';
 import { Portal } from '../Overlay';
 import './style.css';
 import useMouseEvents from '../utils/useMouseEvents';
@@ -11,14 +11,27 @@ export interface GalleryProps {
   images: string[];
   index: number;
   isOpen: boolean;
+  onChange: (index: number) => void;
+  imageRenderer?: (
+    url: string,
+    index: number,
+    containerRect: ContainerRect,
+    imageSize: { width: number; height: number },
+  ) => ReactElement;
   loadingIcon?: ReactNode;
-  onClose?: (index: number) => any;
-  onChange: (index: number) => any;
+  onClose?: (index: number) => void;
 }
 
-export default function Gallery({ isOpen, images, index, loadingIcon, onChange }: GalleryProps) {
+export default function Gallery({
+  isOpen,
+  images,
+  index,
+  onChange,
+  imageRenderer,
+  loadingIcon,
+}: GalleryProps) {
   const [isMovable, setIsMovable] = useState(false);
-  const [containerSize, setContainerSize] = useState({
+  const [containerRect, setcontainerRect] = useState<ContainerRect>({
     width: 0,
     height: 0,
     top: 0,
@@ -34,22 +47,22 @@ export default function Gallery({ isOpen, images, index, loadingIcon, onChange }
   useLayoutEffect(() => {
     if (containerNode) {
       const size = containerNode.getBoundingClientRect();
-      setContainerSize(size);
+      setcontainerRect(size);
     }
   }, [containerNode]);
   useLayoutEffect(() => {
     if (containerNode) {
-      setTranslateValue(containerNode, -index * (containerSize.width + GAP_WIDTH));
+      setTranslateValue(containerNode, -index * (containerRect.width + GAP_WIDTH));
     }
-  }, [containerNode, index, containerSize]);
+  }, [containerNode, index, containerRect]);
   const handleTouchEnd = useCallback(() => {
     setIsMovable(false);
     if (!containerNode) return;
     (containerNode.style.transition as any) = null;
-    const originalOffset = -index * (containerSize.width + GAP_WIDTH);
+    const originalOffset = -index * (containerRect.width + GAP_WIDTH);
     const offset = getTranslateValue(containerNode);
     requestAnimationFrame(() => {
-      const maxOffset = Math.min(containerSize.width * 0.2, 200);
+      const maxOffset = Math.min(containerRect.width * 0.2, 200);
       if (offset - originalOffset < -maxOffset && onChange && index < images.length - 1) {
         onChange(index + 1);
       } else if (offset - originalOffset > maxOffset && onChange && index > 0) {
@@ -58,7 +71,7 @@ export default function Gallery({ isOpen, images, index, loadingIcon, onChange }
         setTranslateValue(containerNode, originalOffset);
       }
     });
-  }, [onChange, containerNode, index, images, containerSize, setIsMovable]);
+  }, [onChange, containerNode, index, images, containerRect, setIsMovable]);
   const handleMove = useCallback(
     e => {
       if (e.persist) {
@@ -98,37 +111,37 @@ export default function Gallery({ isOpen, images, index, loadingIcon, onChange }
             onMouseLeave={handleMouseEvents[2]}>
             {index > 0 ? (
               <ImageController
-                containerSize={containerSize}
+                containerRect={containerRect}
                 isMovable={!isMovable}
                 index={index - 1}
+                imageRenderer={imageRenderer}
                 key={index - 1}
                 loadingIcon={loadingIcon}
                 onMove={handleImageMove}
-                url={images[index - 1]}>
-                <img className="image-slides-content" src={images[index - 1]} alt="" />
-              </ImageController>
+                url={images[index - 1]}
+              />
             ) : null}
             <ImageController
-              containerSize={containerSize}
+              containerRect={containerRect}
               isMovable={!isMovable}
               index={index}
+              imageRenderer={imageRenderer}
               key={index}
               loadingIcon={loadingIcon}
               onMove={handleImageMove}
-              url={images[index]}>
-              <img className="image-slides-content" src={images[index]} alt="" />
-            </ImageController>
+              url={images[index]}
+            />
             {index < images.length - 1 ? (
               <ImageController
-                containerSize={containerSize}
+                containerRect={containerRect}
                 isMovable={!isMovable}
                 index={index + 1}
+                imageRenderer={imageRenderer}
                 key={index + 1}
                 loadingIcon={loadingIcon}
                 onMove={handleImageMove}
-                url={images[index + 1]}>
-                <img className="image-slides-content" src={images[index + 1]} alt="" />
-              </ImageController>
+                url={images[index + 1]}
+              />
             ) : null}
           </ul>
         </AlloyFinger>
