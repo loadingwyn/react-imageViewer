@@ -1,7 +1,6 @@
 /* eslint-disable jsx-a11y/no-noninteractive-element-interactions */
 import React, {
   cloneElement,
-  isValidElement,
   ReactElement,
   ReactNode,
   useCallback,

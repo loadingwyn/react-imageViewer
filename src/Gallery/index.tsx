@@ -1,5 +1,14 @@
 /* eslint-disable jsx-a11y/no-noninteractive-element-interactions */
-import React, { ReactElement, ReactNode, useCallback, useLayoutEffect, useState } from 'react';
+import React, {
+  KeyboardEventHandler,
+  MouseEventHandler,
+  ReactElement,
+  ReactNode,
+  TouchEventHandler,
+  useCallback,
+  useLayoutEffect,
+  useState,
+} from 'react';
 import AlloyFinger from 'alloyfinger/react/AlloyFinger';
 import ImageController, { ContainerRect, GAP_WIDTH } from '../ImageController';
 import { Portal } from '../Overlay';
@@ -19,7 +28,9 @@ export interface GalleryProps {
     imageSize: { width: number; height: number },
   ) => ReactElement;
   loadingIcon?: ReactNode;
-  onClose?: (index: number) => void;
+  onClick?: MouseEventHandler<HTMLUListElement>;
+  onKeyPress?: KeyboardEventHandler<HTMLUListElement>;
+  onSingleTap?: (event: TouchEvent) => void;
 }
 
 export default function Gallery({
@@ -29,6 +40,9 @@ export default function Gallery({
   onChange,
   imageRenderer,
   loadingIcon,
+  onClick,
+  onKeyPress,
+  onSingleTap,
 }: GalleryProps) {
   const [isMovable, setIsMovable] = useState(false);
   const [containerRect, setcontainerRect] = useState<ContainerRect>({
@@ -101,10 +115,12 @@ export default function Gallery({
   return (
     <Portal open={isOpen}>
       <div className="image-slides-view-port" aria-roledescription="carousel">
-        <AlloyFinger onTouchEnd={handleTouchEnd} onPressMove={handleMove}>
+        <AlloyFinger onTouchEnd={handleTouchEnd} onPressMove={handleMove} onSingleTap={onSingleTap}>
           <ul
             className="image-slides-gallery"
             ref={containerRef}
+            onClick={onClick}
+            onKeyPress={onKeyPress}
             onMouseDown={handleMouseEvents[0]}
             onMouseMove={handleMouseEvents[1]}
             onMouseUp={handleMouseEvents[2]}
