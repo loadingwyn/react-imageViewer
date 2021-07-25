@@ -1,7 +1,7 @@
 import React from 'react';
 import { render, unmountComponentAtNode } from 'react-dom';
 import { act } from 'react-dom/test-utils';
-import Gallery from '../src/Gallery';
+import Gallery from '../lib/index';
 
 let container = null;
 const images = [

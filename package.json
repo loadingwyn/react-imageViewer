@@ -1,7 +1,7 @@
 {
   "name": "react-imageslides",
   "version": "3.0.0-beta.0",
-  "description": "A mobile friendly images slideshow react component",
+  "description": "A mobile friendly images viewer react component",
   "main": "lib/index.js",
   "types": "lib/index.d.ts",
   "scripts": {
