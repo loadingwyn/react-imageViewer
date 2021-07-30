@@ -7,6 +7,7 @@ import React, {
   TouchEventHandler,
   useCallback,
   useLayoutEffect,
+  useRef,
   useState,
 } from 'react';
 import AlloyFinger from 'alloyfinger/react/AlloyFinger';
@@ -45,7 +46,7 @@ export default function Gallery({
   onSingleTap,
 }: GalleryProps) {
   const [isMovable, setIsMovable] = useState(false);
-  const [containerRect, setcontainerRect] = useState<ContainerRect>({
+  const [containerRect, setContainerRect] = useState<ContainerRect>({
     width: 0,
     height: 0,
     top: 0,
@@ -55,15 +56,27 @@ export default function Gallery({
   });
   const [containerNode, setContainerNode] = useState<HTMLElement | null>(null);
 
+  const resizeObserverRef = useRef(
+    new ResizeObserver(entires => {
+      setContainerRect({ ...entires[0]?.contentRect });
+    }),
+  );
   const containerRef = useCallback(node => {
     setContainerNode(node);
   }, []);
   useLayoutEffect(() => {
+    resizeObserverRef.current?.disconnect();
+    resizeObserverRef.current = new ResizeObserver(entires => {
+      const { width, height, top, right, bottom, left } = entires[0]?.contentRect;
+      setContainerRect({ width, height, top, right, bottom, left });
+    });
+  }, [setContainerRect]);
+  useLayoutEffect(() => {
+    resizeObserverRef.current?.disconnect();
     if (containerNode) {
-      const size = containerNode.getBoundingClientRect();
-      setcontainerRect(size);
+      resizeObserverRef.current?.observe(containerNode);
     }
-  }, [containerNode]);
+  }, [containerNode, resizeObserverRef]);
   useLayoutEffect(() => {
     if (containerNode) {
       setTranslateValue(containerNode, -index * (containerRect.width + GAP_WIDTH));

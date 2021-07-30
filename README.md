@@ -2,7 +2,7 @@
 
 [![version](https://img.shields.io/npm/v/react-imageslides)](https://www.npmjs.com/package/react-imageslides)
 
-> React-slides@3 redesigns all apis and uses React Hooks. If you are user of React-slides@2, please read api docs carefully.
+> React-slides@3 has been rewriten with React Hooks and all apis of it have been redesigned. If you are using React-slides@2, please read api docs carefully.
 
 ## Example
 
@@ -12,14 +12,14 @@
 
 ## Features
 
-- Close to the native experience(powered by [Alloyfinger](https://github.com/AlloyTeam/AlloyFinger))
+- Support multi-touch and mouse gestures (powered by [Alloyfinger](https://github.com/AlloyTeam/AlloyFinger))
 - High performance(no unneccessary rendering)
-- Support both touch screen devices and desktops
 
 ## Get Started
 
 1.  Run `yarn add react-imageslides react react-dom alloyfinger`
-    The package has peer dependencies on `react@^17.0.0`, `react-dom@^17.0.0`, and `alloyfinger`.
+
+    > The package has peer dependencies on `react@^17.0.0`, `react-dom@^17.0.0`, and `alloyfinger`.
 
 2.  Render it!
 
@@ -48,13 +48,14 @@ ReactDOM.render(<App />, document.getElementById('root'));
 
 ## Apis
 
-| Property    |  Type  | Default | Required | Description                                 |
-| :---------- | :----: | :-----: | :------: | :------------------------------------------ |
-| images      | array  |         |   yes    | Image urls to display                       |
-| onChange    |  func  |         |   yes    | Callback fired when the index changes       |
-| isOpen      |  bool  |         |   yes    | Whether the component is open               |
-| index       | number |         |   yes    | Index of the first image to display         |
-| loadingIcon |  node  |         |          | Placeholder when image is loading           |
-| onClick     |  func  |         |          | Callback fired when user clicks gallery     |
-| onKeyPress  |  func  |         |          | Callback fired when user press down any key |
-| onSingleTap |  func  |         |          | Callback fired when user taps gallery       |
+| Property      |  Type  | Required | Description                                 |
+| :------------ | :----: | :------: | :------------------------------------------ |
+| images        | array  |   yes    | Image urls to display                       |
+| onChange      |  func  |   yes    | Callback fired when the index changes       |
+| isOpen        |  bool  |   yes    | Whether the component is open               |
+| index         | number |   yes    | Index of the first image to display         |
+| loadingIcon   |  node  |          | Placeholder when image is loading           |
+| onClick       |  func  |          | Callback fired when user clicks gallery     |
+| onKeyPress    |  func  |          | Callback fired when user press down any key |
+| onSingleTap   |  func  |          | Callback fired when user taps gallery       |
+| imageRenderer |  func  |          | Render prop to custom image element         |
