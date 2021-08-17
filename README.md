@@ -19,7 +19,7 @@
 
 1.  Run `yarn add react-imageslides react react-dom alloyfinger`
 
-    > The package has peer dependencies on `react@^17.0.0`, `react-dom@^17.0.0`, and `alloyfinger`.
+    > The package has peer dependencies on `react@^17.0.0`, `react-dom@^17.0.0` and `alloyfinger`.
 
 2.  Render it!
 
